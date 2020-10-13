@@ -1,9 +1,10 @@
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 public class AutonoleggioC {
 
     private AutonoleggioV view;
-    private Login login;
     private Cliente cliente;
     private Impiegatodesk impiegatodesk;
     private Impiegatogarage impiegatogarage;
@@ -11,13 +12,13 @@ public class AutonoleggioC {
     private Veicolo veicolo;
     private Contratto contratto;
 
+    private String jdbcUrl;
+    private String jdbcUser;
+    private String jdbcPassword = "";
+
     // database credentials
-    private String mysql_url = "jdbc:mysql://localhost/rental";
-    private String mysql_username = "root";
-    private String mysql_pass = "";
 
-
-    public AutonoleggioC(AutonoleggioV v) {
+    public AutonoleggioC(AutonoleggioV v) throws IOException {
         view = v;
         cliente = new Cliente();
         impiegatodesk = new Impiegatodesk();
@@ -25,7 +26,11 @@ public class AutonoleggioC {
         preventivo = new Preventivo();
         veicolo = new Veicolo();
         contratto = new Contratto();
-        login = new Login();
+
+        Properties properties = new Properties();
+        properties.load(this.getClass().getResourceAsStream("/config.properties"));
+        jdbcUrl = properties.getProperty("jdbc.url");
+        jdbcUser = properties.getProperty("jdbc.username");
     }
 
     public void initController() {
@@ -47,21 +52,20 @@ public class AutonoleggioC {
 
     private Connection getConnection() throws Exception{
         Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(this.mysql_url, this.mysql_username, this.mysql_pass);
+        return DriverManager.getConnection(this.jdbcUrl, this.jdbcUser, this.jdbcPassword);
     }
 
     public void loginAction() {
 
-        login.setUserID(view.getLoginView().getUserIdTextfield().getText());
-        login.setPassword(view.getLoginView().getPasswordTextfield().getText());
+        String login = view.getLoginView().getUserIdTextfield().getText();
+        String password = view.getLoginView().getPasswordTextfield().getText();
 
         try {
             Connection con = getConnection();
             Statement stmt = con.createStatement();
-            String sql = "Select * from login where userid='" + login.getUserID() + "' and Password='" + login.getPassword() + "'";
+            String sql = "Select * from login where userid='" + login + "' and Password='" + password + "'";
             ResultSet res = stmt.executeQuery(sql);
             if (res.next()) {
-                int userid = res.getInt("userid");
                 if (res.getInt("userid") == 50) {
                     impiegatodesk(res.getInt("userid"));
                 } else if (res.getInt("userid") == 100) {
@@ -133,7 +137,7 @@ public class AutonoleggioC {
             if (2020 - cliente.getDnanno() >= 18) {
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                    Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                     Statement stmt = con.createStatement();
                     String sql = "Insert into cliente (userid, Nome, Cognome, Email, Prefisso,Telefono, Dngiorno, Dnmese, Dnanno, Numpatente, Paesepatente,Giornoep, Meseep, Annoep, Giornosp, Mesesp, Annosp, Indirizzo,city, Paese, Codpostale, Pwd) values (NULL, '" + cliente.getNome() + "', '" + cliente.getCognome() + "', '" + cliente.getEmail() + "', '" + cliente.getPrefisso() + "', '" + view.getRegistrationView().getTelefonoTextfield().getText() + "', '" + cliente.getDngiorno() + "', '" + cliente.getDnmese() + "', '" + cliente.getDnanno() + "', '" + cliente.getNumpatente() + "', '" + cliente.getPaesePatente() + "', '" + cliente.getGiornoep() + "', '" + cliente.getMeseep() + "', '" + cliente.getAnnoep() + "', '" + cliente.getGiornosp() + "', '" + cliente.getMesesp() + "', '" + cliente.getAnnosp() + "', '" + cliente.getIndirizzo() + "', '" + cliente.getCity() + "', '" + cliente.getPaese() + "', '" + view.getRegistrationView().getCPTextfield().getText() + "', '" + cliente.getPwd() + "')";
                     int rs = stmt.executeUpdate(sql);
@@ -141,7 +145,7 @@ public class AutonoleggioC {
 
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                            Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                             Statement stmt2 = con2.createStatement();
                             String sql2 = "SELECT * FROM cliente ORDER BY userid DESC LIMIT 1";
                             ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -192,7 +196,7 @@ public class AutonoleggioC {
 
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                    Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                     Statement stmt = con.createStatement();
                     String sql = "Insert into cliente (userid, Nome, Cognome, Email, Prefisso, Telefono, Dngiorno, Dnmese, Dnanno, Numpatente, Paesepatente,Giornoep, Meseep, Annoep, Giornosp, Mesesp, Annosp, Indirizzo,city, Paese, Codpostale, Pwd) values (NULL, '" + cliente.getNome() + "', '" + cliente.getCognome() + "', '" + cliente.getEmail() + "', '" + cliente.getPrefisso() + "', '" + view.getRegistrationView().getTelefonoTextfield().getText() + "', '" + cliente.getDngiorno() + "', '" + cliente.getDnmese() + "', '" + cliente.getDnanno() + "', '" + cliente.getNumpatente() + "', '" + cliente.getPaesePatente() + "', '" + cliente.getGiornoep() + "', '" + cliente.getMeseep() + "', '" + cliente.getAnnoep() + "', '" + cliente.getGiornosp() + "', '" + cliente.getMesesp() + "', '" + cliente.getAnnosp() + "', '" + cliente.getIndirizzo() + "', '" + cliente.getCity() + "', '" + cliente.getPaese() + "', '" + view.getRegistrationView().getCPTextfield().getText() + "', '" + cliente.getPwd() + "')";
                     int rs = stmt.executeUpdate(sql);
@@ -200,7 +204,7 @@ public class AutonoleggioC {
 
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                            Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                             Statement stmt2 = con2.createStatement();
                             String sql2 = "SELECT * FROM cliente ORDER BY userid DESC LIMIT 1";
                             ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -211,7 +215,7 @@ public class AutonoleggioC {
 
                                 try {
                                     Class.forName("com.mysql.cj.jdbc.Driver");
-                                    Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
+                                    Connection con3 = DriverManager.getConnection(jdbcUrl, "root", "");
                                     Statement stmt3 = con3.createStatement();
                                     String sql3 = "Insert into login (userid, Password) values ('" + cliente.getID() + "', '" + cliente.getPwd() + "')";
                                     int rs3 = stmt3.executeUpdate(sql3);
@@ -356,7 +360,7 @@ public class AutonoleggioC {
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt = con.createStatement();
                 String sql = "Select * from preventivo where ID='" + view.getnumeroPreventivoTextField().getText() + "'";
                 ResultSet rs = stmt.executeQuery(sql);
@@ -378,7 +382,7 @@ public class AutonoleggioC {
 
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                        Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                         Statement stmt2 = con2.createStatement();
                         String sql2 = "Select * from cliente where userid='" + view.getnumeroClienteTextField().getText() + "'";
                         ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -424,7 +428,7 @@ public class AutonoleggioC {
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt = con.createStatement();
                 String sql = "Select * from preventivo where ID='" + view.getnumeroPreventivoTextField().getText() + "'";
                 ResultSet rs = stmt.executeQuery(sql);
@@ -446,7 +450,7 @@ public class AutonoleggioC {
 
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                        Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                         Statement stmt2 = con2.createStatement();
                         String sql2 = "Select * from cliente where userid='" + userid + "'";
                         ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -508,7 +512,7 @@ public class AutonoleggioC {
             //operazione eseguita dal desk
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt = con.createStatement();
                 String sql = "Insert into contratto (ID, Preventivo, Cliente, Targa, Mora) values (NULL, '" + IDPreventivo + "', '" + IDCliente + "', 'nn', '0')";
                 int rs = stmt.executeUpdate(sql);
@@ -516,7 +520,7 @@ public class AutonoleggioC {
 
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                        Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                         Statement stmt2 = con2.createStatement();
                         String sql2 = "Select " + preventivo.getclusterscelto() + " from agenda where Data between '" + preventivo.getDataRitiro() + "' and '" + preventivo.getDataRiconsegna() + "'";
                         ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -531,7 +535,7 @@ public class AutonoleggioC {
 
                                 try {
                                     Class.forName("com.mysql.cj.jdbc.Driver");
-                                    Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
+                                    Connection con3 = DriverManager.getConnection(jdbcUrl, "root", "");
                                     Statement stmt3 = con3.createStatement();
                                     String sql3 = "Update agenda set " + preventivo.getclusterscelto() + " = '" + temp + "' where Data = '" + var + "'";
                                     int rs3 = stmt3.executeUpdate(sql3);
@@ -566,7 +570,7 @@ public class AutonoleggioC {
             //operazione eseguita dal desk
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt = con.createStatement();
                 String sql = "Insert into contratto (ID, Preventivo, Cliente, Targa, Mora) values (NULL, '" + IDPreventivo + "', '" + IDCliente + "', 'nn', '0')";
                 int rs = stmt.executeUpdate(sql);
@@ -574,7 +578,7 @@ public class AutonoleggioC {
 
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                        Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                         Statement stmt2 = con2.createStatement();
                         String sql2 = "Select " + preventivo.getclusterscelto() + " from agenda where Data between '" + preventivo.getDataRitiro() + "' and '" + preventivo.getDataRiconsegna() + "'";
                         ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -589,7 +593,7 @@ public class AutonoleggioC {
 
                                 try {
                                     Class.forName("com.mysql.cj.jdbc.Driver");
-                                    Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
+                                    Connection con3 = DriverManager.getConnection(jdbcUrl, "root", "");
                                     Statement stmt3 = con3.createStatement();
                                     String sql3 = "Update agenda set " + preventivo.getclusterscelto() + " = '" + temp + "' where Data = '" + var + "'";
                                     int rs3 = stmt3.executeUpdate(sql3);
@@ -629,7 +633,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt = con.createStatement();
             String sql = "Select * from contratto where ID='" + view.getNumeroContratto().getText() + "'";
             ResultSet rs = stmt.executeQuery(sql);
@@ -670,7 +674,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt = con.createStatement();
             String sql = "Select clusterscelto from preventivo where ID='" + preventivo.getIDPreventivo() + "'";
             ResultSet rs = stmt.executeQuery(sql);
@@ -680,7 +684,7 @@ public class AutonoleggioC {
 
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
+                    Connection con3 = DriverManager.getConnection(jdbcUrl, "root", "");
                     Statement stmt3 = con3.createStatement();
                     String sql3 = "Select Targa from veicolo where Gruppo='" + preventivo.getclusterscelto() + "' and Stato='" + statoiniziale + "' LIMIT 1";
                     ResultSet rs3 = stmt3.executeQuery(sql3);
@@ -691,7 +695,7 @@ public class AutonoleggioC {
 
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con4 = DriverManager.getConnection(mysql_url, "root", "");
+                            Connection con4 = DriverManager.getConnection(jdbcUrl, "root", "");
                             Statement stmt4 = con4.createStatement();
                             String sql4 = "Update contratto set Targa = '" + contratto.getTarga() + "' where Preventivo = '" + preventivo.getIDPreventivo() + "'";
                             int rs4 = stmt4.executeUpdate(sql4);
@@ -700,7 +704,7 @@ public class AutonoleggioC {
 
                                 try {
                                     Class.forName("com.mysql.cj.jdbc.Driver");
-                                    Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                                    Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                                     Statement stmt2 = con2.createStatement();
                                     String sql2 = "Update veicolo set Stato = '" + statofinale + "' where Targa = '" + contratto.getTarga() + "'";
                                     int rs2 = stmt2.executeUpdate(sql2);
@@ -745,7 +749,7 @@ public class AutonoleggioC {
             view.parcomacchine();
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt = con.createStatement();
                 String sql = "Select * from veicolo";
                 ResultSet rs = stmt.executeQuery(sql);
@@ -832,7 +836,7 @@ public class AutonoleggioC {
             view.parcomacchinegarage();
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt = con.createStatement();
                 String sql = "Select * from veicolo";
                 ResultSet rs = stmt.executeQuery(sql);
@@ -937,7 +941,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt = con.createStatement();
             String sql = "Insert into veicolo (Targa, Marca, Modello, Gruppo, Stato, Km, Danni) values ('" + veicolo.getTarga() + "', '" + veicolo.getMarca() + "', '" + veicolo.getModello() + "', '" + veicolo.getGruppo() + "', '" + veicolo.getStato() + "', '" + view.getKmAggiungi().getText() + "', '" + veicolo.getDanni() + "')";
             int rs = stmt.executeUpdate(sql);
@@ -969,7 +973,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt = con.createStatement();
             String sql = "Select * from veicolo where Targa = '" + view.getTargaVeicoloTextField().getText() + "'";
             ResultSet rs = stmt.executeQuery(sql);
@@ -983,7 +987,7 @@ public class AutonoleggioC {
 
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                    Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                     Statement stmt2 = con2.createStatement();
                     String sql2 = "Delete from veicolo where Targa = '" + veicolo.getTarga() + "'";
                     int rs2 = stmt2.executeUpdate(sql2);
@@ -1022,7 +1026,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt2 = con2.createStatement();
             String sql2 = "Select * from veicolo where Targa = '" + view.getTargaVeicoloModificaTextField().getText() + "'";
             ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -1061,7 +1065,7 @@ public class AutonoleggioC {
             //impiegato desk
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt2 = con2.createStatement();
                 String sql2 = "Update veicolo set Stato = '" + view.getstato() + "' where Targa = '" + Targa + "'";
                 int rs2 = stmt2.executeUpdate(sql2);
@@ -1080,7 +1084,7 @@ public class AutonoleggioC {
             //impiegato garage
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt2 = con2.createStatement();
                 String sql2 = "Update veicolo set Stato = '" + view.getstato() + "' where Targa = '" + Targa + "'";
                 int rs2 = stmt2.executeUpdate(sql2);
@@ -1121,7 +1125,7 @@ public class AutonoleggioC {
 
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
+                    Connection con3 = DriverManager.getConnection(jdbcUrl, "root", "");
                     Statement stmt3 = con3.createStatement();
                     String sql3 = "Select * from cluster where Nome = '" + preventivo.getclusterscelto() + "'";
                     ResultSet rs3 = stmt3.executeQuery(sql3);
@@ -1138,7 +1142,7 @@ public class AutonoleggioC {
 
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                    Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                     Statement stmt = con.createStatement();
                     String sql = "Select COUNT('" + preventivo.getclusterscelto() + "') from agenda where Data between '" + preventivo.getDataRitiro() + "' and '" + preventivo.getDataRiconsegna() + "' and " + preventivo.getclusterscelto() + " > 0 ";
                     ResultSet rs = stmt.executeQuery(sql);
@@ -1174,7 +1178,7 @@ public class AutonoleggioC {
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt2 = con2.createStatement();
                 String sql2 = "Select * from cliente where userid='" + userid + "'";
                 ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -1210,7 +1214,7 @@ public class AutonoleggioC {
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con3 = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt3 = con3.createStatement();
                 String sql3 = "Select * from cluster where Nome = '" + preventivo.getclusterscelto() + "'";
                 ResultSet rs3 = stmt3.executeQuery(sql3);
@@ -1227,7 +1231,7 @@ public class AutonoleggioC {
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt = con.createStatement();
                 String sql = "Select COUNT('" + preventivo.getclusterscelto() + "') from agenda where Data between '" + preventivo.getDataRitiro() + "' and '" + preventivo.getDataRiconsegna() + "' and " + preventivo.getclusterscelto() + " > 0 ";
                 ResultSet rs = stmt.executeQuery(sql);
@@ -1276,7 +1280,7 @@ public class AutonoleggioC {
 
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
+                    Connection con3 = DriverManager.getConnection(jdbcUrl, "root", "");
                     Statement stmt3 = con3.createStatement();
                     String sql3 = "Select * from cluster where Nome = '" + preventivo.getclusterscelto() + "'";
                     ResultSet rs3 = stmt3.executeQuery(sql3);
@@ -1294,7 +1298,7 @@ public class AutonoleggioC {
 
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                    Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                     Statement stmt = con.createStatement();
                     String sql = "Select COUNT('" + preventivo.getclusterscelto() + "') from agenda where Data between '" + preventivo.getDataRitiro() + "' and '" + preventivo.getDataRiconsegna() + "' and " + preventivo.getclusterscelto() + " > 0 ";
                     ResultSet rs = stmt.executeQuery(sql);
@@ -1392,7 +1396,7 @@ public class AutonoleggioC {
             //impiegato desk
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt = con.createStatement();
                 String sql = "Insert into preventivo (ID, DataRitiro, OraRitiro, DataRiconsegna, OraRiconsegna, gncp, mncp, ancp, gepcp, mepcp, aepcp, clusterscelto, seggiolino, catene, navigatore, hotspot, Totale) values (NULL, '" + view.getdataritiro() + "', '" + view.getoraritiro() + "', '" + view.getdatariconsegna() + "', '" + view.getorariconsegna() + "', '" + view.getgnc() + "', '" + view.getmnc() + "', '" + view.getanc() + "', '" + view.getgep() + "', '" + view.getmep() + "', '" + view.getaep() + "', '" + view.getclusterscelto() + "', '" + preventivo.getseggiolino() + "', '" + preventivo.getcatene() + "', '" + preventivo.getnavigatore() + "', '" + preventivo.gethotspot() + "', '" + preventivo.gettotale() + "')";
                 int rs = stmt.executeUpdate(sql);
@@ -1400,7 +1404,7 @@ public class AutonoleggioC {
 
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                        Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                         Statement stmt2 = con2.createStatement();
                         String sql2 = "SELECT * FROM preventivo ORDER BY ID DESC LIMIT 1";
                         ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -1426,7 +1430,7 @@ public class AutonoleggioC {
             //cliente
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt = con.createStatement();
                 String sql = "Insert into preventivo (ID, DataRitiro, OraRitiro, DataRiconsegna, OraRiconsegna, gncp, mncp, ancp, gepcp, mepcp, aepcp, clusterscelto, seggiolino, catene, navigatore, hotspot, Totale) values (NULL, '" + preventivo.getDataRitiro() + "', '" + preventivo.getOraRitiro() + "', '" + preventivo.getDataRiconsegna() + "', '" + preventivo.getOraRiconsegna() + "', '" + preventivo.getgncp() + "', '" + preventivo.getmncp() + "', '" + preventivo.getancp() + "', '" + preventivo.getgepcp() + "', '" + preventivo.getmepcp() + "', '" + preventivo.getaepcp() + "', '" + preventivo.getclusterscelto() + "', '" + preventivo.getseggiolino() + "', '" + preventivo.getcatene() + "', '" + preventivo.getnavigatore() + "', '" + preventivo.gethotspot() + "', '" + preventivo.gettotale() + "')";
                 int rs = stmt.executeUpdate(sql);
@@ -1434,7 +1438,7 @@ public class AutonoleggioC {
 
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                        Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                         Statement stmt2 = con2.createStatement();
                         String sql2 = "SELECT * FROM preventivo ORDER BY ID DESC LIMIT 1";
                         ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -1460,7 +1464,7 @@ public class AutonoleggioC {
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt = con.createStatement();
                 String sql = "Insert into preventivo (ID, DataRitiro, OraRitiro, DataRiconsegna, OraRiconsegna, gncp, mncp, ancp, gepcp, mepcp, aepcp, clusterscelto, seggiolino, catene, navigatore, hotspot, Totale) values (NULL, '" + view.getdataritiro() + "', '" + view.getoraritiro() + "', '" + view.getdatariconsegna() + "', '" + view.getorariconsegna() + "', '" + view.getgnc() + "', '" + view.getmnc() + "', '" + view.getanc() + "', '" + view.getgep() + "', '" + view.getmep() + "', '" + view.getaep() + "', '" + view.getclusterscelto() + "', '" + preventivo.getseggiolino() + "', '" + preventivo.getcatene() + "', '" + preventivo.getnavigatore() + "', '" + preventivo.gethotspot() + "', '" + preventivo.gettotale() + "')";
                 int rs = stmt.executeUpdate(sql);
@@ -1468,7 +1472,7 @@ public class AutonoleggioC {
 
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                        Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                         Statement stmt2 = con2.createStatement();
                         String sql2 = "SELECT * FROM preventivo ORDER BY ID DESC LIMIT 1";
                         ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -1500,7 +1504,7 @@ public class AutonoleggioC {
         view.modificadati();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt = con.createStatement();
             String sql = "Select * from cliente where userid='" + IDCliente + "'";
             ResultSet rs = stmt.executeQuery(sql);
@@ -1566,7 +1570,7 @@ public class AutonoleggioC {
         try {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt2 = con2.createStatement();
             String sql2 = "Select * from contratto where Cliente='" + userid + "'";
             ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -1631,7 +1635,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con3 = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt3 = con3.createStatement();
             String sql3 = "Delete from contratto where ID = '" + view.getNumeroContratto().getText() + "'";
             int rs3 = stmt3.executeUpdate(sql3);
@@ -1664,7 +1668,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt2 = con2.createStatement();
             String sql2 = "Update cliente set Email = '" + cliente.getEmail() + "', Prefisso = '" + cliente.getPrefisso() + "', Telefono = '" + view.getModificationView().getTelefonoClienteTextField().getText() + "', Numpatente = '" + cliente.getNumpatente() + "', Paesepatente = '" + cliente.getPaesePatente() + "', Giornosp = '" + cliente.getGiornosp() + "', Mesesp = '" + cliente.getMesesp() + "', Annosp = '" + cliente.getAnnosp() + "', Indirizzo = '" + cliente.getIndirizzo() + "', city = '" + cliente.getCity() + "', Paese = '" + cliente.getPaese() + "', Codpostale = '" + view.getModificationView().getCPClienteTextField().getText() + "', Pwd = '" + cliente.getPwd() + "' where userid = '" + userid + "'";
             int rs2 = stmt2.executeUpdate(sql2);
@@ -1687,7 +1691,7 @@ public class AutonoleggioC {
         try {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt2 = con2.createStatement();
             String sql2 = "Select * from cliente where userid='" + ID + "'";
             ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -1717,7 +1721,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt2 = con2.createStatement();
             String sql2 = "Delete from login where userid = '" + userid + "'";
             int rs2 = stmt2.executeUpdate(sql2);
@@ -1725,7 +1729,7 @@ public class AutonoleggioC {
 
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
+                    Connection con3 = DriverManager.getConnection(jdbcUrl, "root", "");
                     Statement stmt3 = con3.createStatement();
                     String sql3 = "Delete from cliente where userid = '" + userid + "'";
                     int rs3 = stmt3.executeUpdate(sql3);
@@ -1773,7 +1777,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt = con.createStatement();
             String sql = "Select * from contratto where ID='" + view.getNumeroContratto().getText() + "'";
             ResultSet rs = stmt.executeQuery(sql);
@@ -1787,7 +1791,7 @@ public class AutonoleggioC {
                 try {
 
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                    Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                     Statement stmt2 = con2.createStatement();
                     String sql2 = "Select * from veicolo where Targa='" + contratto.getTarga() + "'";
                     ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -1799,7 +1803,7 @@ public class AutonoleggioC {
                         try {
 
                             Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
+                            Connection con3 = DriverManager.getConnection(jdbcUrl, "root", "");
                             Statement stmt3 = con3.createStatement();
                             String sql3 = "Select * from preventivo where ID='" + contratto.getIDPreventivo() + "'";
                             ResultSet rs3 = stmt3.executeQuery(sql3);
@@ -1849,7 +1853,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt2 = con2.createStatement();
             String sql2 = "Update veicolo set Stato = '" + statofinale + "' where Targa = '" + contratto.getTarga() + "'";
             int rs2 = stmt2.executeUpdate(sql2);
@@ -1883,7 +1887,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt = con.createStatement();
             String sql = "Select * from contratto where ID='" + view.getNumeroContratto().getText() + "'";
             ResultSet rs = stmt.executeQuery(sql);
@@ -1897,7 +1901,7 @@ public class AutonoleggioC {
                 try {
 
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+                    Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
                     Statement stmt2 = con2.createStatement();
                     String sql2 = "Select * from veicolo where Targa='" + contratto.getTarga() + "'";
                     ResultSet rs2 = stmt2.executeQuery(sql2);
@@ -1910,7 +1914,7 @@ public class AutonoleggioC {
                         try {
 
                             Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
+                            Connection con3 = DriverManager.getConnection(jdbcUrl, "root", "");
                             Statement stmt3 = con3.createStatement();
                             String sql3 = "Select * from preventivo where ID='" + contratto.getIDPreventivo() + "'";
                             ResultSet rs3 = stmt3.executeQuery(sql3);
@@ -1964,7 +1968,7 @@ public class AutonoleggioC {
             //se entro qui il veicolo è stato consegnato in ritardo
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt = con.createStatement();
                 String sql = "Select Prezzo from cluster where Nome='" + preventivo.getclusterscelto() + "'";
                 ResultSet rs = stmt.executeQuery(sql);
@@ -2012,7 +2016,7 @@ public class AutonoleggioC {
             //se entro qui il veicolo è stato consegnato in ritardo
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
+                Connection con = DriverManager.getConnection(jdbcUrl, "root", "");
                 Statement stmt = con.createStatement();
                 String sql = "Select Prezzo from cluster where Nome='" + preventivo.getclusterscelto() + "'";
                 ResultSet rs = stmt.executeQuery(sql);
@@ -2040,7 +2044,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con4 = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con4 = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt4 = con4.createStatement();
             String sql4 = "Update contratto set Mora = '" + contratto.getMora() + "' where ID = '" + contratto.getIDContratto() + "'";
             int rs4 = stmt4.executeUpdate(sql4);
@@ -2049,7 +2053,7 @@ public class AutonoleggioC {
 
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
+                    Connection con3 = DriverManager.getConnection(jdbcUrl, "root", "");
                     Statement stmt3 = con3.createStatement();
                     String sql3 = "Update veicolo set Km = '" + veicolo.getKm() + "' where Targa = '" + contratto.getTarga() + "'";
                     int rs3 = stmt3.executeUpdate(sql3);
@@ -2059,7 +2063,7 @@ public class AutonoleggioC {
 
                             try {
                                 Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con5 = DriverManager.getConnection(mysql_url, "root", "");
+                                Connection con5 = DriverManager.getConnection(jdbcUrl, "root", "");
                                 Statement stmt5 = con5.createStatement();
                                 String sql5 = "Update veicolo set Danni = '" + veicolo.getDanni() + "' where Targa = '" + contratto.getTarga() + "'";
                                 int rs5 = stmt5.executeUpdate(sql5);
@@ -2097,7 +2101,7 @@ public class AutonoleggioC {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
             Statement stmt2 = con2.createStatement();
             String sql2 = "Update veicolo set Stato = '" + statofinale + "' where Targa = '" + contratto.getTarga() + "'";
             int rs2 = stmt2.executeUpdate(sql2);
