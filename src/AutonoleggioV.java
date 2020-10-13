@@ -1,4 +1,7 @@
 import views.LoginView;
+import views.ModificationView;
+import views.RegistrationView;
+import views.StaticData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,57 +20,6 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
     private JButton Annulla;
 
     //elementi per la registrazione
-    private JLabel InformazioniPersonaliLabel;
-    private JLabel NomeLabel;
-    private JTextField NomeTextfield;
-    private JLabel PasswordUtenteLabel;
-    private JPasswordField PasswordUtenteTextField;
-    private JLabel CognomeLabel;
-    private JTextField CognomeTextfield;
-    private JLabel EmailLabel;
-    private JTextField EmailTextfield;
-    private JLabel PrefissoLabel;
-    private JComboBox<String> prefisso;
-    private String[] prefissi;
-    private JLabel TelefonoLabel;
-    private JTextField TelefonoTextfield;
-    private JLabel DatadinascitaLabel;
-    private JLabel GiornodnLabel;
-    private JComboBox<Integer> gdn;
-    private Integer[] giorni;
-    private JLabel MesednLabel;
-    private JComboBox<String> mdn;
-    private String[] mesi;
-    private JLabel AnnodnLabel;
-    private JComboBox<Integer> adn;
-    private Integer[] anni;
-    private JLabel InfoPatenteLabel;
-    private JLabel NPatenteLabel;
-    private JTextField NPatenteTextfield;
-    private JLabel PaeseEmissionePLabel;
-    private JComboBox<String> paese;
-    private String[] paesi;
-    private JLabel GiornodeLabel;
-    private JComboBox<Integer> gde;
-    private JLabel MesedeLabel;
-    private JComboBox<String> mde;
-    private JLabel AnnodeLabel;
-    private JComboBox<Integer> ade;
-    private JLabel GiornodsLabel;
-    private JComboBox<Integer> gds;
-    private JLabel MesedsLabel;
-    private JComboBox<String> mds;
-    private JLabel AnnodsLabel;
-    private JComboBox<Integer> ads;
-    private JLabel FatturazioneLabel;
-    private JLabel IndirizzoLabel;
-    private JTextField IndirizzoTextfield;
-    private JLabel cityLabel;
-    private JTextField cityTextField;
-    private JLabel PaeseResidenzaPLabel;
-    private JComboBox<String> paeseres;
-    private JLabel CPLabel;
-    private JTextField CPTextfield;
     private JButton Registrati;
 
     //registrazione effettuata con successo
@@ -104,7 +56,6 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
     private JLabel AEPatenteLabel;
     private JComboBox<Integer> aep;
     private Integer[] anniep;
-    private Integer[] annis;
     private Integer[] giornipreventivo;
     private JLabel selezioneCluster;
     private JLabel BGM;
@@ -330,36 +281,12 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
     private JTextField MoraKm;
     private JLabel RitardoLabel;
     private JTextField RitartoTextField;
-    private JTextField SeggiolinoMora;
-    private JTextField CateneMora;
-    private JTextField NavigatoreMora;
-    private JTextField HotspotMora;
     private JButton CalcoloMora;
 
     //elementi per view cliente
     private JLabel Benvenuto;
     private JLabel NomeClienteLabel;
     private JLabel CognomeClienteLabel;
-    private JTextField PwdClienteTextField;
-    private JTextField EmailClienteTextField;
-    private JComboBox<String> prefissocliente;
-    private JTextField TelefonoClienteTextField;
-    private JLabel gdnClienteLabel;
-    private JLabel mdnClienteLabel;
-    private JLabel adnClienteLabel;
-    private JLabel gdeClienteLabel;
-    private JLabel mdeClienteLabel;
-    private JLabel adeClienteLabel;
-    private JComboBox<Integer> gdsCliente;
-    private JComboBox<String> mdsCliente;
-    private JComboBox<Integer> adsCliente;
-    private JTextField cityClientTextField;
-    private JTextField CPClienteTextField;
-    private JComboBox<String> paeseCliente;
-    private JTextField NPatenteClienteTextField;
-    private JTextField IndirizzoClienteTextField;
-    private JComboBox<String> paeseresCliente;
-    private JButton SalvaModifiche;
 
 
     private JButton ModificaDati;
@@ -395,6 +322,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
     private JLabel immagine;
 
     private LoginView loginView;
+    private RegistrationView registrationView;
+    private ModificationView modificationView;
 
     public AutonoleggioV(String title) {
         frame = new JFrame(title);
@@ -466,157 +395,13 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        InformazioniPersonaliLabel = new JLabel("Informazioni Personali");
-        NomeLabel = new JLabel("Nome :");
-        NomeTextfield = new JTextField();
-        PasswordUtenteLabel = new JLabel("Password :");
-        PasswordUtenteTextField = new JPasswordField();
-        CognomeLabel = new JLabel("Cognome :");
-        CognomeTextfield = new JTextField();
-        EmailLabel = new JLabel("Email :");
-        EmailTextfield = new JTextField();
-        PrefissoLabel = new JLabel("Prefisso : ");
-        prefissi = new String[]{"+39", "+33", "+1"};
-        prefisso = new JComboBox<String>(prefissi);
-        TelefonoLabel = new JLabel("Telefono :");
-        TelefonoTextfield = new JTextField();
-        DatadinascitaLabel = new JLabel("Data di nascita");
-        GiornodnLabel = new JLabel("Giorno : ");
-        giorni = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
-        gdn = new JComboBox<Integer>(giorni);
-        MesednLabel = new JLabel("Mese : ");
-        mesi = new String[]{"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
-        mdn = new JComboBox<String>(mesi);
-        AnnodnLabel = new JLabel("Anno : ");
-        anni = new Integer[]{1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960,
-                1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981,
-                1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002};
-        adn = new JComboBox<Integer>(anni);
-        annis = new Integer[]{2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030};
-        InfoPatenteLabel = new JLabel("Info Patente  ");
-        NPatenteLabel = new JLabel("Numero Patente : ");
-        NPatenteTextfield = new JTextField();
-        PaeseEmissionePLabel = new JLabel("Paese Emissione Patente : ");
-        paesi = new String[]{"Italia", "Francia", "America"};
-        paese = new JComboBox<String>(paesi);
-        GiornodeLabel = new JLabel("Giorno emissione : ");
-        gde = new JComboBox<Integer>(giorni);
-        MesedeLabel = new JLabel("Mese emissione : ");
-        mde = new JComboBox<String>(mesi);
-        AnnodeLabel = new JLabel("Anno emissione: ");
-        ade = new JComboBox<Integer>(anni);
-        GiornodsLabel = new JLabel("Giorno scadenza : ");
-        gds = new JComboBox<Integer>(giorni);
-        MesedsLabel = new JLabel("Mese scadenza : ");
-        mds = new JComboBox<String>(mesi);
-        AnnodsLabel = new JLabel("Anno scadenza: ");
-        ads = new JComboBox<Integer>(annis);
-        FatturazioneLabel = new JLabel("Dati fatturazione");
-        IndirizzoLabel = new JLabel("Indirizzo :");
-        IndirizzoTextfield = new JTextField();
-        cityLabel = new JLabel("Città :");
-        cityTextField = new JTextField();
-        PaeseResidenzaPLabel = new JLabel("Paese :");
-        paeseres = new JComboBox<String>(paesi);
-        CPLabel = new JLabel("Codice Postale :");
-        CPTextfield = new JTextField();
+
+        registrationView = new RegistrationView(frame);
 
         Registrati = new JButton("Registrati");
         Annulla = new JButton("Annulla");
         // Add UI element to frame
         frame.setLayout(null);
-        InformazioniPersonaliLabel.setBounds(50, 25, 200, 70);
-        frame.add(InformazioniPersonaliLabel);
-        NomeLabel.setBounds(50, 75, 70, 70);
-        frame.add(NomeLabel);
-        NomeTextfield.setBounds(150, 100, 200, 20);
-        frame.add(NomeTextfield);
-        PasswordUtenteLabel.setBounds(400, 75, 100, 70);
-        frame.add(PasswordUtenteLabel);
-        PasswordUtenteTextField.setBounds(500, 100, 200, 20);
-        frame.add(PasswordUtenteTextField);
-        CognomeLabel.setBounds(50, 125, 70, 70);
-        frame.add(CognomeLabel);
-        CognomeTextfield.setBounds(150, 150, 200, 20);
-        frame.add(CognomeTextfield);
-        EmailLabel.setBounds(50, 175, 70, 70);
-        frame.add(EmailLabel);
-        EmailTextfield.setBounds(150, 200, 200, 20);
-        frame.add(EmailTextfield);
-        PrefissoLabel.setBounds(50, 225, 70, 70);
-        frame.add(PrefissoLabel);
-        prefisso.setBounds(150, 250, 70, 20);
-        frame.add(prefisso);
-        TelefonoLabel.setBounds(250, 225, 70, 70);
-        frame.add(TelefonoLabel);
-        TelefonoTextfield.setBounds(350, 250, 200, 20);
-        frame.add(TelefonoTextfield);
-        DatadinascitaLabel.setBounds(50, 275, 200, 70);
-        frame.add(DatadinascitaLabel);
-        GiornodnLabel.setBounds(200, 275, 70, 70);
-        frame.add(GiornodnLabel);
-        gdn.setBounds(300, 300, 70, 20);
-        frame.add(gdn);
-        MesednLabel.setBounds(400, 275, 70, 70);
-        frame.add(MesednLabel);
-        mdn.setBounds(500, 300, 100, 20);
-        frame.add(mdn);
-        AnnodnLabel.setBounds(650, 275, 70, 70);
-        frame.add(AnnodnLabel);
-        adn.setBounds(750, 300, 70, 20);
-        frame.add(adn);
-        InfoPatenteLabel.setBounds(50, 325, 100, 70);
-        frame.add(InfoPatenteLabel);
-        NPatenteLabel.setBounds(175, 325, 150, 70);
-        frame.add(NPatenteLabel);
-        NPatenteTextfield.setBounds(325, 350, 150, 20);
-        frame.add(NPatenteTextfield);
-        PaeseEmissionePLabel.setBounds(500, 325, 200, 70);
-        frame.add(PaeseEmissionePLabel);
-        paese.setBounds(700, 350, 100, 20);
-        frame.add(paese);
-        GiornodeLabel.setBounds(50, 375, 150, 70);
-        frame.add(GiornodeLabel);
-        gde.setBounds(200, 400, 70, 20);
-        frame.add(gde);
-        MesedeLabel.setBounds(300, 375, 150, 70);
-        frame.add(MesedeLabel);
-        mde.setBounds(450, 400, 100, 20);
-        frame.add(mde);
-        AnnodeLabel.setBounds(600, 375, 150, 70);
-        frame.add(AnnodeLabel);
-        ade.setBounds(750, 400, 70, 20);
-        frame.add(ade);
-        GiornodsLabel.setBounds(50, 425, 150, 70);
-        frame.add(GiornodsLabel);
-        gds.setBounds(200, 450, 70, 20);
-        frame.add(gds);
-        MesedsLabel.setBounds(300, 425, 150, 70);
-        frame.add(MesedsLabel);
-        mds.setBounds(450, 450, 100, 20);
-        frame.add(mds);
-        AnnodsLabel.setBounds(600, 425, 150, 70);
-        frame.add(AnnodsLabel);
-        ads.setBounds(750, 450, 70, 20);
-        frame.add(ads);
-        FatturazioneLabel.setBounds(50, 475, 150, 70);
-        frame.add(FatturazioneLabel);
-        IndirizzoLabel.setBounds(50, 525, 70, 70);
-        frame.add(IndirizzoLabel);
-        IndirizzoTextfield.setBounds(150, 550, 200, 20);
-        frame.add(IndirizzoTextfield);
-        cityLabel.setBounds(375, 525, 70, 70);
-        frame.add(cityLabel);
-        cityTextField.setBounds(450, 550, 200, 20);
-        frame.add(cityTextField);
-        PaeseResidenzaPLabel.setBounds(50, 575, 70, 70);
-        frame.add(PaeseResidenzaPLabel);
-        paeseres.setBounds(150, 600, 100, 20);
-        frame.add(paeseres);
-        CPLabel.setBounds(275, 575, 150, 70);
-        frame.add(CPLabel);
-        CPTextfield.setBounds(400, 600, 200, 20);
-        frame.add(CPTextfield);
 
         Registrati.setBounds(900, 575, 100, 50);
         frame.add(Registrati);
@@ -633,158 +418,12 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        InformazioniPersonaliLabel = new JLabel("Informazioni Personali");
-        NomeLabel = new JLabel("Nome :");
-        NomeTextfield = new JTextField();
-        PasswordUtenteLabel = new JLabel("Password :");
-        PasswordUtenteTextField = new JPasswordField();
-        CognomeLabel = new JLabel("Cognome :");
-        CognomeTextfield = new JTextField();
-        EmailLabel = new JLabel("Email :");
-        EmailTextfield = new JTextField();
-        PrefissoLabel = new JLabel("Prefisso : ");
-        prefissi = new String[]{"+39", "+33", "+1"};
-        prefisso = new JComboBox<String>(prefissi);
-        TelefonoLabel = new JLabel("Telefono :");
-        TelefonoTextfield = new JTextField();
-        DatadinascitaLabel = new JLabel("Data di nascita");
-        GiornodnLabel = new JLabel("Giorno : ");
-        giorni = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
-        gdn = new JComboBox<Integer>(giorni);
-        MesednLabel = new JLabel("Mese : ");
-        mesi = new String[]{"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
-        mdn = new JComboBox<String>(mesi);
-        AnnodnLabel = new JLabel("Anno : ");
-        anni = new Integer[]{1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960,
-                1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981,
-                1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002};
-        adn = new JComboBox<Integer>(anni);
-        annis = new Integer[]{2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030};
-        InfoPatenteLabel = new JLabel("Info Patente  ");
-        NPatenteLabel = new JLabel("Numero Patente : ");
-        NPatenteTextfield = new JTextField();
-        PaeseEmissionePLabel = new JLabel("Paese Emissione Patente : ");
-        paesi = new String[]{"Italia", "Francia", "America"};
-        paese = new JComboBox<String>(paesi);
-        GiornodeLabel = new JLabel("Giorno emissione : ");
-        gde = new JComboBox<Integer>(giorni);
-        MesedeLabel = new JLabel("Mese emissione : ");
-        mde = new JComboBox<String>(mesi);
-        AnnodeLabel = new JLabel("Anno emissione: ");
-        ade = new JComboBox<Integer>(anni);
-        GiornodsLabel = new JLabel("Giorno scadenza : ");
-        gds = new JComboBox<Integer>(giorni);
-        MesedsLabel = new JLabel("Mese scadenza : ");
-        mds = new JComboBox<String>(mesi);
-        AnnodsLabel = new JLabel("Anno scadenza: ");
-        ads = new JComboBox<Integer>(annis);
-        FatturazioneLabel = new JLabel("Dati fatturazione");
-        IndirizzoLabel = new JLabel("Indirizzo :");
-        IndirizzoTextfield = new JTextField();
-        cityLabel = new JLabel("Città :");
-        cityTextField = new JTextField();
-        PaeseResidenzaPLabel = new JLabel("Paese :");
-        paeseres = new JComboBox<String>(paesi);
-        CPLabel = new JLabel("Codice Postale :");
-        CPTextfield = new JTextField();
+        registrationView = new RegistrationView(frame);
 
         Registrati = new JButton("Registrati");
         Indietro = new JButton("Indietro");
         // Add UI element to frame
         frame.setLayout(null);
-        InformazioniPersonaliLabel.setBounds(50, 25, 200, 70);
-        frame.add(InformazioniPersonaliLabel);
-        NomeLabel.setBounds(50, 75, 70, 70);
-        frame.add(NomeLabel);
-        NomeTextfield.setBounds(150, 100, 200, 20);
-        frame.add(NomeTextfield);
-        PasswordUtenteLabel.setBounds(400, 75, 100, 70);
-        frame.add(PasswordUtenteLabel);
-        PasswordUtenteTextField.setBounds(500, 100, 200, 20);
-        frame.add(PasswordUtenteTextField);
-        CognomeLabel.setBounds(50, 125, 70, 70);
-        frame.add(CognomeLabel);
-        CognomeTextfield.setBounds(150, 150, 200, 20);
-        frame.add(CognomeTextfield);
-        EmailLabel.setBounds(50, 175, 70, 70);
-        frame.add(EmailLabel);
-        EmailTextfield.setBounds(150, 200, 200, 20);
-        frame.add(EmailTextfield);
-        PrefissoLabel.setBounds(50, 225, 70, 70);
-        frame.add(PrefissoLabel);
-        prefisso.setBounds(150, 250, 70, 20);
-        frame.add(prefisso);
-        TelefonoLabel.setBounds(250, 225, 70, 70);
-        frame.add(TelefonoLabel);
-        TelefonoTextfield.setBounds(350, 250, 200, 20);
-        frame.add(TelefonoTextfield);
-        DatadinascitaLabel.setBounds(50, 275, 200, 70);
-        frame.add(DatadinascitaLabel);
-        GiornodnLabel.setBounds(200, 275, 70, 70);
-        frame.add(GiornodnLabel);
-        gdn.setBounds(300, 300, 70, 20);
-        frame.add(gdn);
-        MesednLabel.setBounds(400, 275, 70, 70);
-        frame.add(MesednLabel);
-        mdn.setBounds(500, 300, 100, 20);
-        frame.add(mdn);
-        AnnodnLabel.setBounds(650, 275, 70, 70);
-        frame.add(AnnodnLabel);
-        adn.setBounds(750, 300, 70, 20);
-        frame.add(adn);
-        InfoPatenteLabel.setBounds(50, 325, 100, 70);
-        frame.add(InfoPatenteLabel);
-        NPatenteLabel.setBounds(175, 325, 150, 70);
-        frame.add(NPatenteLabel);
-        NPatenteTextfield.setBounds(325, 350, 150, 20);
-        frame.add(NPatenteTextfield);
-        PaeseEmissionePLabel.setBounds(500, 325, 200, 70);
-        frame.add(PaeseEmissionePLabel);
-        paese.setBounds(700, 350, 100, 20);
-        frame.add(paese);
-        GiornodeLabel.setBounds(50, 375, 150, 70);
-        frame.add(GiornodeLabel);
-        gde.setBounds(200, 400, 70, 20);
-        frame.add(gde);
-        MesedeLabel.setBounds(300, 375, 150, 70);
-        frame.add(MesedeLabel);
-        mde.setBounds(450, 400, 100, 20);
-        frame.add(mde);
-        AnnodeLabel.setBounds(600, 375, 150, 70);
-        frame.add(AnnodeLabel);
-        ade.setBounds(750, 400, 70, 20);
-        frame.add(ade);
-        GiornodsLabel.setBounds(50, 425, 150, 70);
-        frame.add(GiornodsLabel);
-        gds.setBounds(200, 450, 70, 20);
-        frame.add(gds);
-        MesedsLabel.setBounds(300, 425, 150, 70);
-        frame.add(MesedsLabel);
-        mds.setBounds(450, 450, 100, 20);
-        frame.add(mds);
-        AnnodsLabel.setBounds(600, 425, 150, 70);
-        frame.add(AnnodsLabel);
-        ads.setBounds(750, 450, 70, 20);
-        frame.add(ads);
-        FatturazioneLabel.setBounds(50, 475, 150, 70);
-        frame.add(FatturazioneLabel);
-        IndirizzoLabel.setBounds(50, 525, 70, 70);
-        frame.add(IndirizzoLabel);
-        IndirizzoTextfield.setBounds(150, 550, 200, 20);
-        frame.add(IndirizzoTextfield);
-        cityLabel.setBounds(375, 525, 70, 70);
-        frame.add(cityLabel);
-        cityTextField.setBounds(450, 550, 200, 20);
-        frame.add(cityTextField);
-        PaeseResidenzaPLabel.setBounds(50, 575, 70, 70);
-        frame.add(PaeseResidenzaPLabel);
-        paeseres.setBounds(150, 600, 100, 20);
-        frame.add(paeseres);
-        CPLabel.setBounds(275, 575, 150, 70);
-        frame.add(CPLabel);
-        CPTextfield.setBounds(400, 600, 200, 20);
-        frame.add(CPTextfield);
-
         Registrati.setBounds(900, 575, 100, 50);
         frame.add(Registrati);
         Indietro.setBounds(1050, 575, 100, 50);
@@ -814,26 +453,21 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         orariconsegna = new JComboBox<String>(ore);
         DNClienteLabel = new JLabel("Data di nascita cliente : ");
         GNClienteLabel = new JLabel("Giorno : ");
-        giorni = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
-        gnc = new JComboBox<Integer>(giorni);
+        gnc = new JComboBox<>(StaticData.DAYS);
         MNClienteLabel = new JLabel("Mese : ");
-        mesi = new String[]{"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
-        mnc = new JComboBox<String>(mesi);
+        mnc = new JComboBox<>(StaticData.MONTHS);
         ANClienteLabel = new JLabel("Anno : ");
-        anni = new Integer[]{1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960,
-                1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981,
-                1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002};
-        anc = new JComboBox<Integer>(anni);
+        anc = new JComboBox<>(StaticData.YEARS);
         DEPatenteLabel = new JLabel("Data emissione patente : ");
         GEPatenteLabel = new JLabel("Giorno : ");
-        gep = new JComboBox<Integer>(giorni);
+        gep = new JComboBox<>(StaticData.DAYS);
         MEPatenteLabel = new JLabel("Mese : ");
-        mep = new JComboBox<String>(mesi);
+        mep = new JComboBox<String>(StaticData.MONTHS);
         AEPatenteLabel = new JLabel("Anno : ");
         anniep = new Integer[]{1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978,
                 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
                 2000, 2001, 2002};
-        aep = new JComboBox<Integer>(anniep);
+        aep = new JComboBox<>(anniep);
         selezioneCluster = new JLabel("Selezionare uno dei seguenti cluster : ");
         BGM = new JLabel("BGM - Berlina di dimensioni grandi con cambio manuale. 5 porte e 5 posti con alimentazione Diesel o Benzina");
         BMA = new JLabel("BMA - Berlina di dimensioni medie con cambio automatico. 5 porte e 5 posti con alimentazione Diesel o Benzina");
@@ -936,21 +570,16 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         orariconsegna = new JComboBox<String>(ore);
         DNClienteLabel = new JLabel("Data di nascita cliente : ");
         GNClienteLabel = new JLabel("Giorno : ");
-        giorni = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
-        gnc = new JComboBox<Integer>(giorni);
+        gnc = new JComboBox<Integer>(StaticData.DAYS);
         MNClienteLabel = new JLabel("Mese : ");
-        mesi = new String[]{"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
-        mnc = new JComboBox<String>(mesi);
+        mnc = new JComboBox<String>(StaticData.MONTHS);
         ANClienteLabel = new JLabel("Anno : ");
-        anni = new Integer[]{1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960,
-                1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981,
-                1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002};
-        anc = new JComboBox<Integer>(anni);
+        anc = new JComboBox<Integer>(StaticData.YEARS);
         DEPatenteLabel = new JLabel("Data emissione patente : ");
         GEPatenteLabel = new JLabel("Giorno : ");
-        gep = new JComboBox<Integer>(giorni);
+        gep = new JComboBox<Integer>(StaticData.DAYS);
         MEPatenteLabel = new JLabel("Mese : ");
-        mep = new JComboBox<String>(mesi);
+        mep = new JComboBox<String>(StaticData.MONTHS);
         AEPatenteLabel = new JLabel("Anno : ");
         anniep = new Integer[]{1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978,
                 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
@@ -1128,7 +757,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         ClusterSelezionato = new JLabel();
         TotaleLabel = new JLabel("Totale : ");
         Totale = new JLabel();
-        SimboloE = new JLabel("€");
+        SimboloE = new JLabel("ï¿½");
         SceltaExtra = new JLabel("Extra disponibili :");
         extra = new String[]{"SI", "NO"};
         SeggiolinoLabel = new JLabel("Seggiolino : ");
@@ -1254,7 +883,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         Hotspot = new JLabel();
         TotaleLabel = new JLabel("Totale : ");
         Totale = new JLabel();
-        SimboloE = new JLabel("€");
+        SimboloE = new JLabel("ï¿½");
         EffettuaPreventivo = new JButton("Stampa Preventivo");
         Indietro = new JButton("Indietro");
         esc = new JLabel();
@@ -1331,7 +960,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        MessaggioFinale = new JLabel("Il preventivo è stato salvato e inviato alla stampante");
+        MessaggioFinale = new JLabel("Il preventivo ï¿½ stato salvato e inviato alla stampante");
         MessaggioFinale.setBounds(50, 50, 300, 70);
         frame.add(MessaggioFinale);
         MessaggioCompletare = new JLabel("Per procedere con la prenotazione effettuare il login ed inserire il numero di preventivo : ");
@@ -1437,7 +1066,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         numeroPreventivo = new JLabel();
         TotaleLabel = new JLabel("Totale : ");
         Totale = new JLabel();
-        SimboloE = new JLabel("€");
+        SimboloE = new JLabel("ï¿½");
 
         Pagamento = new JButton("Pagamento");
         Indietro = new JButton("Indietro");
@@ -1850,7 +1479,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
 
         frame.setVisible(true);
-
+        frame.repaint();
     }
 
     public void rimuovi() {
@@ -2532,7 +2161,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
         TotaleLabel = new JLabel("Totale Mora : ");
         Totale = new JLabel();
-        SimboloE = new JLabel("€");
+        SimboloE = new JLabel("ï¿½");
 
         Pagamento = new JButton("Pagamento");
         Indietro = new JButton("Indietro");
@@ -2727,7 +2356,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        MessaggioFinale = new JLabel("Il preventivo è stato salvato e inviato alla stampante");
+        MessaggioFinale = new JLabel("Il preventivo ï¿½ stato salvato e inviato alla stampante");
         MessaggioFinale.setBounds(50, 50, 300, 70);
         frame.add(MessaggioFinale);
         MessaggioCompletare = new JLabel("Per procedere con il noleggio selezionare la voce apposita ed inserire il numero di preventivo : ");
@@ -2771,164 +2400,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        InformazioniPersonaliLabel = new JLabel("Informazioni Personali");
-        NomeLabel = new JLabel("Nome :");
-        NomeClienteLabel = new JLabel();
-        PasswordUtenteLabel = new JLabel("Password :");
-        PasswordUtenteTextField = new JPasswordField();
-        CognomeLabel = new JLabel("Cognome :");
-        CognomeClienteLabel = new JLabel();
-        EmailLabel = new JLabel("Email :");
-        EmailClienteTextField = new JTextField();
-        PrefissoLabel = new JLabel("Prefisso : ");
-        prefissi = new String[]{"+39", "+33", "+1"};
-        prefissocliente = new JComboBox<String>(prefissi);
-        TelefonoLabel = new JLabel("Telefono :");
-        TelefonoClienteTextField = new JTextField();
-        DatadinascitaLabel = new JLabel("Data di nascita");
-        GiornodnLabel = new JLabel("Giorno : ");
-        giorni = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
-        gdnClienteLabel = new JLabel();
-        MesednLabel = new JLabel("Mese : ");
-        mesi = new String[]{"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
-        mdnClienteLabel = new JLabel();
-        AnnodnLabel = new JLabel("Anno : ");
-        adnClienteLabel = new JLabel();
 
-        annis = new Integer[]{2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030};
-        InfoPatenteLabel = new JLabel("Info Patente  ");
-        NPatenteLabel = new JLabel("Numero Patente : ");
-        NPatenteClienteTextField = new JTextField();
-
-        PaeseEmissionePLabel = new JLabel("Paese Emissione Patente : ");
-        paesi = new String[]{"Italia", "Francia", "America"};
-        paeseCliente = new JComboBox<String>(paesi);
-        GiornodeLabel = new JLabel("Giorno emissione : ");
-        gdeClienteLabel = new JLabel();
-        MesedeLabel = new JLabel("Mese emissione : ");
-        mdeClienteLabel = new JLabel();
-        ;
-        AnnodeLabel = new JLabel("Anno emissione: ");
-        adeClienteLabel = new JLabel();
-        GiornodsLabel = new JLabel("Giorno scadenza : ");
-        gdsCliente = new JComboBox<Integer>(giorni);
-        MesedsLabel = new JLabel("Mese scadenza : ");
-        mdsCliente = new JComboBox<String>(mesi);
-        AnnodsLabel = new JLabel("Anno scadenza: ");
-        adsCliente = new JComboBox<Integer>(annis);
-        FatturazioneLabel = new JLabel("Dati fatturazione");
-        IndirizzoLabel = new JLabel("Indirizzo :");
-        IndirizzoClienteTextField = new JTextField();
-        cityLabel = new JLabel("Città :");
-        cityClientTextField = new JTextField();
-        PaeseResidenzaPLabel = new JLabel("Paese :");
-        paeseresCliente = new JComboBox<String>(paesi);
-        CPLabel = new JLabel("Codice Postale :");
-        CPClienteTextField = new JTextField();
-
-        SalvaModifiche = new JButton("Salva Modifiche");
-        Indietro = new JButton("Indietro");
-
-        // Add UI element to frame
-        frame.setLayout(null);
-        InformazioniPersonaliLabel.setBounds(50, 25, 200, 70);
-        frame.add(InformazioniPersonaliLabel);
-
-        NomeLabel.setBounds(50, 75, 70, 70);
-        frame.add(NomeLabel);
-        NomeClienteLabel.setBounds(150, 100, 200, 20);
-        frame.add(NomeClienteLabel);
-        PasswordUtenteLabel.setBounds(400, 75, 100, 70);
-        frame.add(PasswordUtenteLabel);
-        PasswordUtenteTextField.setBounds(500, 100, 200, 20);
-        frame.add(PasswordUtenteTextField);
-        CognomeLabel.setBounds(50, 125, 70, 70);
-        frame.add(CognomeLabel);
-        CognomeClienteLabel.setBounds(150, 150, 200, 20);
-        frame.add(CognomeClienteLabel);
-        EmailLabel.setBounds(50, 175, 70, 70);
-        frame.add(EmailLabel);
-        EmailClienteTextField.setBounds(150, 200, 200, 20);
-        frame.add(EmailClienteTextField);
-        PrefissoLabel.setBounds(50, 225, 70, 70);
-        frame.add(PrefissoLabel);
-        prefissocliente.setBounds(150, 250, 70, 20);
-        frame.add(prefissocliente);
-        TelefonoLabel.setBounds(250, 225, 70, 70);
-        frame.add(TelefonoLabel);
-        TelefonoClienteTextField.setBounds(350, 250, 200, 20);
-        frame.add(TelefonoClienteTextField);
-        DatadinascitaLabel.setBounds(50, 275, 200, 70);
-        frame.add(DatadinascitaLabel);
-        GiornodnLabel.setBounds(200, 275, 70, 70);
-        frame.add(GiornodnLabel);
-        gdnClienteLabel.setBounds(300, 300, 70, 20);
-        frame.add(gdnClienteLabel);
-        MesednLabel.setBounds(400, 275, 70, 70);
-        frame.add(MesednLabel);
-        mdnClienteLabel.setBounds(500, 300, 100, 20);
-        frame.add(mdnClienteLabel);
-        AnnodnLabel.setBounds(650, 275, 70, 70);
-        frame.add(AnnodnLabel);
-        adnClienteLabel.setBounds(750, 300, 70, 20);
-        frame.add(adnClienteLabel);
-        InfoPatenteLabel.setBounds(50, 325, 100, 70);
-        frame.add(InfoPatenteLabel);
-        NPatenteLabel.setBounds(175, 325, 150, 70);
-        frame.add(NPatenteLabel);
-        NPatenteClienteTextField.setBounds(325, 350, 150, 20);
-        frame.add(NPatenteClienteTextField);
-        PaeseEmissionePLabel.setBounds(500, 325, 200, 70);
-        frame.add(PaeseEmissionePLabel);
-        paeseCliente.setBounds(700, 350, 100, 20);
-        frame.add(paeseCliente);
-        GiornodeLabel.setBounds(50, 375, 150, 70);
-        frame.add(GiornodeLabel);
-        gdeClienteLabel.setBounds(200, 400, 70, 20);
-        frame.add(gdeClienteLabel);
-        MesedeLabel.setBounds(300, 375, 150, 70);
-        frame.add(MesedeLabel);
-        mdeClienteLabel.setBounds(450, 400, 100, 20);
-        frame.add(mdeClienteLabel);
-        AnnodeLabel.setBounds(600, 375, 150, 70);
-        frame.add(AnnodeLabel);
-        adeClienteLabel.setBounds(750, 400, 70, 20);
-        frame.add(adeClienteLabel);
-        GiornodsLabel.setBounds(50, 425, 150, 70);
-        frame.add(GiornodsLabel);
-        gdsCliente.setBounds(200, 450, 70, 20);
-        frame.add(gdsCliente);
-        MesedsLabel.setBounds(300, 425, 150, 70);
-        frame.add(MesedsLabel);
-        mdsCliente.setBounds(450, 450, 100, 20);
-        frame.add(mdsCliente);
-        AnnodsLabel.setBounds(600, 425, 150, 70);
-        frame.add(AnnodsLabel);
-        adsCliente.setBounds(750, 450, 70, 20);
-        frame.add(adsCliente);
-        FatturazioneLabel.setBounds(50, 475, 150, 70);
-        frame.add(FatturazioneLabel);
-        IndirizzoLabel.setBounds(50, 525, 70, 70);
-        frame.add(IndirizzoLabel);
-        IndirizzoClienteTextField.setBounds(150, 550, 200, 20);
-        frame.add(IndirizzoClienteTextField);
-        cityLabel.setBounds(375, 525, 70, 70);
-        frame.add(cityLabel);
-        cityClientTextField.setBounds(450, 550, 200, 20);
-        frame.add(cityClientTextField);
-        PaeseResidenzaPLabel.setBounds(50, 575, 70, 70);
-        frame.add(PaeseResidenzaPLabel);
-        paeseresCliente.setBounds(150, 600, 100, 20);
-        frame.add(paeseresCliente);
-        CPLabel.setBounds(275, 575, 150, 70);
-        frame.add(CPLabel);
-        CPClienteTextField.setBounds(400, 600, 200, 20);
-        frame.add(CPClienteTextField);
-
-        SalvaModifiche.setBounds(850, 575, 150, 50);
-        frame.add(SalvaModifiche);
-        Indietro.setBounds(1050, 575, 100, 50);
-        frame.add(Indietro);
 
     }
 
@@ -3193,38 +2665,13 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         return loginView;
     }
 
-    //
-//    public JLabel getUserIdLabel() {
-//        return UserIdLabel;
-//    }
-//
-//    public void setFirstnameLabel(JLabel UserIdLabel) {
-//        this.UserIdLabel = UserIdLabel;
-//    }
-//
-//    public JLabel getPasswordLabel() {
-//        return PasswordLabel;
-//    }
-//
-//    public void setLastnameLabel(JLabel PasswordLabel) {
-//        this.PasswordLabel = PasswordLabel;
-//    }
-//
-//    public JTextField getUserIdTextfield() {
-//        return UserIdTextfield;
-//    }
-//
-//    public void setFirstnameTextfield(JTextField UserIdTextfield) {
-//        this.UserIdTextfield = UserIdTextfield;
-//    }
-//
-//    public JTextField getPasswordTextfield() {
-//        return PasswordTextfield;
-//    }
-//
-//    public void setPasswordTextfield(JTextField PasswordTextfield) {
-//        this.PasswordTextfield = PasswordTextfield;
-//    }
+    public RegistrationView getRegistrationView() {
+        return registrationView;
+    }
+
+    public ModificationView getModificationView() {
+        return modificationView;
+    }
 
     public JButton getLogin() {
         return Accedi;
@@ -3240,118 +2687,6 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
     public void setChiudi(JButton Chiudi) {
         this.Annulla = Chiudi;
-    }
-
-
-    public JTextField getNomeTextfield() {
-        return NomeTextfield;
-    }
-
-    public JTextField getPasswordUtenteTextField() {
-        return PasswordUtenteTextField;
-    }
-
-    public JTextField getCognomeTextfield() {
-        return CognomeTextfield;
-    }
-
-    public JTextField getEmailTextfield() {
-        return EmailTextfield;
-    }
-
-    public String getprefisso() {
-
-        String valueprefisso = prefisso.getSelectedItem().toString();
-        return valueprefisso;
-
-    }
-
-    public JTextField getTelefonoTextfield() {
-        return TelefonoTextfield;
-    }
-
-    public int getgdn() {
-
-        String text = prefisso.getSelectedItem().toString();
-        int valuegdn = Integer.parseInt(text);
-
-        return valuegdn;
-    }
-
-    public String getmdn() {
-        String valuemdn = mdn.getSelectedItem().toString();
-        return valuemdn;
-    }
-
-    public int getadn() {
-
-        String text = adn.getSelectedItem().toString();
-        int valueadn = Integer.parseInt(text);
-        return valueadn;
-    }
-
-    public JTextField getNPatenteTextfield() {
-        return NPatenteTextfield;
-    }
-
-    public String getpaese() {
-        String valuepaese = paese.getSelectedItem().toString();
-        return valuepaese;
-    }
-
-    public int getgde() {
-        String text = gde.getSelectedItem().toString();
-        int valuegde = Integer.parseInt(text);
-
-        return valuegde;
-    }
-
-    public String getmde() {
-        String valuemde = mde.getSelectedItem().toString();
-        return valuemde;
-    }
-
-    public int getade() {
-        String text = ade.getSelectedItem().toString();
-        int valuegde = Integer.parseInt(text);
-
-        return valuegde;
-    }
-
-    public int getgds() {
-        String text = gds.getSelectedItem().toString();
-        int valuegds = Integer.parseInt(text);
-
-        return valuegds;
-    }
-
-    public String getmds() {
-        String valuemds = mds.getSelectedItem().toString();
-        return valuemds;
-    }
-
-    public int getads() {
-        String text = ads.getSelectedItem().toString();
-        int valueads = Integer.parseInt(text);
-
-        return valueads;
-    }
-
-    public JTextField getIndirizzoTextfield() {
-        return IndirizzoTextfield;
-    }
-
-    public JTextField getCityTextField() {
-        return cityTextField;
-    }
-
-    public String getpaeseres() {
-        String valuepaeseres = paeseres.getSelectedItem().toString();
-        return valuepaeseres;
-    }
-
-    public JTextField getCPTextfield() {
-        return CPTextfield;
     }
 
     public JButton getRitiro() {
@@ -3453,117 +2788,10 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
     }
 
-    public void setPasswordUtenteTextField(String N) {
-
-        this.PasswordUtenteTextField.setText(N);
-
-    }
-
     public void setCognomeClienteLabel(String N) {
 
         this.CognomeClienteLabel.setText(N);
 
-    }
-
-    public void setEmailClienteTextField(String N) {
-
-        this.EmailClienteTextField.setText(N);
-
-    }
-
-    public void setPrefissoCliente(String N) {
-
-        this.prefissocliente.setSelectedItem(N);
-
-    }
-
-    public void setTelefonoClienteTextField(Long N) {
-
-        this.TelefonoClienteTextField.setText(Long.toString(N));
-    }
-
-    public void setNPatenteClienteTextField(String N) {
-
-        this.NPatenteClienteTextField.setText(N);
-    }
-
-    public void setIndirizzoClienteTextField(String N) {
-
-        this.IndirizzoClienteTextField.setText(N);
-    }
-
-    public void setgdnClienteLabel(int N) {
-
-        this.gdnClienteLabel.setText(Integer.toString(N));
-    }
-
-    public void setmdnClienteLabel(String N) {
-
-        this.mdnClienteLabel.setText(N);
-    }
-
-    public void setadnClienteLabel(int N) {
-
-        this.adnClienteLabel.setText(Integer.toString(N));
-    }
-
-    public void setgdeClienteLabel(int N) {
-
-        this.gdeClienteLabel.setText(Integer.toString(N));
-    }
-
-    public void setmdeClienteLabel(String N) {
-
-        this.mdeClienteLabel.setText(N);
-    }
-
-    public void setadeClienteLabel(int N) {
-
-        this.adeClienteLabel.setText(Integer.toString(N));
-    }
-
-    public void setCityClientTextField(String N) {
-
-        this.cityClientTextField.setText(N);
-    }
-
-    public void setCPClienteTextField(int N) {
-
-        this.CPClienteTextField.setText(Integer.toString(N));
-    }
-
-    public void setPaesePatenteCliente(String N) {
-
-        this.paeseCliente.setSelectedItem(N);
-
-    }
-
-    public void setgdsCliente(int N) {
-
-        this.gdsCliente.setSelectedItem(N);
-
-    }
-
-    public void setmdsCliente(String N) {
-
-        this.mdsCliente.setSelectedItem(N);
-
-    }
-
-    public void setadsCliente(int N) {
-
-        this.adsCliente.setSelectedItem(N);
-
-    }
-
-    public void setPaeseResCliente(String N) {
-
-        this.paeseCliente.setSelectedItem(N);
-
-    }
-
-    public JButton getSalvaModifiche() {
-        return SalvaModifiche;
     }
 
     public JButton getFine() {
@@ -4172,11 +3400,6 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
     }
 
-    public JTextField getMoraSeggiolino() {
-
-        return SeggiolinoMora;
-    }
-
     public String getSeggiolino() {
 
         String text = "Seggiolino";
@@ -4199,18 +3422,6 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
         String text = "Hotspot";
         return text;
-    }
-
-    public JTextField getCateneMora() {
-        return CateneMora;
-    }
-
-    public JTextField getNavigatoreMora() {
-        return NavigatoreMora;
-    }
-
-    public JTextField getHotspotMora() {
-        return HotspotMora;
     }
 
     public JButton getCalcoloMora() {
@@ -4270,68 +3481,6 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         this.Mora2.setText(Float.toString(t));
     }
 
-    public JTextField getTelefonoClienteTextField() {
-        return TelefonoClienteTextField;
-    }
-
-    public JTextField getEmailClienteTextField() {
-        return EmailClienteTextField;
-    }
-
-    public JTextField getNPatenteClienteTextField() {
-        return NPatenteClienteTextField;
-    }
-
-    public String getprefissocliente() {
-
-        String text = prefissocliente.getSelectedItem().toString();
-
-        return text;
-    }
-
-    public String getpaeseCliente() {
-
-        String text = paeseCliente.getSelectedItem().toString();
-        return text;
-    }
-
-    public int getgdsCliente() {
-
-        String text = gdsCliente.getSelectedItem().toString();
-        int valuegds = Integer.parseInt(text);
-        return valuegds;
-    }
-
-    public String getmdsCliente() {
-
-        String text = mdsCliente.getSelectedItem().toString();
-        return text;
-    }
-
-    public int getadsCliente() {
-
-        String text = adsCliente.getSelectedItem().toString();
-        int valueads = Integer.parseInt(text);
-        return valueads;
-    }
-
-    public JTextField getIndirizzoClienteTextField() {
-        return IndirizzoClienteTextField;
-    }
-
-    public JTextField getCityClientTextField() {
-        return cityClientTextField;
-    }
-
-    public String getpaeseresCliente() {
-        String text = paeseresCliente.getSelectedItem().toString();
-        return text;
-    }
-
-    public JTextField getCPClienteTextField() {
-        return IndirizzoClienteTextField;
-    }
-
     public JButton getEliminaProfilo() {
         return EliminaProfilo;
     }
@@ -4339,6 +3488,4 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
     public JButton getCancella() {
         return Cancella;
     }
-
-
 }

@@ -1,4 +1,7 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class AutonoleggioC {
 
@@ -120,32 +123,32 @@ public class AutonoleggioC {
 
         if (UserID == 50) {
             //se entro qui sono impiegato desk
-            cliente.setNome(view.getNomeTextfield().getText());
-            cliente.setCognome(view.getCognomeTextfield().getText());
-            cliente.setPwd(view.getPasswordUtenteTextField().getText());
-            cliente.setEmail(view.getEmailTextfield().getText());
-            cliente.setPrefisso(view.getprefisso());
-            cliente.setDngiorno(view.getgdn());
-            cliente.setDnmese(view.getmdn());
-            cliente.setDnanno(view.getadn());
-            cliente.setNumpatente(view.getNPatenteTextfield().getText());
-            cliente.setPaesePatente(view.getpaese());
-            cliente.setGiornoep(view.getgde());
-            cliente.setMeseep(view.getmde());
-            cliente.setAnnoep(view.getade());
-            cliente.setGiornosp(view.getgds());
-            cliente.setMesesp(view.getmds());
-            cliente.setAnnosp(view.getads());
-            cliente.setIndirizzo(view.getIndirizzoTextfield().getText());
-            cliente.setCity(view.getCityTextField().getText());
-            cliente.setPaese(view.getpaeseres());
+            cliente.setNome(view.getRegistrationView().getNomeTextfield().getText());
+            cliente.setCognome(view.getRegistrationView().getCognomeTextfield().getText());
+            cliente.setPwd(view.getRegistrationView().getPasswordUtenteTextField().getText());
+            cliente.setEmail(view.getRegistrationView().getEmailTextfield().getText());
+            cliente.setPrefisso(view.getRegistrationView().getPrefisso());
+            cliente.setDngiorno(view.getRegistrationView().getGdn());
+            cliente.setDnmese(view.getRegistrationView().getMdn());
+            cliente.setDnanno(view.getRegistrationView().getAdn());
+            cliente.setNumpatente(view.getRegistrationView().getNPatenteTextfield().getText());
+            cliente.setPaesePatente(view.getRegistrationView().getPaese());
+            cliente.setGiornoep(view.getRegistrationView().getGde());
+            cliente.setMeseep(view.getRegistrationView().getMde());
+            cliente.setAnnoep(view.getRegistrationView().getAde());
+            cliente.setGiornosp(view.getRegistrationView().getGds());
+            cliente.setMesesp(view.getRegistrationView().getMds());
+            cliente.setAnnosp(view.getRegistrationView().getAds());
+            cliente.setIndirizzo(view.getRegistrationView().getIndirizzoTextfield().getText());
+            cliente.setCity(view.getRegistrationView().getCityTextField().getText());
+            cliente.setPaese(view.getRegistrationView().getPaeseres());
 
             if (2020 - cliente.getDnanno() >= 18) {
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection(mysql_url, "root", "");
                     Statement stmt = con.createStatement();
-                    String sql = "Insert into cliente (UserID, Nome, Cognome, Email, Prefisso,Telefono, Dngiorno, Dnmese, Dnanno, Numpatente, Paesepatente,Giornoep, Meseep, Annoep, Giornosp, Mesesp, Annosp, Indirizzo,city, Paese, Codpostale, Pwd) values (NULL, '" + cliente.getNome() + "', '" + cliente.getCognome() + "', '" + cliente.getEmail() + "', '" + cliente.getPrefisso() + "', '" + view.getTelefonoTextfield().getText() + "', '" + cliente.getDngiorno() + "', '" + cliente.getDnmese() + "', '" + cliente.getDnanno() + "', '" + cliente.getNumpatente() + "', '" + cliente.getPaesePatente() + "', '" + cliente.getGiornoep() + "', '" + cliente.getMeseep() + "', '" + cliente.getAnnoep() + "', '" + cliente.getGiornosp() + "', '" + cliente.getMesesp() + "', '" + cliente.getAnnosp() + "', '" + cliente.getIndirizzo() + "', '" + cliente.getCity() + "', '" + cliente.getPaese() + "', '" + view.getCPTextfield().getText() + "', '" + cliente.getPwd() + "')";
+                    String sql = "Insert into cliente (UserID, Nome, Cognome, Email, Prefisso,Telefono, Dngiorno, Dnmese, Dnanno, Numpatente, Paesepatente,Giornoep, Meseep, Annoep, Giornosp, Mesesp, Annosp, Indirizzo,city, Paese, Codpostale, Pwd) values (NULL, '" + cliente.getNome() + "', '" + cliente.getCognome() + "', '" + cliente.getEmail() + "', '" + cliente.getPrefisso() + "', '" + view.getRegistrationView().getTelefonoTextfield().getText() + "', '" + cliente.getDngiorno() + "', '" + cliente.getDnmese() + "', '" + cliente.getDnanno() + "', '" + cliente.getNumpatente() + "', '" + cliente.getPaesePatente() + "', '" + cliente.getGiornoep() + "', '" + cliente.getMeseep() + "', '" + cliente.getAnnoep() + "', '" + cliente.getGiornosp() + "', '" + cliente.getMesesp() + "', '" + cliente.getAnnosp() + "', '" + cliente.getIndirizzo() + "', '" + cliente.getCity() + "', '" + cliente.getPaese() + "', '" + view.getRegistrationView().getCPTextfield().getText() + "', '" + cliente.getPwd() + "')";
                     int rs = stmt.executeUpdate(sql);
                     if (rs > -1) {
 
@@ -178,25 +181,25 @@ public class AutonoleggioC {
                 view.error();
         } else {
 
-            cliente.setNome(view.getNomeTextfield().getText());
-            cliente.setCognome(view.getCognomeTextfield().getText());
-            cliente.setPwd(view.getPasswordUtenteTextField().getText());
-            cliente.setEmail(view.getEmailTextfield().getText());
-            cliente.setPrefisso(view.getprefisso());
-            cliente.setDngiorno(view.getgdn());
-            cliente.setDnmese(view.getmdn());
-            cliente.setDnanno(view.getadn());
-            cliente.setNumpatente(view.getNPatenteTextfield().getText());
-            cliente.setPaesePatente(view.getpaese());
-            cliente.setGiornoep(view.getgde());
-            cliente.setMeseep(view.getmde());
-            cliente.setAnnoep(view.getade());
-            cliente.setGiornosp(view.getgds());
-            cliente.setMesesp(view.getmds());
-            cliente.setAnnosp(view.getads());
-            cliente.setIndirizzo(view.getIndirizzoTextfield().getText());
-            cliente.setCity(view.getCityTextField().getText());
-            cliente.setPaese(view.getpaeseres());
+            cliente.setNome(view.getRegistrationView().getNomeTextfield().getText());
+            cliente.setCognome(view.getRegistrationView().getCognomeTextfield().getText());
+            cliente.setPwd(view.getRegistrationView().getPasswordUtenteTextField().getText());
+            cliente.setEmail(view.getRegistrationView().getEmailTextfield().getText());
+            cliente.setPrefisso(view.getRegistrationView().getPrefisso());
+            cliente.setDngiorno(view.getRegistrationView().getGdn());
+            cliente.setDnmese(view.getRegistrationView().getMdn());
+            cliente.setDnanno(view.getRegistrationView().getAdn());
+            cliente.setNumpatente(view.getRegistrationView().getNPatenteTextfield().getText());
+            cliente.setPaesePatente(view.getRegistrationView().getPaese());
+            cliente.setGiornoep(view.getRegistrationView().getGde());
+            cliente.setMeseep(view.getRegistrationView().getMde());
+            cliente.setAnnoep(view.getRegistrationView().getAde());
+            cliente.setGiornosp(view.getRegistrationView().getGds());
+            cliente.setMesesp(view.getRegistrationView().getMds());
+            cliente.setAnnosp(view.getRegistrationView().getAds());
+            cliente.setIndirizzo(view.getRegistrationView().getIndirizzoTextfield().getText());
+            cliente.setCity(view.getRegistrationView().getCityTextField().getText());
+            cliente.setPaese(view.getRegistrationView().getPaeseres());
 
             //verifico che la persona che vuole registrarsi sia maggiorenne
             if (2020 - cliente.getDnanno() >= 18) {
@@ -205,7 +208,7 @@ public class AutonoleggioC {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection(mysql_url, "root", "");
                     Statement stmt = con.createStatement();
-                    String sql = "Insert into cliente (UserID, Nome, Cognome, Email, Prefisso, Telefono, Dngiorno, Dnmese, Dnanno, Numpatente, Paesepatente,Giornoep, Meseep, Annoep, Giornosp, Mesesp, Annosp, Indirizzo,city, Paese, Codpostale, Pwd) values (NULL, '" + cliente.getNome() + "', '" + cliente.getCognome() + "', '" + cliente.getEmail() + "', '" + cliente.getPrefisso() + "', '" + view.getTelefonoTextfield().getText() + "', '" + cliente.getDngiorno() + "', '" + cliente.getDnmese() + "', '" + cliente.getDnanno() + "', '" + cliente.getNumpatente() + "', '" + cliente.getPaesePatente() + "', '" + cliente.getGiornoep() + "', '" + cliente.getMeseep() + "', '" + cliente.getAnnoep() + "', '" + cliente.getGiornosp() + "', '" + cliente.getMesesp() + "', '" + cliente.getAnnosp() + "', '" + cliente.getIndirizzo() + "', '" + cliente.getCity() + "', '" + cliente.getPaese() + "', '" + view.getCPTextfield().getText() + "', '" + cliente.getPwd() + "')";
+                    String sql = "Insert into cliente (UserID, Nome, Cognome, Email, Prefisso, Telefono, Dngiorno, Dnmese, Dnanno, Numpatente, Paesepatente,Giornoep, Meseep, Annoep, Giornosp, Mesesp, Annosp, Indirizzo,city, Paese, Codpostale, Pwd) values (NULL, '" + cliente.getNome() + "', '" + cliente.getCognome() + "', '" + cliente.getEmail() + "', '" + cliente.getPrefisso() + "', '" + view.getRegistrationView().getTelefonoTextfield().getText() + "', '" + cliente.getDngiorno() + "', '" + cliente.getDnmese() + "', '" + cliente.getDnanno() + "', '" + cliente.getNumpatente() + "', '" + cliente.getPaesePatente() + "', '" + cliente.getGiornoep() + "', '" + cliente.getMeseep() + "', '" + cliente.getAnnoep() + "', '" + cliente.getGiornosp() + "', '" + cliente.getMesesp() + "', '" + cliente.getAnnosp() + "', '" + cliente.getIndirizzo() + "', '" + cliente.getCity() + "', '" + cliente.getPaese() + "', '" + view.getRegistrationView().getCPTextfield().getText() + "', '" + cliente.getPwd() + "')";
                     int rs = stmt.executeUpdate(sql);
                     if (rs > -1) {
 
@@ -2013,49 +2016,49 @@ public class AutonoleggioC {
             if (rs.next()) {
 
                 cliente.setNome(rs.getString("Nome"));
-                view.setNomeClienteLabel(cliente.getNome());
+                view.getModificationView().setNomeClienteLabel(cliente.getNome());
                 cliente.setPwd(rs.getString("Pwd"));
-                view.setPasswordUtenteTextField(cliente.getPwd());
+                view.getModificationView().setPasswordUtenteTextField(cliente.getPwd());
                 cliente.setCognome(rs.getString("Cognome"));
-                view.setCognomeClienteLabel(cliente.getCognome());
+                view.getModificationView().setCognomeClienteLabel(cliente.getCognome());
                 cliente.setEmail(rs.getString("Email"));
-                view.setEmailClienteTextField(cliente.getEmail());
+                view.getModificationView().setEmailClienteTextField(cliente.getEmail());
                 cliente.setPrefisso(rs.getString("Prefisso"));
-                view.setPrefissoCliente(cliente.getPrefisso());
+                view.getModificationView().setPrefissoCliente(cliente.getPrefisso());
                 cliente.setTelefono(rs.getLong("Telefono"));
-                view.setTelefonoClienteTextField(cliente.getTelefono());
+                view.getModificationView().setTelefonoClienteTextField(cliente.getTelefono());
                 cliente.setDngiorno(rs.getInt("Dngiorno"));
-                view.setgdnClienteLabel(cliente.getDngiorno());
+                view.getModificationView().setgdnClienteLabel(cliente.getDngiorno());
                 cliente.setDnmese(rs.getString("Dnmese"));
-                view.setmdnClienteLabel(cliente.getDnmese());
+                view.getModificationView().setmdnClienteLabel(cliente.getDnmese());
                 cliente.setDnanno(rs.getInt("Dnanno"));
-                view.setadnClienteLabel(cliente.getDnanno());
+                view.getModificationView().setadnClienteLabel(cliente.getDnanno());
                 cliente.setNumpatente(rs.getString("Numpatente"));
-                view.setNPatenteClienteTextField(cliente.getNumpatente());
+                view.getModificationView().setNPatenteClienteTextField(cliente.getNumpatente());
                 cliente.setPaesePatente(rs.getString("PaesePatente"));
-                view.setPaesePatenteCliente(cliente.getPaesePatente());
+                view.getModificationView().setPaesePatenteCliente(cliente.getPaesePatente());
                 cliente.setGiornoep(rs.getInt("Giornoep"));
-                view.setgdeClienteLabel(cliente.getGiornoep());
+                view.getModificationView().setgdeClienteLabel(cliente.getGiornoep());
                 cliente.setMeseep(rs.getString("Meseep"));
-                view.setmdeClienteLabel(cliente.getMeseep());
+                view.getModificationView().setmdeClienteLabel(cliente.getMeseep());
                 cliente.setAnnoep(rs.getInt("Annoep"));
-                view.setadeClienteLabel(cliente.getAnnoep());
+                view.getModificationView().setadeClienteLabel(cliente.getAnnoep());
                 cliente.setGiornosp(rs.getInt("Giornosp"));
-                view.setgdsCliente(cliente.getGiornosp());
+                view.getModificationView().setgdsCliente(cliente.getGiornosp());
                 cliente.setMesesp(rs.getString("Mesesp"));
-                view.setmdsCliente(cliente.getMesesp());
+                view.getModificationView().setmdsCliente(cliente.getMesesp());
                 cliente.setAnnosp(rs.getInt("Annosp"));
-                view.setadsCliente(cliente.getGiornosp());
+                view.getModificationView().setadsCliente(cliente.getGiornosp());
                 cliente.setIndirizzo(rs.getString("Indirizzo"));
-                view.setIndirizzoClienteTextField(cliente.getIndirizzo());
+                view.getModificationView().setIndirizzoClienteTextField(cliente.getIndirizzo());
                 cliente.setCity(rs.getString("city"));
-                view.setCityClientTextField(cliente.getCity());
+                view.getModificationView().setCityClientTextField(cliente.getCity());
                 cliente.setPaese(rs.getString("Paese"));
-                view.setPaeseResCliente(cliente.getPaese());
+                view.getModificationView().setPaeseResCliente(cliente.getPaese());
                 cliente.setCodpostale(rs.getInt("Codpostale"));
-                view.setCPClienteTextField(cliente.getCodpostale());
+                view.getModificationView().setCPClienteTextField(cliente.getCodpostale());
 
-                view.getSalvaModifiche().addActionListener(e -> salvamodifiche(cliente.getID()));
+                view.getModificationView().getSalvaModifiche().addActionListener(e -> salvamodifiche(cliente.getID()));
                 view.getIndietro().addActionListener(e -> cliente(cliente.getID()));
 
             } else
@@ -2156,24 +2159,24 @@ public class AutonoleggioC {
 
     private void salvamodifiche(int UserID) {
 
-        cliente.setPwd(view.getPasswordUtenteTextField().getText());
-        cliente.setEmail(view.getEmailClienteTextField().getText());
-        cliente.setPrefisso(view.getprefissocliente());
-        cliente.setNumpatente(view.getNPatenteClienteTextField().getText());
-        cliente.setPaesePatente(view.getpaeseCliente());
-        cliente.setGiornosp(view.getgdsCliente());
-        cliente.setMesesp(view.getmdsCliente());
-        cliente.setAnnosp(view.getadsCliente());
-        cliente.setIndirizzo(view.getIndirizzoClienteTextField().getText());
-        cliente.setCity(view.getCityClientTextField().getText());
-        cliente.setPaese(view.getpaeseresCliente());
+        cliente.setPwd(view.getModificationView().getPasswordUtenteTextField().getText());
+        cliente.setEmail(view.getModificationView().getEmailClienteTextField().getText());
+        cliente.setPrefisso(view.getModificationView().getprefissocliente());
+        cliente.setNumpatente(view.getModificationView().getNPatenteClienteTextField().getText());
+        cliente.setPaesePatente(view.getModificationView().getpaeseCliente());
+        cliente.setGiornosp(view.getModificationView().getgdsCliente());
+        cliente.setMesesp(view.getModificationView().getmdsCliente());
+        cliente.setAnnosp(view.getModificationView().getadsCliente());
+        cliente.setIndirizzo(view.getModificationView().getIndirizzoClienteTextField().getText());
+        cliente.setCity(view.getModificationView().getCityClientTextField().getText());
+        cliente.setPaese(view.getModificationView().getpaeseresCliente());
 
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
             Statement stmt2 = con2.createStatement();
-            String sql2 = "Update cliente set Email = '" + cliente.getEmail() + "', Prefisso = '" + cliente.getPrefisso() + "', Telefono = '" + view.getTelefonoClienteTextField().getText() + "', Numpatente = '" + cliente.getNumpatente() + "', Paesepatente = '" + cliente.getPaesePatente() + "', Giornosp = '" + cliente.getGiornosp() + "', Mesesp = '" + cliente.getMesesp() + "', Annosp = '" + cliente.getAnnosp() + "', Indirizzo = '" + cliente.getIndirizzo() + "', city = '" + cliente.getCity() + "', Paese = '" + cliente.getPaese() + "', Codpostale = '" + view.getCPClienteTextField().getText() + "', Pwd = '" + cliente.getPwd() + "' where UserID = '" + UserID + "'";
+            String sql2 = "Update cliente set Email = '" + cliente.getEmail() + "', Prefisso = '" + cliente.getPrefisso() + "', Telefono = '" + view.getModificationView().getTelefonoClienteTextField().getText() + "', Numpatente = '" + cliente.getNumpatente() + "', Paesepatente = '" + cliente.getPaesePatente() + "', Giornosp = '" + cliente.getGiornosp() + "', Mesesp = '" + cliente.getMesesp() + "', Annosp = '" + cliente.getAnnosp() + "', Indirizzo = '" + cliente.getIndirizzo() + "', city = '" + cliente.getCity() + "', Paese = '" + cliente.getPaese() + "', Codpostale = '" + view.getModificationView().getCPClienteTextField().getText() + "', Pwd = '" + cliente.getPwd() + "' where UserID = '" + UserID + "'";
             int rs2 = stmt2.executeUpdate(sql2);
             if (rs2 > -1) {
 
