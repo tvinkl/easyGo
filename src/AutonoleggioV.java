@@ -472,7 +472,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         clusterscelto = new JComboBox<String>(cluster);
 
 
-        Prosegui = new JButton("Continute");
+        Prosegui = new JButton("Continue");
         Annulla = new JButton("Cancel");
         // Add UI element to frame
         frame.setLayout(null);
