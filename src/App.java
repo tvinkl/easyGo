@@ -1,6 +1,6 @@
 public class App {
     public static void main(String[] args) {
-        AutonoleggioC c = new AutonoleggioC(new AutonoleggioV("easyGOing - Car Rental Service"));
+        AutonoleggioC c = new AutonoleggioC(new AutonoleggioV("EasyGo by Tvinkl"));
         c.initController();
     }
 }
