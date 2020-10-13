@@ -98,7 +98,7 @@ public class RegistrationView {
         FatturazioneLabel = new JLabel("Dati fatturazione");
         IndirizzoLabel = new JLabel("Indirizzo :");
         IndirizzoTextfield = new JTextField();
-        cityLabel = new JLabel("Citt� :");
+        cityLabel = new JLabel("Citta':");
         cityTextField = new JTextField();
         PaeseResidenzaPLabel = new JLabel("Paese :");
         paeseres = new JComboBox<String>(paesi);

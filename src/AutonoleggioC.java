@@ -3,11 +3,8 @@ import java.sql.*;
 import java.util.Properties;
 
 public class AutonoleggioC {
-
     private AutonoleggioV view;
     private Cliente cliente;
-    private Impiegatodesk impiegatodesk;
-    private Impiegatogarage impiegatogarage;
     private Preventivo preventivo;
     private Veicolo veicolo;
     private Contratto contratto;
@@ -21,8 +18,6 @@ public class AutonoleggioC {
     public AutonoleggioC(AutonoleggioV v) throws IOException {
         view = v;
         cliente = new Cliente();
-        impiegatodesk = new Impiegatodesk();
-        impiegatogarage = new Impiegatogarage();
         preventivo = new Preventivo();
         veicolo = new Veicolo();
         contratto = new Contratto();
@@ -50,7 +45,7 @@ public class AutonoleggioC {
         view.getChiudi().addActionListener(e -> welcome());
     }
 
-    private Connection getConnection() throws Exception{
+    private Connection getConnection() throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(this.jdbcUrl, this.jdbcUser, this.jdbcPassword);
     }
@@ -263,12 +258,10 @@ public class AutonoleggioC {
             view.getProseguiPreventivo().addActionListener(e -> verificadisponibilità(userid));
             view.getIndietro().addActionListener(e -> impiegatodesk(userid));
         } else if (userid > 100) {
-
             //se entro qui sono un cliente
             view.clienterichiestapreventivo();
             view.getProseguiPreventivo().addActionListener(e -> verificadisponibilità(userid));
             view.getIndietro().addActionListener(e -> cliente(userid));
-
         } else {
             //se entro qui non mi sono autenticato
             view.richiestapreventivo();
@@ -300,8 +293,6 @@ public class AutonoleggioC {
     }
 
     private void impiegatodesk(int userid) {
-
-        impiegatodesk.setUserID(userid);
         view.deskimpiegato();
         view.getRegistrazione().addActionListener(e -> registration(userid));
         view.getPreventivo().addActionListener(e -> paymentQuote(userid));
@@ -313,8 +304,6 @@ public class AutonoleggioC {
     }
 
     private void impiegatogarage(int userid) {
-
-        impiegatogarage.setUserID(userid);
         view.garageimpiegato();
         view.getRitiro().addActionListener(e -> ritiro(userid));
         view.getRiconsegna().addActionListener(e -> riconsegna(userid));
@@ -324,9 +313,7 @@ public class AutonoleggioC {
     }
 
     private void verificadocumenti(int userid) {
-
         view.finalizzarenoleggio();
-
         view.getCerca().addActionListener(e -> CercaContratto(userid));
         view.getIndietro().addActionListener(e -> impiegatodesk(userid));
 
@@ -347,10 +334,7 @@ public class AutonoleggioC {
             view.getIndietro().addActionListener(e -> cliente(userid));
 
         }
-
-
     }
-
 
     private void verificaDatiNoleggio(int userid) {
 
@@ -1246,9 +1230,6 @@ public class AutonoleggioC {
                         view.settotale((preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1) * preventivo.getprezzo());
 
 
-
-
-
                         view.getRiepilogoeTotale().addActionListener(e -> aggiornaprezzo(userid));
                         view.getTornaallaselezione().addActionListener(e -> paymentQuote(userid));
 
@@ -1313,7 +1294,6 @@ public class AutonoleggioC {
                             view.settotale((preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1) * preventivo.getprezzo());
 
 
-
                             view.getRiepilogoeTotale().addActionListener(e -> aggiornaprezzo(userid));
                             view.getTornaallaselezione().addActionListener(e -> RichiestaPreventivoRitorno(userid));
 
@@ -1349,7 +1329,6 @@ public class AutonoleggioC {
             view.setClusterSelezionato(preventivo.getclusterscelto());
 
             preventivo.settotale((preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1) * preventivo.getprezzo());
-
 
 
             view.settotale(preventivo.gettotale());
@@ -1990,10 +1969,7 @@ public class AutonoleggioC {
         preventivo.setcatene(view.getcatene());
 
 
-
-
         preventivo.setnavigatore(view.getnavigatore());
-
 
 
         preventivo.sethotspot(view.gethotspot());
@@ -2041,7 +2017,6 @@ public class AutonoleggioC {
     }
 
     private void addebito(int userid) {
-
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con4 = DriverManager.getConnection(jdbcUrl, "root", "");
@@ -2080,11 +2055,7 @@ public class AutonoleggioC {
                             }
 
                         } else {
-
-
                             stampadocumentofinale("Lavaggio", userid);
-
-
                         }
                     }
                 } catch (Exception e) {
@@ -2098,7 +2069,6 @@ public class AutonoleggioC {
     }
 
     private void stampadocumentofinale(String statofinale, int userid) {
-
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con2 = DriverManager.getConnection(jdbcUrl, "root", "");
@@ -2116,9 +2086,5 @@ public class AutonoleggioC {
         } catch (Exception e) {
             System.out.print(e);
         }
-
-
     }
-
-
 }
