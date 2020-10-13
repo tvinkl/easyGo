@@ -8,3 +8,4 @@ target/
 log/
 ObjectStore
 .DS_Store
+easyGo.iml

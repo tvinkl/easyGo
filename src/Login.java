@@ -8,7 +8,6 @@ public class Login {
 
     }
 
-
     public String getUserID() {
         return UserID;
     }

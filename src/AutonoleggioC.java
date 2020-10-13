@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class AutonoleggioC {
 
@@ -11,12 +8,13 @@ public class AutonoleggioC {
     private Impiegatodesk impiegatodesk;
     private Impiegatogarage impiegatogarage;
     private Preventivo preventivo;
-    private Extra extra;
     private Veicolo veicolo;
     private Contratto contratto;
 
-
+    // database credentials
     private String mysql_url = "jdbc:mysql://localhost/rental";
+    private String mysql_username = "root";
+    private String mysql_pass = "";
 
 
     public AutonoleggioC(AutonoleggioV v) {
@@ -25,68 +23,57 @@ public class AutonoleggioC {
         impiegatodesk = new Impiegatodesk();
         impiegatogarage = new Impiegatogarage();
         preventivo = new Preventivo();
-        extra = new Extra();
         veicolo = new Veicolo();
         contratto = new Contratto();
         login = new Login();
     }
 
     public void initController() {
-
-        view.pressAccediButton().addActionListener(e -> accedi());
-
+        view.pressAccediButton().addActionListener(e -> welcome());
     }
 
-    public void accedi() {
-
+    public void welcome() {
         view.option();
-        view.pressRegistrazioneButton().addActionListener(e -> registrazione(0));
+        view.pressRegistrazioneButton().addActionListener(e -> registration(0));
         view.pressLoginButton().addActionListener(e -> login());
-        view.pressRichiestaPreventivoButton().addActionListener(e -> richiestapreventivo(0));
-
+        view.pressRichiestaPreventivoButton().addActionListener(e -> paymentQuote(0));
     }
 
     private void login() {
-
         view.login();
-
-        view.getLogin().addActionListener(e -> Login());
-        view.getChiudi().addActionListener(e -> accedi());
-
+        view.getLogin().addActionListener(e -> loginAction());
+        view.getChiudi().addActionListener(e -> welcome());
     }
 
-    public void Login() {
+    private Connection getConnection() throws Exception{
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection(this.mysql_url, this.mysql_username, this.mysql_pass);
+    }
+
+    public void loginAction() {
 
         login.setUserID(view.getLoginView().getUserIdTextfield().getText());
         login.setPassword(view.getLoginView().getPasswordTextfield().getText());
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(mysql_url, "root", "");
+            Connection con = getConnection();
             Statement stmt = con.createStatement();
-            String sql = "Select * from login where UserID='" + login.getUserID() + "' and Password='" + login.getPassword() + "'";
-            ResultSet rs = stmt.executeQuery(sql);
-            if (rs.next()) {
-                if (rs.getInt("UserID") == 50) {
-                    impiegatodesk(rs.getInt("UserID"));
-                } else if (rs.getInt("UserID") == 100) {
-                    impiegatogarage(rs.getInt("UserID"));
-
-                } else if (rs.getInt("UserID") > 100) {
-                    //identifico che chi sta facendo il login è un cliente
+            String sql = "Select * from login where userid='" + login.getUserID() + "' and Password='" + login.getPassword() + "'";
+            ResultSet res = stmt.executeQuery(sql);
+            if (res.next()) {
+                int userid = res.getInt("userid");
+                if (res.getInt("userid") == 50) {
+                    impiegatodesk(res.getInt("userid"));
+                } else if (res.getInt("userid") == 100) {
+                    impiegatogarage(res.getInt("userid"));
+                } else if (res.getInt("userid") > 100) {
+                    //identifico che chi sta facendo il login e' un cliente
                     try {
-
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
-                        Statement stmt2 = con2.createStatement();
-                        String sql2 = "Select * from cliente where UserID='" + view.getLoginView().getUserIdTextfield().getText() + "'";
-                        ResultSet rs2 = stmt2.executeQuery(sql2);
+                        String sql2 = "Select * from cliente where userid='" + view.getLoginView().getUserIdTextfield().getText() + "'";
+                        ResultSet rs2 = stmt.executeQuery(sql2);
                         if (rs2.next()) {
-
-                            cliente(rs2.getInt("UserID"));
-
+                            cliente(rs2.getInt("userid"));
                         }
-
                     } catch (Exception e) {
 
                     }
@@ -99,29 +86,29 @@ public class AutonoleggioC {
         }
     }
 
-    private void registrazione(int UserID) {
+    private void registration(int userid) {
 
-        if (UserID == 50) {
+        if (userid == 50) {
             //se entro qui l'impiegato sta effettuando la registrazione di un nuovo cliente
 
             view.impiegatoregistrazione();
-            view.getRegistrati().addActionListener(e -> aggiornaregistro(UserID));
-            view.getIndietro().addActionListener(e -> impiegatodesk(UserID));
+            view.getRegistrati().addActionListener(e -> aggiornaregistro(userid));
+            view.getIndietro().addActionListener(e -> impiegatodesk(userid));
 
         } else {
 
             view.registrazione();
-            view.getRegistrati().addActionListener(e -> aggiornaregistro(UserID));
-            view.getChiudi().addActionListener(e -> accedi());
+            view.getRegistrati().addActionListener(e -> aggiornaregistro(userid));
+            view.getChiudi().addActionListener(e -> welcome());
 
         }
 
     }
 
 
-    private void aggiornaregistro(int UserID) {
+    private void aggiornaregistro(int userid) {
 
-        if (UserID == 50) {
+        if (userid == 50) {
             //se entro qui sono impiegato desk
             cliente.setNome(view.getRegistrationView().getNomeTextfield().getText());
             cliente.setCognome(view.getRegistrationView().getCognomeTextfield().getText());
@@ -148,7 +135,7 @@ public class AutonoleggioC {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection(mysql_url, "root", "");
                     Statement stmt = con.createStatement();
-                    String sql = "Insert into cliente (UserID, Nome, Cognome, Email, Prefisso,Telefono, Dngiorno, Dnmese, Dnanno, Numpatente, Paesepatente,Giornoep, Meseep, Annoep, Giornosp, Mesesp, Annosp, Indirizzo,city, Paese, Codpostale, Pwd) values (NULL, '" + cliente.getNome() + "', '" + cliente.getCognome() + "', '" + cliente.getEmail() + "', '" + cliente.getPrefisso() + "', '" + view.getRegistrationView().getTelefonoTextfield().getText() + "', '" + cliente.getDngiorno() + "', '" + cliente.getDnmese() + "', '" + cliente.getDnanno() + "', '" + cliente.getNumpatente() + "', '" + cliente.getPaesePatente() + "', '" + cliente.getGiornoep() + "', '" + cliente.getMeseep() + "', '" + cliente.getAnnoep() + "', '" + cliente.getGiornosp() + "', '" + cliente.getMesesp() + "', '" + cliente.getAnnosp() + "', '" + cliente.getIndirizzo() + "', '" + cliente.getCity() + "', '" + cliente.getPaese() + "', '" + view.getRegistrationView().getCPTextfield().getText() + "', '" + cliente.getPwd() + "')";
+                    String sql = "Insert into cliente (userid, Nome, Cognome, Email, Prefisso,Telefono, Dngiorno, Dnmese, Dnanno, Numpatente, Paesepatente,Giornoep, Meseep, Annoep, Giornosp, Mesesp, Annosp, Indirizzo,city, Paese, Codpostale, Pwd) values (NULL, '" + cliente.getNome() + "', '" + cliente.getCognome() + "', '" + cliente.getEmail() + "', '" + cliente.getPrefisso() + "', '" + view.getRegistrationView().getTelefonoTextfield().getText() + "', '" + cliente.getDngiorno() + "', '" + cliente.getDnmese() + "', '" + cliente.getDnanno() + "', '" + cliente.getNumpatente() + "', '" + cliente.getPaesePatente() + "', '" + cliente.getGiornoep() + "', '" + cliente.getMeseep() + "', '" + cliente.getAnnoep() + "', '" + cliente.getGiornosp() + "', '" + cliente.getMesesp() + "', '" + cliente.getAnnosp() + "', '" + cliente.getIndirizzo() + "', '" + cliente.getCity() + "', '" + cliente.getPaese() + "', '" + view.getRegistrationView().getCPTextfield().getText() + "', '" + cliente.getPwd() + "')";
                     int rs = stmt.executeUpdate(sql);
                     if (rs > -1) {
 
@@ -156,14 +143,14 @@ public class AutonoleggioC {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
                             Statement stmt2 = con2.createStatement();
-                            String sql2 = "SELECT * FROM cliente ORDER BY UserID DESC LIMIT 1";
+                            String sql2 = "SELECT * FROM cliente ORDER BY userid DESC LIMIT 1";
                             ResultSet rs2 = stmt2.executeQuery(sql2);
                             if (rs2.next()) {
 
                                 view.registrazionesuccesso();
-                                view.setnumeroutente(rs2.getInt("UserID"));
+                                view.setnumeroutente(rs2.getInt("userid"));
                                 view.setpasswordutente(rs2.getString("Pwd"));
-                                view.getFine().addActionListener(e -> impiegatodesk(UserID));
+                                view.getFine().addActionListener(e -> impiegatodesk(userid));
 
                             }
 
@@ -192,7 +179,6 @@ public class AutonoleggioC {
             cliente.setNumpatente(view.getRegistrationView().getNPatenteTextfield().getText());
             cliente.setPaesePatente(view.getRegistrationView().getPaese());
             cliente.setGiornoep(view.getRegistrationView().getGde());
-            cliente.setMeseep(view.getRegistrationView().getMde());
             cliente.setAnnoep(view.getRegistrationView().getAde());
             cliente.setGiornosp(view.getRegistrationView().getGds());
             cliente.setMesesp(view.getRegistrationView().getMds());
@@ -208,7 +194,7 @@ public class AutonoleggioC {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection(mysql_url, "root", "");
                     Statement stmt = con.createStatement();
-                    String sql = "Insert into cliente (UserID, Nome, Cognome, Email, Prefisso, Telefono, Dngiorno, Dnmese, Dnanno, Numpatente, Paesepatente,Giornoep, Meseep, Annoep, Giornosp, Mesesp, Annosp, Indirizzo,city, Paese, Codpostale, Pwd) values (NULL, '" + cliente.getNome() + "', '" + cliente.getCognome() + "', '" + cliente.getEmail() + "', '" + cliente.getPrefisso() + "', '" + view.getRegistrationView().getTelefonoTextfield().getText() + "', '" + cliente.getDngiorno() + "', '" + cliente.getDnmese() + "', '" + cliente.getDnanno() + "', '" + cliente.getNumpatente() + "', '" + cliente.getPaesePatente() + "', '" + cliente.getGiornoep() + "', '" + cliente.getMeseep() + "', '" + cliente.getAnnoep() + "', '" + cliente.getGiornosp() + "', '" + cliente.getMesesp() + "', '" + cliente.getAnnosp() + "', '" + cliente.getIndirizzo() + "', '" + cliente.getCity() + "', '" + cliente.getPaese() + "', '" + view.getRegistrationView().getCPTextfield().getText() + "', '" + cliente.getPwd() + "')";
+                    String sql = "Insert into cliente (userid, Nome, Cognome, Email, Prefisso, Telefono, Dngiorno, Dnmese, Dnanno, Numpatente, Paesepatente,Giornoep, Meseep, Annoep, Giornosp, Mesesp, Annosp, Indirizzo,city, Paese, Codpostale, Pwd) values (NULL, '" + cliente.getNome() + "', '" + cliente.getCognome() + "', '" + cliente.getEmail() + "', '" + cliente.getPrefisso() + "', '" + view.getRegistrationView().getTelefonoTextfield().getText() + "', '" + cliente.getDngiorno() + "', '" + cliente.getDnmese() + "', '" + cliente.getDnanno() + "', '" + cliente.getNumpatente() + "', '" + cliente.getPaesePatente() + "', '" + cliente.getGiornoep() + "', '" + cliente.getMeseep() + "', '" + cliente.getAnnoep() + "', '" + cliente.getGiornosp() + "', '" + cliente.getMesesp() + "', '" + cliente.getAnnosp() + "', '" + cliente.getIndirizzo() + "', '" + cliente.getCity() + "', '" + cliente.getPaese() + "', '" + view.getRegistrationView().getCPTextfield().getText() + "', '" + cliente.getPwd() + "')";
                     int rs = stmt.executeUpdate(sql);
                     if (rs > -1) {
 
@@ -216,25 +202,25 @@ public class AutonoleggioC {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
                             Statement stmt2 = con2.createStatement();
-                            String sql2 = "SELECT * FROM cliente ORDER BY UserID DESC LIMIT 1";
+                            String sql2 = "SELECT * FROM cliente ORDER BY userid DESC LIMIT 1";
                             ResultSet rs2 = stmt2.executeQuery(sql2);
                             if (rs2.next()) {
 
-                                cliente.setUserId(rs2.getInt("UserID"));
+                                cliente.setUserId(rs2.getInt("userid"));
                                 cliente.setPwd(rs2.getString("Pwd"));
 
                                 try {
                                     Class.forName("com.mysql.cj.jdbc.Driver");
                                     Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
                                     Statement stmt3 = con3.createStatement();
-                                    String sql3 = "Insert into login (UserID, Password) values ('" + cliente.getID() + "', '" + cliente.getPwd() + "')";
+                                    String sql3 = "Insert into login (userid, Password) values ('" + cliente.getID() + "', '" + cliente.getPwd() + "')";
                                     int rs3 = stmt3.executeUpdate(sql3);
                                     if (rs3 > -1) {
 
                                         view.registrazionesuccesso();
                                         view.setnumeroutente(cliente.getID());
                                         view.setpasswordutente(cliente.getPwd());
-                                        view.getFine().addActionListener(e -> accedi());
+                                        view.getFine().addActionListener(e -> welcome());
 
                                     }
 
@@ -265,31 +251,31 @@ public class AutonoleggioC {
 
     }
 
-    private void richiestapreventivo(int UserID) {
+    private void paymentQuote(int userid) {
 
-        if (UserID == 50) {
+        if (userid == 50) {
             //se entro qui sono impiegato desk
             view.impiegatorichiestapreventivo();
-            view.getProseguiPreventivo().addActionListener(e -> verificadisponibilità(UserID));
-            view.getIndietro().addActionListener(e -> impiegatodesk(UserID));
-        } else if (UserID > 100) {
+            view.getProseguiPreventivo().addActionListener(e -> verificadisponibilità(userid));
+            view.getIndietro().addActionListener(e -> impiegatodesk(userid));
+        } else if (userid > 100) {
 
             //se entro qui sono un cliente
             view.clienterichiestapreventivo();
-            view.getProseguiPreventivo().addActionListener(e -> verificadisponibilità(UserID));
-            view.getIndietro().addActionListener(e -> cliente(UserID));
+            view.getProseguiPreventivo().addActionListener(e -> verificadisponibilità(userid));
+            view.getIndietro().addActionListener(e -> cliente(userid));
 
         } else {
             //se entro qui non mi sono autenticato
             view.richiestapreventivo();
             view.getProseguiPreventivo().addActionListener(e -> verificadisponibilità(0));
-            view.getChiudi().addActionListener(e -> accedi());
+            view.getChiudi().addActionListener(e -> welcome());
         }
 
 
     }
 
-    private void RichiestaPreventivoRitorno(int UserID) {
+    private void RichiestaPreventivoRitorno(int userid) {
 
         view.richiestapreventivo();
         view.setdataritiro(preventivo.getDataRitiro());
@@ -304,57 +290,57 @@ public class AutonoleggioC {
         view.setaepcp(preventivo.getaepcp());
         view.setclusterscelto(preventivo.getclusterscelto());
 
-        view.getProseguiPreventivo().addActionListener(e -> verificadisponibilità(UserID));
-        view.getChiudi().addActionListener(e -> accedi());
+        view.getProseguiPreventivo().addActionListener(e -> verificadisponibilità(userid));
+        view.getChiudi().addActionListener(e -> welcome());
 
     }
 
-    private void impiegatodesk(int UserID) {
+    private void impiegatodesk(int userid) {
 
-        impiegatodesk.setUserID(UserID);
+        impiegatodesk.setUserID(userid);
         view.deskimpiegato();
-        view.getRegistrazione().addActionListener(e -> registrazione(UserID));
-        view.getPreventivo().addActionListener(e -> richiestapreventivo(UserID));
-        view.getNoleggio().addActionListener(e -> creanuovonoleggio(UserID));
-        view.getVerificaDocumenti().addActionListener(e -> verificadocumenti(UserID));
-        view.getGestioneParcoMacchine().addActionListener(e -> gestioneparcomacchine(UserID));
+        view.getRegistrazione().addActionListener(e -> registration(userid));
+        view.getPreventivo().addActionListener(e -> paymentQuote(userid));
+        view.getNoleggio().addActionListener(e -> creanuovonoleggio(userid));
+        view.getVerificaDocumenti().addActionListener(e -> verificadocumenti(userid));
+        view.getGestioneParcoMacchine().addActionListener(e -> gestioneparcomacchine(userid));
         view.getLogout().addActionListener(e -> Logout());
 
     }
 
-    private void impiegatogarage(int UserID) {
+    private void impiegatogarage(int userid) {
 
-        impiegatogarage.setUserID(UserID);
+        impiegatogarage.setUserID(userid);
         view.garageimpiegato();
-        view.getRitiro().addActionListener(e -> ritiro(UserID));
-        view.getRiconsegna().addActionListener(e -> riconsegna(UserID));
-        view.getGestioneParcoMacchine().addActionListener(e -> gestioneparcomacchine(UserID));
+        view.getRitiro().addActionListener(e -> ritiro(userid));
+        view.getRiconsegna().addActionListener(e -> riconsegna(userid));
+        view.getGestioneParcoMacchine().addActionListener(e -> gestioneparcomacchine(userid));
         view.getLogout().addActionListener(e -> Logout());
 
     }
 
-    private void verificadocumenti(int UserID) {
+    private void verificadocumenti(int userid) {
 
         view.finalizzarenoleggio();
 
-        view.getCerca().addActionListener(e -> CercaContratto(UserID));
-        view.getIndietro().addActionListener(e -> impiegatodesk(UserID));
+        view.getCerca().addActionListener(e -> CercaContratto(userid));
+        view.getIndietro().addActionListener(e -> impiegatodesk(userid));
 
     }
 
-    private void creanuovonoleggio(int UserID) {
+    private void creanuovonoleggio(int userid) {
 
-        if (UserID == 50) {
+        if (userid == 50) {
             //se entro qui il noleggio viene creato da impiegato desk
             view.impiegatoprenotazione();
-            view.getProsegui().addActionListener(e -> verificadatinoleggio(UserID));
-            view.getIndietro().addActionListener(e -> impiegatodesk(UserID));
+            view.getProsegui().addActionListener(e -> verificaDatiNoleggio(userid));
+            view.getIndietro().addActionListener(e -> impiegatodesk(userid));
 
-        } else if (UserID > 100) {
+        } else if (userid > 100) {
 
             view.prenotazione();
-            view.getProsegui().addActionListener(e -> verificadatinoleggio(UserID));
-            view.getIndietro().addActionListener(e -> cliente(UserID));
+            view.getProsegui().addActionListener(e -> verificaDatiNoleggio(userid));
+            view.getIndietro().addActionListener(e -> cliente(userid));
 
         }
 
@@ -362,9 +348,9 @@ public class AutonoleggioC {
     }
 
 
-    private void verificadatinoleggio(int UserID) {
+    private void verificaDatiNoleggio(int userid) {
 
-        if (UserID == 50) {
+        if (userid == 50) {
 
             //noleggio viene effettuato da impiegato desk
 
@@ -388,21 +374,17 @@ public class AutonoleggioC {
                     preventivo.setmepcp(rs.getString("mepcp"));
                     preventivo.setaepcp(rs.getInt("aepcp"));
                     preventivo.setclusterscelto(rs.getString("clusterscelto"));
-                    preventivo.setseggiolino(rs.getString("seggiolino"));
-                    preventivo.setcatene(rs.getString("catene"));
-                    preventivo.setnavigatore(rs.getString("navigatore"));
-                    preventivo.sethotspot(rs.getString("hotspot"));
                     preventivo.settotale(rs.getFloat("Totale"));
 
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
                         Statement stmt2 = con2.createStatement();
-                        String sql2 = "Select * from cliente where UserID='" + view.getnumeroClienteTextField().getText() + "'";
+                        String sql2 = "Select * from cliente where userid='" + view.getnumeroClienteTextField().getText() + "'";
                         ResultSet rs2 = stmt2.executeQuery(sql2);
                         if (rs2.next()) {
 
-                            cliente.setUserId(rs2.getInt("UserID"));
+                            cliente.setUserId(rs2.getInt("userid"));
                             cliente.setNome(rs2.getString("Nome"));
                             cliente.setCognome(rs2.getString("Cognome"));
                             cliente.setDngiorno(rs2.getInt("Dngiorno"));
@@ -422,8 +404,8 @@ public class AutonoleggioC {
                             view.setidpreventivo(preventivo.getIDPreventivo());
                             view.settotale(preventivo.gettotale());
 
-                            view.getPagamento().addActionListener(e -> pagamento(cliente.getID(), preventivo.getIDPreventivo(), UserID));
-                            view.getIndietro().addActionListener(e -> creanuovonoleggio(UserID));
+                            view.getPagamento().addActionListener(e -> pagamento(cliente.getID(), preventivo.getIDPreventivo(), userid));
+                            view.getIndietro().addActionListener(e -> creanuovonoleggio(userid));
 
                         } else
                             view.error();
@@ -438,7 +420,7 @@ public class AutonoleggioC {
                 System.out.print(e);
             }
 
-        } else if (UserID > 100) {
+        } else if (userid > 100) {
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -460,21 +442,17 @@ public class AutonoleggioC {
                     preventivo.setmepcp(rs.getString("mepcp"));
                     preventivo.setaepcp(rs.getInt("aepcp"));
                     preventivo.setclusterscelto(rs.getString("clusterscelto"));
-                    preventivo.setseggiolino(rs.getString("seggiolino"));
-                    preventivo.setcatene(rs.getString("catene"));
-                    preventivo.setnavigatore(rs.getString("navigatore"));
-                    preventivo.sethotspot(rs.getString("hotspot"));
                     preventivo.settotale(rs.getFloat("Totale"));
 
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
                         Statement stmt2 = con2.createStatement();
-                        String sql2 = "Select * from cliente where UserID='" + UserID + "'";
+                        String sql2 = "Select * from cliente where userid='" + userid + "'";
                         ResultSet rs2 = stmt2.executeQuery(sql2);
                         if (rs2.next()) {
 
-                            cliente.setUserId(rs2.getInt("UserID"));
+                            cliente.setUserId(rs2.getInt("userid"));
                             cliente.setNome(rs2.getString("Nome"));
                             cliente.setCognome(rs2.getString("Cognome"));
                             cliente.setDngiorno(rs2.getInt("Dngiorno"));
@@ -494,8 +472,8 @@ public class AutonoleggioC {
                             view.setidpreventivo(preventivo.getIDPreventivo());
                             view.settotale(preventivo.gettotale());
 
-                            view.getPagamento().addActionListener(e -> pagamento(cliente.getID(), preventivo.getIDPreventivo(), UserID));
-                            view.getIndietro().addActionListener(e -> creanuovonoleggio(UserID));
+                            view.getPagamento().addActionListener(e -> pagamento(cliente.getID(), preventivo.getIDPreventivo(), userid));
+                            view.getIndietro().addActionListener(e -> creanuovonoleggio(userid));
 
                         } else
                             view.error();
@@ -516,17 +494,17 @@ public class AutonoleggioC {
 
     }
 
-    private void pagamento(int IDCliente, int IDPreventivo, int UserID) {
+    private void pagamento(int IDCliente, int IDPreventivo, int userid) {
 
         view.pagamentofine();
-        view.getFine().addActionListener(e -> salvanoleggio(IDCliente, IDPreventivo, UserID));
+        view.getFine().addActionListener(e -> salvaNoleggio(IDCliente, IDPreventivo, userid));
     }
 
-    private void salvanoleggio(int IDCliente, int IDPreventivo, int UserID) {
+    private void salvaNoleggio(int IDCliente, int IDPreventivo, int userid) {
 
         //in questa fase avvengono 3 salvataggi importanti, il primo è la memorizzazione del contratto, il secondo è l'update del numero di veicoli disponibili per ogni cluster
 
-        if (UserID == 50) {
+        if (userid == 50) {
             //operazione eseguita dal desk
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -577,14 +555,14 @@ public class AutonoleggioC {
 
 
                     view.impiegatoprenotazionefine();
-                    view.getFine().addActionListener(e -> impiegatodesk(UserID));
+                    view.getFine().addActionListener(e -> impiegatodesk(userid));
                 } else
                     view.error();
                 con.close();
             } catch (Exception e) {
                 System.out.print(e);
             }
-        } else if (UserID > 100) {
+        } else if (userid > 100) {
             //operazione eseguita dal desk
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -635,7 +613,7 @@ public class AutonoleggioC {
 
 
                     view.impiegatoprenotazionefine();
-                    view.getFine().addActionListener(e -> cliente(UserID));
+                    view.getFine().addActionListener(e -> cliente(userid));
                 } else
                     view.error();
                 con.close();
@@ -647,7 +625,7 @@ public class AutonoleggioC {
 
     }
 
-    private void CercaContratto(int UserID) {
+    private void CercaContratto(int userid) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -667,9 +645,9 @@ public class AutonoleggioC {
                 view.setidpreventivo(contratto.getIDPreventivo());
                 preventivo.setIDPreventivo(contratto.getIDPreventivo());
 
-                view.getScansione().addActionListener(e -> scansionedocumenti(UserID));
-                view.getDeposito().addActionListener(e -> depositocauzionale("Disponibile", "Px Ritiro", UserID));
-                view.getIndietro().addActionListener(e -> verificadocumenti(UserID));
+                view.getScansione().addActionListener(e -> scansionedocumenti(userid));
+                view.getDeposito().addActionListener(e -> depositocauzionale("Disponibile", "Px Ritiro", userid));
+                view.getIndietro().addActionListener(e -> verificadocumenti(userid));
 
 
             } else
@@ -681,14 +659,14 @@ public class AutonoleggioC {
 
     }
 
-    private void scansionedocumenti(int UserID) {
+    private void scansionedocumenti(int userid) {
 
         view.scansionefine();
-        view.getFine().addActionListener(e -> CercaContratto(UserID));
+        view.getFine().addActionListener(e -> CercaContratto(userid));
 
     }
 
-    private void depositocauzionale(String statoiniziale, String statofinale, int UserID) {
+    private void depositocauzionale(String statoiniziale, String statofinale, int userid) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -729,7 +707,7 @@ public class AutonoleggioC {
                                     if (rs2 > -1) {
 
                                         view.depositofine();
-                                        view.getFine().addActionListener(e -> impiegatodesk(UserID));
+                                        view.getFine().addActionListener(e -> impiegatodesk(userid));
 
                                     } else
                                         view.error();
@@ -760,9 +738,9 @@ public class AutonoleggioC {
 
     }
 
-    private void gestioneparcomacchine(int UserID) {
+    private void gestioneparcomacchine(int userid) {
 
-        if (UserID == 50) {
+        if (userid == 50) {
             //impiegato desk
             view.parcomacchine();
             try {
@@ -844,12 +822,12 @@ public class AutonoleggioC {
                 System.out.print(e);
             }
 
-            view.getIndietro().addActionListener(e -> impiegatodesk(UserID));
-            view.getModificamacchina().addActionListener(e -> aggiornastato(UserID));
-            view.getRimuovi().addActionListener(e -> rimuoviveicolo(UserID));
-            view.getAggiungi().addActionListener(e -> aggiungiveicolo(UserID));
+            view.getIndietro().addActionListener(e -> impiegatodesk(userid));
+            view.getModificamacchina().addActionListener(e -> aggiornastato(userid));
+            view.getRimuovi().addActionListener(e -> rimuoviveicolo(userid));
+            view.getAggiungi().addActionListener(e -> aggiungiveicolo(userid));
 
-        } else if (UserID == 100) {
+        } else if (userid == 100) {
             //impiegato garage
             view.parcomacchinegarage();
             try {
@@ -930,8 +908,8 @@ public class AutonoleggioC {
                 System.out.print(e);
             }
 
-            view.getIndietro().addActionListener(e -> impiegatogarage(UserID));
-            view.getModificamacchina().addActionListener(e -> aggiornastato(UserID));
+            view.getIndietro().addActionListener(e -> impiegatogarage(userid));
+            view.getModificamacchina().addActionListener(e -> aggiornastato(userid));
 
 
         }
@@ -939,16 +917,16 @@ public class AutonoleggioC {
 
     }
 
-    private void aggiungiveicolo(int UserID) {
+    private void aggiungiveicolo(int userid) {
 
         view.aggiungi();
 
-        view.getAggiungi().addActionListener(e -> aggiungiveicoloprosegui(UserID));
-        view.getIndietro().addActionListener(e -> gestioneparcomacchine(UserID));
+        view.getAggiungi().addActionListener(e -> aggiungiveicoloprosegui(userid));
+        view.getIndietro().addActionListener(e -> gestioneparcomacchine(userid));
 
     }
 
-    private void aggiungiveicoloprosegui(int UserID) {
+    private void aggiungiveicoloprosegui(int userid) {
 
         veicolo.setTarga(view.getTargaAggiungi().getText());
         veicolo.setMarca(view.getMarcaAggiungi().getText());
@@ -966,7 +944,7 @@ public class AutonoleggioC {
             if (rs > -1) {
 
                 view.aggiungifine();
-                view.getFine().addActionListener(e -> impiegatodesk(UserID));
+                view.getFine().addActionListener(e -> impiegatodesk(userid));
             } else
                 view.error();
             con.close();
@@ -977,17 +955,17 @@ public class AutonoleggioC {
 
     }
 
-    private void rimuoviveicolo(int UserID) {
+    private void rimuoviveicolo(int userid) {
 
         view.rimuovi();
 
-        view.getIndietro().addActionListener(e -> gestioneparcomacchine(UserID));
-        view.getRimuoviConferma().addActionListener(e -> rimuoviconferma(UserID));
+        view.getIndietro().addActionListener(e -> gestioneparcomacchine(userid));
+        view.getRimuoviConferma().addActionListener(e -> rimuoviconferma(userid));
 
 
     }
 
-    private void rimuoviconferma(int UserID) {
+    private void rimuoviconferma(int userid) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -1012,7 +990,7 @@ public class AutonoleggioC {
                     if (rs2 > -1) {
 
                         view.rimuovifine();
-                        view.getFine().addActionListener(e -> impiegatodesk(UserID));
+                        view.getFine().addActionListener(e -> impiegatodesk(userid));
 
                     } else
                         view.error();
@@ -1028,19 +1006,19 @@ public class AutonoleggioC {
         }
     }
 
-    private void aggiornastato(int UserID) {
+    private void aggiornastato(int userid) {
 
 
         view.modificaveicolo();
 
-        view.getIndietro().addActionListener(e -> gestioneparcomacchine(UserID));
-        view.getModificaProsegui().addActionListener(e -> aggiornastatoprosegui(UserID));
+        view.getIndietro().addActionListener(e -> gestioneparcomacchine(userid));
+        view.getModificaProsegui().addActionListener(e -> aggiornastatoprosegui(userid));
 
 
     }
 
 
-    private void aggiornastatoprosegui(int UserID) {
+    private void aggiornastatoprosegui(int userid) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -1064,8 +1042,8 @@ public class AutonoleggioC {
                 view.setGruppo(veicolo.getGruppo());
                 view.setStato(veicolo.getStato());
 
-                view.getModificaConferma().addActionListener(e -> aggiornastatoconferma(veicolo.getTarga(), UserID));
-                view.getIndietro().addActionListener(e -> aggiornastato(UserID));
+                view.getModificaConferma().addActionListener(e -> aggiornastatoconferma(veicolo.getTarga(), userid));
+                view.getIndietro().addActionListener(e -> aggiornastato(userid));
 
             } else
                 view.error();
@@ -1077,9 +1055,9 @@ public class AutonoleggioC {
     }
 
 
-    private void aggiornastatoconferma(String Targa, int UserID) {
+    private void aggiornastatoconferma(String Targa, int userid) {
 
-        if (UserID == 50) {
+        if (userid == 50) {
             //impiegato desk
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -1090,7 +1068,7 @@ public class AutonoleggioC {
                 if (rs2 > -1) {
 
                     view.modificaveicolofine();
-                    view.getFine().addActionListener(e -> impiegatodesk(UserID));
+                    view.getFine().addActionListener(e -> impiegatodesk(userid));
 
                 } else
                     view.error();
@@ -1098,7 +1076,7 @@ public class AutonoleggioC {
             } catch (Exception e) {
                 System.out.print(e);
             }
-        } else if (UserID == 100) {
+        } else if (userid == 100) {
             //impiegato garage
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -1109,7 +1087,7 @@ public class AutonoleggioC {
                 if (rs2 > -1) {
 
                     view.modificaveicolofine();
-                    view.getFine().addActionListener(e -> impiegatogarage(UserID));
+                    view.getFine().addActionListener(e -> impiegatogarage(userid));
 
                 } else
                     view.error();
@@ -1122,9 +1100,9 @@ public class AutonoleggioC {
     }
 
 
-    private void verificadisponibilità(int UserID) {
+    private void verificadisponibilità(int userid) {
 
-        if (UserID == 50) {
+        if (userid == 50) {
             //gestione preventivo per l'impiegato del desk
 
             preventivo.setDataRitiro(view.getdataritiro());
@@ -1174,84 +1152,9 @@ public class AutonoleggioC {
                             view.setClusterSelezionato(preventivo.getclusterscelto());
                             view.settotale((preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1) * preventivo.getprezzo());
 
-                            try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con4 = DriverManager.getConnection(mysql_url, "root", "");
-                                Statement stmt4 = con4.createStatement();
-                                String sql4 = "Select * from extra where Nome = 'Seggiolino'";
-                                ResultSet rs4 = stmt4.executeQuery(sql4);
-                                if (rs4.next()) {
 
-                                    extra.setnome(rs4.getString("Nome"));
-                                    extra.setprezzo(rs4.getFloat("Prezzo"));
-                                    view.setcostoseggiolino(extra.getprezzo());
-
-                                }
-
-                                con4.close();
-                            } catch (Exception e) {
-                                System.out.print(e);
-                            }
-
-                            try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con5 = DriverManager.getConnection(mysql_url, "root", "");
-                                Statement stmt5 = con5.createStatement();
-                                String sql5 = "Select * from extra where Nome = 'Navigatore'";
-                                ResultSet rs5 = stmt5.executeQuery(sql5);
-                                if (rs5.next()) {
-
-                                    extra.setnome(rs5.getString("Nome"));
-                                    extra.setprezzo(rs5.getFloat("Prezzo"));
-                                    view.setcostonavigatore(extra.getprezzo());
-
-                                }
-
-                                con5.close();
-                            } catch (Exception e) {
-                                System.out.print(e);
-                            }
-
-                            try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con6 = DriverManager.getConnection(mysql_url, "root", "");
-                                Statement stmt6 = con6.createStatement();
-                                String sql6 = "Select * from extra where Nome = 'Catene'";
-                                ResultSet rs6 = stmt6.executeQuery(sql6);
-                                if (rs6.next()) {
-
-                                    extra.setnome(rs6.getString("Nome"));
-                                    extra.setprezzo(rs6.getFloat("Prezzo"));
-                                    view.setcostocatene(extra.getprezzo());
-
-                                }
-
-                                con6.close();
-                            } catch (Exception e) {
-                                System.out.print(e);
-                            }
-
-                            try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                                Statement stmt7 = con7.createStatement();
-                                String sql7 = "Select * from extra where Nome = 'Hotspot'";
-                                ResultSet rs7 = stmt7.executeQuery(sql7);
-                                if (rs7.next()) {
-
-                                    extra.setnome(rs7.getString("Nome"));
-                                    extra.setprezzo(rs7.getFloat("Prezzo"));
-                                    view.setcostohotspot(extra.getprezzo());
-
-                                }
-
-                                con7.close();
-                            } catch (Exception e) {
-                                System.out.print(e);
-                            }
-
-                            view.getRiepilogoeTotale().addActionListener(e -> aggiornaprezzo(UserID));
-                            view.getTornaallaselezione().addActionListener(e -> richiestapreventivo(UserID));
+                            view.getRiepilogoeTotale().addActionListener(e -> aggiornaprezzo(userid));
+                            view.getTornaallaselezione().addActionListener(e -> paymentQuote(userid));
 
                         } else
                             view.error();
@@ -1266,14 +1169,14 @@ public class AutonoleggioC {
                 view.error();
 
 
-        } else if (UserID > 100) {
+        } else if (userid > 100) {
             //gestione preventivo per il cliente
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
                 Statement stmt2 = con2.createStatement();
-                String sql2 = "Select * from cliente where UserID='" + UserID + "'";
+                String sql2 = "Select * from cliente where userid='" + userid + "'";
                 ResultSet rs2 = stmt2.executeQuery(sql2);
                 if (rs2.next()) {
 
@@ -1338,84 +1241,12 @@ public class AutonoleggioC {
                         view.setClusterSelezionato(preventivo.getclusterscelto());
                         view.settotale((preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1) * preventivo.getprezzo());
 
-                        try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con4 = DriverManager.getConnection(mysql_url, "root", "");
-                            Statement stmt4 = con4.createStatement();
-                            String sql4 = "Select * from extra where Nome = 'Seggiolino'";
-                            ResultSet rs4 = stmt4.executeQuery(sql4);
-                            if (rs4.next()) {
 
-                                extra.setnome(rs4.getString("Nome"));
-                                extra.setprezzo(rs4.getFloat("Prezzo"));
-                                view.setcostoseggiolino(extra.getprezzo());
 
-                            }
 
-                            con4.close();
-                        } catch (Exception e) {
-                            System.out.print(e);
-                        }
 
-                        try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con5 = DriverManager.getConnection(mysql_url, "root", "");
-                            Statement stmt5 = con5.createStatement();
-                            String sql5 = "Select * from extra where Nome = 'Navigatore'";
-                            ResultSet rs5 = stmt5.executeQuery(sql5);
-                            if (rs5.next()) {
-
-                                extra.setnome(rs5.getString("Nome"));
-                                extra.setprezzo(rs5.getFloat("Prezzo"));
-                                view.setcostonavigatore(extra.getprezzo());
-
-                            }
-
-                            con5.close();
-                        } catch (Exception e) {
-                            System.out.print(e);
-                        }
-
-                        try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con6 = DriverManager.getConnection(mysql_url, "root", "");
-                            Statement stmt6 = con6.createStatement();
-                            String sql6 = "Select * from extra where Nome = 'Catene'";
-                            ResultSet rs6 = stmt6.executeQuery(sql6);
-                            if (rs6.next()) {
-
-                                extra.setnome(rs6.getString("Nome"));
-                                extra.setprezzo(rs6.getFloat("Prezzo"));
-                                view.setcostocatene(extra.getprezzo());
-
-                            }
-
-                            con6.close();
-                        } catch (Exception e) {
-                            System.out.print(e);
-                        }
-
-                        try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                            Statement stmt7 = con7.createStatement();
-                            String sql7 = "Select * from extra where Nome = 'Hotspot'";
-                            ResultSet rs7 = stmt7.executeQuery(sql7);
-                            if (rs7.next()) {
-
-                                extra.setnome(rs7.getString("Nome"));
-                                extra.setprezzo(rs7.getFloat("Prezzo"));
-                                view.setcostohotspot(extra.getprezzo());
-
-                            }
-
-                            con7.close();
-                        } catch (Exception e) {
-                            System.out.print(e);
-                        }
-
-                        view.getRiepilogoeTotale().addActionListener(e -> aggiornaprezzo(UserID));
-                        view.getTornaallaselezione().addActionListener(e -> richiestapreventivo(UserID));
+                        view.getRiepilogoeTotale().addActionListener(e -> aggiornaprezzo(userid));
+                        view.getTornaallaselezione().addActionListener(e -> paymentQuote(userid));
 
                     } else
                         view.error();
@@ -1477,84 +1308,10 @@ public class AutonoleggioC {
                             view.setClusterSelezionato(preventivo.getclusterscelto());
                             view.settotale((preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1) * preventivo.getprezzo());
 
-                            try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con4 = DriverManager.getConnection(mysql_url, "root", "");
-                                Statement stmt4 = con4.createStatement();
-                                String sql4 = "Select * from extra where Nome = 'Seggiolino'";
-                                ResultSet rs4 = stmt4.executeQuery(sql4);
-                                if (rs4.next()) {
 
-                                    extra.setnome(rs4.getString("Nome"));
-                                    extra.setprezzo(rs4.getFloat("Prezzo"));
-                                    view.setcostoseggiolino(extra.getprezzo());
 
-                                }
-
-                                con4.close();
-                            } catch (Exception e) {
-                                System.out.print(e);
-                            }
-
-                            try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con5 = DriverManager.getConnection(mysql_url, "root", "");
-                                Statement stmt5 = con5.createStatement();
-                                String sql5 = "Select * from extra where Nome = 'Navigatore'";
-                                ResultSet rs5 = stmt5.executeQuery(sql5);
-                                if (rs5.next()) {
-
-                                    extra.setnome(rs5.getString("Nome"));
-                                    extra.setprezzo(rs5.getFloat("Prezzo"));
-                                    view.setcostonavigatore(extra.getprezzo());
-
-                                }
-
-                                con5.close();
-                            } catch (Exception e) {
-                                System.out.print(e);
-                            }
-
-                            try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con6 = DriverManager.getConnection(mysql_url, "root", "");
-                                Statement stmt6 = con6.createStatement();
-                                String sql6 = "Select * from extra where Nome = 'Catene'";
-                                ResultSet rs6 = stmt6.executeQuery(sql6);
-                                if (rs6.next()) {
-
-                                    extra.setnome(rs6.getString("Nome"));
-                                    extra.setprezzo(rs6.getFloat("Prezzo"));
-                                    view.setcostocatene(extra.getprezzo());
-
-                                }
-
-                                con6.close();
-                            } catch (Exception e) {
-                                System.out.print(e);
-                            }
-
-                            try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                                Statement stmt7 = con7.createStatement();
-                                String sql7 = "Select * from extra where Nome = 'Hotspot'";
-                                ResultSet rs7 = stmt7.executeQuery(sql7);
-                                if (rs7.next()) {
-
-                                    extra.setnome(rs7.getString("Nome"));
-                                    extra.setprezzo(rs7.getFloat("Prezzo"));
-                                    view.setcostohotspot(extra.getprezzo());
-
-                                }
-
-                                con7.close();
-                            } catch (Exception e) {
-                                System.out.print(e);
-                            }
-
-                            view.getRiepilogoeTotale().addActionListener(e -> aggiornaprezzo(UserID));
-                            view.getTornaallaselezione().addActionListener(e -> RichiestaPreventivoRitorno(UserID));
+                            view.getRiepilogoeTotale().addActionListener(e -> aggiornaprezzo(userid));
+                            view.getTornaallaselezione().addActionListener(e -> RichiestaPreventivoRitorno(userid));
 
                         } else
                             view.error();
@@ -1576,328 +1333,62 @@ public class AutonoleggioC {
 
     }
 
-    private void aggiornaprezzo(int UserID) {
+    private void aggiornaprezzo(int userid) {
 
-        if (UserID == 50) {
+        if (userid == 50) {
             //se entro qui impiegato desk
-            preventivo.setseggiolino(view.getseggiolino());
-            preventivo.setcatene(view.getcatene());
-            preventivo.setnavigatore(view.getnavigatore());
-            preventivo.sethotspot(view.gethotspot());
+
             view.riepilogo();
             view.setPeriodoselezionatoinizio(preventivo.getDataRitiro());
             view.setPeriodoselezionatofine(preventivo.getDataRiconsegna());
             view.setDurataNoleggio(preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1);
             view.setClusterSelezionato(preventivo.getclusterscelto());
-            view.setSeggiolino(preventivo.getseggiolino());
-            view.setCatene(preventivo.getcatene());
-            view.setNavigatore(preventivo.getnavigatore());
-            view.setHotspot(preventivo.gethotspot());
 
             preventivo.settotale((preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1) * preventivo.getprezzo());
 
-            if (preventivo.getseggiolino() == "SI") {
 
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                    Statement stmt7 = con7.createStatement();
-                    String sql7 = "Select Prezzo from extra where Nome = 'Seggiolino'";
-                    ResultSet rs7 = stmt7.executeQuery(sql7);
-                    if (rs7.next()) {
-
-                        extra.setprezzo(rs7.getFloat("Prezzo"));
-                        preventivo.settotale(preventivo.gettotale() + extra.getprezzo() * (preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1));
-
-                    }
-                    con7.close();
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-            }
-
-            if (preventivo.getcatene() == "SI") {
-
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                    Statement stmt7 = con7.createStatement();
-                    String sql7 = "Select Prezzo from extra where Nome = 'Catene'";
-                    ResultSet rs7 = stmt7.executeQuery(sql7);
-                    if (rs7.next()) {
-
-                        extra.setprezzo(rs7.getFloat("Prezzo"));
-                        preventivo.settotale(preventivo.gettotale() + extra.getprezzo() * (preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1));
-
-                    }
-                    con7.close();
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-            }
-
-            if (preventivo.getnavigatore() == "SI") {
-
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                    Statement stmt7 = con7.createStatement();
-                    String sql7 = "Select Prezzo from extra where Nome = 'Navigatore'";
-                    ResultSet rs7 = stmt7.executeQuery(sql7);
-                    if (rs7.next()) {
-
-                        extra.setprezzo(rs7.getFloat("Prezzo"));
-                        preventivo.settotale(preventivo.gettotale() + extra.getprezzo() * (preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1));
-
-                    }
-                    con7.close();
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-            }
-
-            if (preventivo.gethotspot() == "SI") {
-
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                    Statement stmt7 = con7.createStatement();
-                    String sql7 = "Select Prezzo from extra where Nome = 'Hotspot'";
-                    ResultSet rs7 = stmt7.executeQuery(sql7);
-                    if (rs7.next()) {
-
-                        extra.setprezzo(rs7.getFloat("Prezzo"));
-                        preventivo.settotale(preventivo.gettotale() + extra.getprezzo() * (preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1));
-
-                    }
-                    con7.close();
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-            }
 
             view.settotale(preventivo.gettotale());
-            view.getEffettuaPreventivo().addActionListener(e -> stampapreventivo(UserID));
-            view.getIndietro().addActionListener(e -> verificadisponibilità(UserID));
+            view.getEffettuaPreventivo().addActionListener(e -> stampapreventivo(userid));
+            view.getIndietro().addActionListener(e -> verificadisponibilità(userid));
 
 
-        } else if (UserID > 100) {
+        } else if (userid > 100) {
             //se entro qui sono un cliente
-            preventivo.setseggiolino(view.getseggiolino());
-            preventivo.setcatene(view.getcatene());
-            preventivo.setnavigatore(view.getnavigatore());
-            preventivo.sethotspot(view.gethotspot());
+
             view.riepilogo();
             view.setPeriodoselezionatoinizio(preventivo.getDataRitiro());
             view.setPeriodoselezionatofine(preventivo.getDataRiconsegna());
             view.setDurataNoleggio(preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1);
             view.setClusterSelezionato(preventivo.getclusterscelto());
-            view.setSeggiolino(preventivo.getseggiolino());
-            view.setCatene(preventivo.getcatene());
-            view.setNavigatore(preventivo.getnavigatore());
-            view.setHotspot(preventivo.gethotspot());
 
             preventivo.settotale((preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1) * preventivo.getprezzo());
 
-            if (preventivo.getseggiolino() == "SI") {
-
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                    Statement stmt7 = con7.createStatement();
-                    String sql7 = "Select Prezzo from extra where Nome = 'Seggiolino'";
-                    ResultSet rs7 = stmt7.executeQuery(sql7);
-                    if (rs7.next()) {
-
-                        extra.setprezzo(rs7.getFloat("Prezzo"));
-                        preventivo.settotale(preventivo.gettotale() + extra.getprezzo() * (preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1));
-
-                    }
-                    con7.close();
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-            }
-
-            if (preventivo.getcatene() == "SI") {
-
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                    Statement stmt7 = con7.createStatement();
-                    String sql7 = "Select Prezzo from extra where Nome = 'Catene'";
-                    ResultSet rs7 = stmt7.executeQuery(sql7);
-                    if (rs7.next()) {
-
-                        extra.setprezzo(rs7.getFloat("Prezzo"));
-                        preventivo.settotale(preventivo.gettotale() + extra.getprezzo() * (preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1));
-
-                    }
-                    con7.close();
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-            }
-
-            if (preventivo.getnavigatore() == "SI") {
-
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                    Statement stmt7 = con7.createStatement();
-                    String sql7 = "Select Prezzo from extra where Nome = 'Navigatore'";
-                    ResultSet rs7 = stmt7.executeQuery(sql7);
-                    if (rs7.next()) {
-
-                        extra.setprezzo(rs7.getFloat("Prezzo"));
-                        preventivo.settotale(preventivo.gettotale() + extra.getprezzo() * (preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1));
-
-                    }
-                    con7.close();
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-            }
-
-            if (preventivo.gethotspot() == "SI") {
-
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                    Statement stmt7 = con7.createStatement();
-                    String sql7 = "Select Prezzo from extra where Nome = 'Hotspot'";
-                    ResultSet rs7 = stmt7.executeQuery(sql7);
-                    if (rs7.next()) {
-
-                        extra.setprezzo(rs7.getFloat("Prezzo"));
-                        preventivo.settotale(preventivo.gettotale() + extra.getprezzo() * (preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1));
-
-                    }
-                    con7.close();
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-            }
 
             view.settotale(preventivo.gettotale());
-            view.getEffettuaPreventivo().addActionListener(e -> stampapreventivo(UserID));
-            view.getIndietro().addActionListener(e -> verificadisponibilità(UserID));
+            view.getEffettuaPreventivo().addActionListener(e -> stampapreventivo(userid));
+            view.getIndietro().addActionListener(e -> verificadisponibilità(userid));
 
 
         } else {
-
-            preventivo.setseggiolino(view.getseggiolino());
-            preventivo.setcatene(view.getcatene());
-            preventivo.setnavigatore(view.getnavigatore());
-            preventivo.sethotspot(view.gethotspot());
             view.riepilogo();
             view.setPeriodoselezionatoinizio(preventivo.getDataRitiro());
             view.setPeriodoselezionatofine(preventivo.getDataRiconsegna());
             view.setDurataNoleggio(preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1);
             view.setClusterSelezionato(preventivo.getclusterscelto());
-            view.setSeggiolino(preventivo.getseggiolino());
-            view.setCatene(preventivo.getcatene());
-            view.setNavigatore(preventivo.getnavigatore());
-            view.setHotspot(preventivo.gethotspot());
-
             preventivo.settotale((preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1) * preventivo.getprezzo());
-
-            if (preventivo.getseggiolino() == "SI") {
-
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                    Statement stmt7 = con7.createStatement();
-                    String sql7 = "Select Prezzo from extra where Nome = 'Seggiolino'";
-                    ResultSet rs7 = stmt7.executeQuery(sql7);
-                    if (rs7.next()) {
-
-                        extra.setprezzo(rs7.getFloat("Prezzo"));
-                        preventivo.settotale(preventivo.gettotale() + extra.getprezzo() * (preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1));
-
-                    }
-
-                    con7.close();
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-            }
-
-            if (preventivo.getcatene() == "SI") {
-
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                    Statement stmt7 = con7.createStatement();
-                    String sql7 = "Select Prezzo from extra where Nome = 'Catene'";
-                    ResultSet rs7 = stmt7.executeQuery(sql7);
-                    if (rs7.next()) {
-
-                        extra.setprezzo(rs7.getFloat("Prezzo"));
-                        preventivo.settotale(preventivo.gettotale() + extra.getprezzo() * (preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1));
-
-                    }
-
-                    con7.close();
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-            }
-
-            if (preventivo.getnavigatore() == "SI") {
-
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                    Statement stmt7 = con7.createStatement();
-                    String sql7 = "Select Prezzo from extra where Nome = 'Navigatore'";
-                    ResultSet rs7 = stmt7.executeQuery(sql7);
-                    if (rs7.next()) {
-
-                        extra.setprezzo(rs7.getFloat("Prezzo"));
-                        preventivo.settotale(preventivo.gettotale() + extra.getprezzo() * (preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1));
-
-                    }
-
-                    con7.close();
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-            }
-
-            if (preventivo.gethotspot() == "SI") {
-
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con7 = DriverManager.getConnection(mysql_url, "root", "");
-                    Statement stmt7 = con7.createStatement();
-                    String sql7 = "Select Prezzo from extra where Nome = 'Hotspot'";
-                    ResultSet rs7 = stmt7.executeQuery(sql7);
-                    if (rs7.next()) {
-
-                        extra.setprezzo(rs7.getFloat("Prezzo"));
-                        preventivo.settotale(preventivo.gettotale() + extra.getprezzo() * (preventivo.getDataRiconsegna() - preventivo.getDataRitiro() + 1));
-
-                    }
-                    con7.close();
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-
-            }
-
             view.settotale(preventivo.gettotale());
-            view.getEffettuaPreventivo().addActionListener(e -> stampapreventivo(UserID));
-            view.getIndietro().addActionListener(e -> verificadisponibilità(UserID));
+            view.getEffettuaPreventivo().addActionListener(e -> stampapreventivo(userid));
+            view.getIndietro().addActionListener(e -> verificadisponibilità(userid));
 
         }
 
     }
 
 
-    private void stampapreventivo(int UserID) {
+    private void stampapreventivo(int userid) {
 
-        if (UserID == 50) {
+        if (userid == 50) {
             //impiegato desk
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -1917,7 +1408,7 @@ public class AutonoleggioC {
 
                             view.finepreventivo();
                             view.setnumeroPreventivo(rs2.getInt("ID"));
-                            view.getFine().addActionListener(e -> impiegatodesk(UserID));
+                            view.getFine().addActionListener(e -> impiegatodesk(userid));
 
                         }
                         con.close();
@@ -1931,7 +1422,7 @@ public class AutonoleggioC {
                 System.out.print(e);
             }
 
-        } else if (UserID > 100) {
+        } else if (userid > 100) {
             //cliente
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -1951,7 +1442,7 @@ public class AutonoleggioC {
 
                             view.clientefinepreventivo();
                             view.setnumeroPreventivo(rs2.getInt("ID"));
-                            view.getFine().addActionListener(e -> cliente(UserID));
+                            view.getFine().addActionListener(e -> cliente(userid));
 
                         }
                         con.close();
@@ -1985,7 +1476,7 @@ public class AutonoleggioC {
 
                             view.finepreventivo();
                             view.setnumeroPreventivo(rs2.getInt("ID"));
-                            view.getFine().addActionListener(e -> accedi());
+                            view.getFine().addActionListener(e -> welcome());
 
                         }
                         con.close();
@@ -2011,7 +1502,7 @@ public class AutonoleggioC {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(mysql_url, "root", "");
             Statement stmt = con.createStatement();
-            String sql = "Select * from cliente where UserID='" + IDCliente + "'";
+            String sql = "Select * from cliente where userid='" + IDCliente + "'";
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
 
@@ -2070,14 +1561,14 @@ public class AutonoleggioC {
     }
 
 
-    private void storiconoleggi(int UserID) {
+    private void storiconoleggi(int userid) {
 
         try {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
             Statement stmt2 = con2.createStatement();
-            String sql2 = "Select * from contratto where Cliente='" + UserID + "'";
+            String sql2 = "Select * from contratto where Cliente='" + userid + "'";
             ResultSet rs2 = stmt2.executeQuery(sql2);
             if (rs2.next()) {
 
@@ -2113,8 +1604,8 @@ public class AutonoleggioC {
                 view.setTarga2(contratto.getTarga());
                 view.setMora2(contratto.getMora());
 
-                view.getIndietro().addActionListener(e -> cliente(UserID));
-                view.getCancella().addActionListener(e -> cancella(UserID));
+                view.getIndietro().addActionListener(e -> cliente(userid));
+                view.getCancella().addActionListener(e -> cancella(userid));
 
             } else
                 view.error();
@@ -2127,16 +1618,16 @@ public class AutonoleggioC {
 
     }
 
-    private void cancella(int UserID) {
+    private void cancella(int userid) {
 
         view.cancella();
 
-        view.getCancella().addActionListener(e -> cancellaconferma(UserID));
-        view.getIndietro().addActionListener(e -> storiconoleggi(UserID));
+        view.getCancella().addActionListener(e -> cancellaconferma(userid));
+        view.getIndietro().addActionListener(e -> storiconoleggi(userid));
 
     }
 
-    private void cancellaconferma(int UserID) {
+    private void cancellaconferma(int userid) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -2147,7 +1638,7 @@ public class AutonoleggioC {
             if (rs3 > -1) {
 
                 view.cancellafine();
-                view.getFine().addActionListener(e -> cliente(UserID));
+                view.getFine().addActionListener(e -> cliente(userid));
 
             } else
                 view.error();
@@ -2157,7 +1648,7 @@ public class AutonoleggioC {
         }
     }
 
-    private void salvamodifiche(int UserID) {
+    private void salvamodifiche(int userid) {
 
         cliente.setPwd(view.getModificationView().getPasswordUtenteTextField().getText());
         cliente.setEmail(view.getModificationView().getEmailClienteTextField().getText());
@@ -2171,17 +1662,16 @@ public class AutonoleggioC {
         cliente.setCity(view.getModificationView().getCityClientTextField().getText());
         cliente.setPaese(view.getModificationView().getpaeseresCliente());
 
-
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
             Statement stmt2 = con2.createStatement();
-            String sql2 = "Update cliente set Email = '" + cliente.getEmail() + "', Prefisso = '" + cliente.getPrefisso() + "', Telefono = '" + view.getModificationView().getTelefonoClienteTextField().getText() + "', Numpatente = '" + cliente.getNumpatente() + "', Paesepatente = '" + cliente.getPaesePatente() + "', Giornosp = '" + cliente.getGiornosp() + "', Mesesp = '" + cliente.getMesesp() + "', Annosp = '" + cliente.getAnnosp() + "', Indirizzo = '" + cliente.getIndirizzo() + "', city = '" + cliente.getCity() + "', Paese = '" + cliente.getPaese() + "', Codpostale = '" + view.getModificationView().getCPClienteTextField().getText() + "', Pwd = '" + cliente.getPwd() + "' where UserID = '" + UserID + "'";
+            String sql2 = "Update cliente set Email = '" + cliente.getEmail() + "', Prefisso = '" + cliente.getPrefisso() + "', Telefono = '" + view.getModificationView().getTelefonoClienteTextField().getText() + "', Numpatente = '" + cliente.getNumpatente() + "', Paesepatente = '" + cliente.getPaesePatente() + "', Giornosp = '" + cliente.getGiornosp() + "', Mesesp = '" + cliente.getMesesp() + "', Annosp = '" + cliente.getAnnosp() + "', Indirizzo = '" + cliente.getIndirizzo() + "', city = '" + cliente.getCity() + "', Paese = '" + cliente.getPaese() + "', Codpostale = '" + view.getModificationView().getCPClienteTextField().getText() + "', Pwd = '" + cliente.getPwd() + "' where userid = '" + userid + "'";
             int rs2 = stmt2.executeUpdate(sql2);
             if (rs2 > -1) {
 
                 view.modificadatifine();
-                view.getFine().addActionListener(e -> cliente(UserID));
+                view.getFine().addActionListener(e -> cliente(userid));
 
             } else
                 view.error();
@@ -2199,19 +1689,19 @@ public class AutonoleggioC {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
             Statement stmt2 = con2.createStatement();
-            String sql2 = "Select * from cliente where UserID='" + ID + "'";
+            String sql2 = "Select * from cliente where userid='" + ID + "'";
             ResultSet rs2 = stmt2.executeQuery(sql2);
             if (rs2.next()) {
 
                 view.cliente();
-                cliente.setUserId((rs2.getInt("UserID")));
+                cliente.setUserId((rs2.getInt("userid")));
                 cliente.setNome(rs2.getString("Nome"));
                 view.setNomeClienteLabel(cliente.getNome());
                 cliente.setCognome(rs2.getString("Cognome"));
                 view.setCognomeClienteLabel(cliente.getCognome());
 
                 view.getModificaDati().addActionListener(e -> modificaDati(cliente.getID()));
-                view.getPreventivo().addActionListener(e -> richiestapreventivo(cliente.getID()));
+                view.getPreventivo().addActionListener(e -> paymentQuote(cliente.getID()));
                 view.getNuovoNoleggio().addActionListener(e -> creanuovonoleggio(cliente.getID()));
                 view.getStoricoNoleggi().addActionListener(e -> storiconoleggi(cliente.getID()));
                 view.getEliminaProfilo().addActionListener(e -> elimina(cliente.getID()));
@@ -2223,13 +1713,13 @@ public class AutonoleggioC {
         }
     }
 
-    private void elimina(int UserID) {
+    private void elimina(int userid) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con2 = DriverManager.getConnection(mysql_url, "root", "");
             Statement stmt2 = con2.createStatement();
-            String sql2 = "Delete from login where UserID = '" + UserID + "'";
+            String sql2 = "Delete from login where userid = '" + userid + "'";
             int rs2 = stmt2.executeUpdate(sql2);
             if (rs2 > -1) {
 
@@ -2237,12 +1727,12 @@ public class AutonoleggioC {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con3 = DriverManager.getConnection(mysql_url, "root", "");
                     Statement stmt3 = con3.createStatement();
-                    String sql3 = "Delete from cliente where UserID = '" + UserID + "'";
+                    String sql3 = "Delete from cliente where userid = '" + userid + "'";
                     int rs3 = stmt3.executeUpdate(sql3);
                     if (rs3 > -1) {
 
                         view.eliminafine();
-                        view.getFine().addActionListener(e -> accedi());
+                        view.getFine().addActionListener(e -> welcome());
 
                     } else
                         view.error();
@@ -2263,21 +1753,21 @@ public class AutonoleggioC {
 
         view.logout();
 
-        view.getFine().addActionListener(e -> accedi());
+        view.getFine().addActionListener(e -> welcome());
 
     }
 
 
-    private void ritiro(int UserID) {
+    private void ritiro(int userid) {
 
         view.ritiroveicolo();
 
-        view.getCerca().addActionListener(e -> ritiroprosegui(UserID));
-        view.getIndietro().addActionListener(e -> impiegatogarage(UserID));
+        view.getCerca().addActionListener(e -> ritiroprosegui(userid));
+        view.getIndietro().addActionListener(e -> impiegatogarage(userid));
 
     }
 
-    private void ritiroprosegui(int UserID) {
+    private void ritiroprosegui(int userid) {
 
         view.proseguiritiro();
 
@@ -2327,8 +1817,8 @@ public class AutonoleggioC {
                                 view.setHotspotExtra(preventivo.gethotspot());
                                 view.setDanni(veicolo.getDanni());
 
-                                view.getStampadocfinale().addActionListener(e -> stampafinale("In noleggio", UserID));
-                                view.getIndietro().addActionListener(e -> ritiro(UserID));
+                                view.getStampadocfinale().addActionListener(e -> stampafinale("In noleggio", userid));
+                                view.getIndietro().addActionListener(e -> ritiro(userid));
 
 
                             } else
@@ -2355,7 +1845,7 @@ public class AutonoleggioC {
 
     }
 
-    private void stampafinale(String statofinale, int UserID) {
+    private void stampafinale(String statofinale, int userid) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -2366,7 +1856,7 @@ public class AutonoleggioC {
             if (rs2 > -1) {
 
                 view.stampafinale();
-                view.getFine().addActionListener(e -> impiegatogarage(UserID));
+                view.getFine().addActionListener(e -> impiegatogarage(userid));
 
             } else
                 view.error();
@@ -2378,16 +1868,16 @@ public class AutonoleggioC {
 
     }
 
-    private void riconsegna(int UserID) {
+    private void riconsegna(int userid) {
 
         view.riconsegnaveicolo();
 
-        view.getCerca().addActionListener(e -> riconsegnaprosegui(UserID));
-        view.getIndietro().addActionListener(e -> impiegatogarage(UserID));
+        view.getCerca().addActionListener(e -> riconsegnaprosegui(userid));
+        view.getIndietro().addActionListener(e -> impiegatogarage(userid));
 
     }
 
-    private void riconsegnaprosegui(int UserID) {
+    private void riconsegnaprosegui(int userid) {
 
         view.proseguiriconsegna();
 
@@ -2445,8 +1935,8 @@ public class AutonoleggioC {
                                 view.setKm(veicolo.getKm());
 
 
-                                view.getCalcoloMora().addActionListener(e -> calcolomora(UserID));
-                                view.getIndietro().addActionListener(e -> ritiro(UserID));
+                                view.getCalcoloMora().addActionListener(e -> calcolomora(userid));
+                                view.getIndietro().addActionListener(e -> ritiro(userid));
 
                             } else
                                 view.error();
@@ -2465,7 +1955,7 @@ public class AutonoleggioC {
         }
     }
 
-    private void calcolomora(int UserID) {
+    private void calcolomora(int userid) {
 
         view.morariconsegna();
 
@@ -2492,97 +1982,17 @@ public class AutonoleggioC {
 
         preventivo.setseggiolino(view.getseggiolino());
 
-        if (preventivo.getseggiolino() == "SI") {
-
-            //se entro qui il seggiolino non è stato trovato
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
-                Statement stmt = con.createStatement();
-                String sql = "Select Prezzo from extra where Nome='" + view.getSeggiolino() + "'";
-                ResultSet rs = stmt.executeQuery(sql);
-                if (rs.next()) {
-
-                    extra.setprezzo(rs.getFloat("Prezzo"));
-                    contratto.setMora(contratto.getMora() + extra.getprezzo());
-
-                } else
-                    view.error();
-            } catch (Exception e) {
-                System.out.print(e);
-            }
-        }
 
         preventivo.setcatene(view.getcatene());
 
-        if (preventivo.getcatene() == "SI") {
 
-            //se entro qui le catene non sono state trovate
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
-                Statement stmt = con.createStatement();
-                String sql = "Select Prezzo from extra where Nome='" + view.getCatene() + "'";
-                ResultSet rs = stmt.executeQuery(sql);
-                if (rs.next()) {
-
-                    extra.setprezzo(rs.getFloat("Prezzo"));
-                    contratto.setMora(contratto.getMora() + extra.getprezzo());
-
-                } else
-                    view.error();
-            } catch (Exception e) {
-                System.out.print(e);
-            }
-        }
 
 
         preventivo.setnavigatore(view.getnavigatore());
 
-        if (preventivo.getnavigatore() == "SI") {
-
-            //se entro qui il navigatore non è stato trovato
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
-                Statement stmt = con.createStatement();
-                String sql = "Select Prezzo from extra where Nome='" + view.getNavigatore() + "'";
-                ResultSet rs = stmt.executeQuery(sql);
-                if (rs.next()) {
-
-                    extra.setprezzo(rs.getFloat("Prezzo"));
-                    contratto.setMora(contratto.getMora() + extra.getprezzo());
-
-                } else
-                    view.error();
-            } catch (Exception e) {
-                System.out.print(e);
-            }
-        }
 
 
         preventivo.sethotspot(view.gethotspot());
-
-        if (preventivo.gethotspot() == "SI") {
-
-            //se entro qui l'hotspot non è stato trovato
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection(mysql_url, "root", "");
-                Statement stmt = con.createStatement();
-                String sql = "Select Prezzo from extra where Nome='" + view.getHotspot() + "'";
-                ResultSet rs = stmt.executeQuery(sql);
-                if (rs.next()) {
-
-                    extra.setprezzo(rs.getFloat("Prezzo"));
-                    contratto.setMora(contratto.getMora() + extra.getprezzo());
-
-                } else
-                    view.error();
-            } catch (Exception e) {
-                System.out.print(e);
-            }
-        }
 
         veicolo.setDanni(view.getdanni());
 
@@ -2621,12 +2031,12 @@ public class AutonoleggioC {
 
         view.settotale(contratto.getMora());
 
-        view.getPagamento().addActionListener(e -> addebito(UserID));
-        view.getIndietro().addActionListener(e -> riconsegnaprosegui(UserID));
+        view.getPagamento().addActionListener(e -> addebito(userid));
+        view.getIndietro().addActionListener(e -> riconsegnaprosegui(userid));
 
     }
 
-    private void addebito(int UserID) {
+    private void addebito(int userid) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -2656,7 +2066,7 @@ public class AutonoleggioC {
                                 if (rs5 > -1) {
 
 
-                                    stampadocumentofinale("In riparazione", UserID);
+                                    stampadocumentofinale("In riparazione", userid);
 
 
                                 } else
@@ -2668,7 +2078,7 @@ public class AutonoleggioC {
                         } else {
 
 
-                            stampadocumentofinale("Lavaggio", UserID);
+                            stampadocumentofinale("Lavaggio", userid);
 
 
                         }
@@ -2683,7 +2093,7 @@ public class AutonoleggioC {
         }
     }
 
-    private void stampadocumentofinale(String statofinale, int UserID) {
+    private void stampadocumentofinale(String statofinale, int userid) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -2694,7 +2104,7 @@ public class AutonoleggioC {
             if (rs2 > -1) {
 
                 view.morapagamentofine();
-                view.getFine().addActionListener(e -> impiegatogarage(UserID));
+                view.getFine().addActionListener(e -> impiegatogarage(userid));
 
             } else
                 view.error();

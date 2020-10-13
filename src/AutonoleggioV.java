@@ -347,7 +347,6 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
 
     public void option() {
-
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
@@ -365,8 +364,6 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.add(loginButton);
         richiestaPreventivoButton.setBounds(800, 200, 200, 150);
         frame.add(richiestaPreventivoButton);
-
-
     }
 
     public void login() {
@@ -383,7 +380,6 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.add(Accedi);
         Annulla.setBounds(400, 400, 100, 60);
         frame.add(Annulla);
-
     }
 
     //registrazione di un nuovo cliente
