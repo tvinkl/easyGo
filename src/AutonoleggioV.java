@@ -435,36 +435,36 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        DataRitiroLabel = new JLabel("Data Ritiro veicolo (gg/mm/aaaa): ");
+        DataRitiroLabel = new JLabel("Vehicle retreat date (dd/mm/yyyy): ");
         giornipreventivo = new Integer[]{15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
         dataritiro = new JComboBox<Integer>(giornipreventivo);
-        DataRitirosegue = new JLabel("Maggio 2020");
-        OraRitiroLabel = new JLabel("Ora Ritiro veicolo : ");
+        DataRitirosegue = new JLabel("May 2020");
+        OraRitiroLabel = new JLabel("Vehicle retreat time : ");
         ore = new String[]{"9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"};
         oraritiro = new JComboBox<String>(ore);
-        DataRiconsegnaLabel = new JLabel("Data Riconsegna veicolo (gg/mm/aaaa): ");
+        DataRiconsegnaLabel = new JLabel("Vehicle return date (dd/mm/yyyy): ");
         datariconsegna = new JComboBox<Integer>(giornipreventivo);
-        DataRiconsegnasegue = new JLabel("Maggio 2020");
-        OraRiconsegnaLabel = new JLabel("Ora Riconsegna veicolo : ");
+        DataRiconsegnasegue = new JLabel("May 2020");
+        OraRiconsegnaLabel = new JLabel("Vehicle return time : ");
         orariconsegna = new JComboBox<String>(ore);
-        DNClienteLabel = new JLabel("Data di nascita cliente : ");
-        GNClienteLabel = new JLabel("Giorno : ");
+        DNClienteLabel = new JLabel("Client birthday : ");
+        GNClienteLabel = new JLabel("Day : ");
         gnc = new JComboBox<>(StaticData.DAYS);
-        MNClienteLabel = new JLabel("Mese : ");
+        MNClienteLabel = new JLabel("Month : ");
         mnc = new JComboBox<>(StaticData.MONTHS);
-        ANClienteLabel = new JLabel("Anno : ");
+        ANClienteLabel = new JLabel("Year : ");
         anc = new JComboBox<>(StaticData.YEARS);
-        DEPatenteLabel = new JLabel("Data emissione patente : ");
-        GEPatenteLabel = new JLabel("Giorno : ");
+        DEPatenteLabel = new JLabel("License issue date : ");
+        GEPatenteLabel = new JLabel("Day : ");
         gep = new JComboBox<>(StaticData.DAYS);
-        MEPatenteLabel = new JLabel("Mese : ");
+        MEPatenteLabel = new JLabel("Month : ");
         mep = new JComboBox<String>(StaticData.MONTHS);
-        AEPatenteLabel = new JLabel("Anno : ");
+        AEPatenteLabel = new JLabel("Year : ");
         anniep = new Integer[]{1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978,
                 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
                 2000, 2001, 2002};
         aep = new JComboBox<>(anniep);
-        selezioneCluster = new JLabel("Selezionare uno dei seguenti cluster : ");
+        selezioneCluster = new JLabel("Select cluster: ");
         BGM = new JLabel("BGM - Berlina di dimensioni grandi con cambio manuale. 5 porte e 5 posti con alimentazione Diesel o Benzina");
         BMA = new JLabel("BMA - Berlina di dimensioni medie con cambio automatico. 5 porte e 5 posti con alimentazione Diesel o Benzina");
         BPMX = new JLabel("BPMX - Berlina di dimensioni piccole con cambio manuale. 3 porte e 4 posti con alimentazione Diesel o Benzina. Idonea per i neopatentati");
@@ -472,8 +472,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         clusterscelto = new JComboBox<String>(cluster);
 
 
-        Prosegui = new JButton("Prosegui");
-        Annulla = new JButton("Annulla");
+        Prosegui = new JButton("Continute");
+        Annulla = new JButton("Cancel");
         // Add UI element to frame
         frame.setLayout(null);
         DataRitiroLabel.setBounds(50, 50, 200, 70);
