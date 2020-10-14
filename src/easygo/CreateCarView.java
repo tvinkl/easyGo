@@ -47,7 +47,6 @@ public class CreateCarView extends JFrame {
         colorComboBox.setBounds(180, 170, 91, 20);
         getContentPane().add(colorComboBox);
 
-
         createCarButton = new JButton("Create car");
 
         createCarButton.setBounds(65, 250, 89, 23);

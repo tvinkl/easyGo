@@ -96,7 +96,7 @@ public class ModificationView {
         MesedsLabel = new JLabel("Mese scadenza : ");
         mdsCliente = new JComboBox<String>(StaticData.MONTHS);
         AnnodsLabel = new JLabel("Anno scadenza: ");
-        adsCliente = new JComboBox<Integer>(StaticData.ANNIS);
+        adsCliente = new JComboBox<Integer>(StaticData.YEARS_FUTURE);
         FatturazioneLabel = new JLabel("Dati fatturazione");
         IndirizzoLabel = new JLabel("Indirizzo :");
         IndirizzoClienteTextField = new JTextField();

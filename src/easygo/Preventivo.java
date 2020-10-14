@@ -2,212 +2,137 @@ package easygo;
 
 public class Preventivo {
 
-    private int IDPreventivo;
-    private int DataRitiro;
-    private String OraRitiro;
-    private int DataRiconsegna;
-    private String OraRiconsegna;
-    private int gncp;
-    private String mncp;
-    private int ancp;
-    private int gepcp;
-    private String mepcp;
-    private int aepcp;
-    private String car;
-    private float price;
-    private String seggiolino;
-    private String catene;
-    private String navigatore;
-    private String hotspot;
-    private double totale;
+    private int pickTime;
+    private int pickDay;
+    private int pickMonth;
+    private int pickYear;
+
+    private int returnTime;
+    private int returnDay;
+    private int returnMonth;
+    private int returnYear;
+
+    private int totalHours;
+
+    private int carId;
+    private float carPricePerHour;
+
+    public int getTotalHours() {
+        return totalHours;
+    }
+
+    public void setTotalHours(int totalHours) {
+        this.totalHours = totalHours;
+    }
+
+    public void setPickTime(int pickTime) {
+        this.pickTime = pickTime;
+    }
+
+    public float getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(float totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    private float totalCost;
+
+    public void setPickTime(Integer pickTime) {
+        this.pickTime = pickTime;
+    }
+
+    public void setPickDay(int pickDay) {
+        this.pickDay = pickDay;
+    }
+
+    public int getCarId() {
+        return carId;
+    }
+
+    public void setCarId(int carId) {
+        this.carId = carId;
+    }
+
+
+//    private int gncp;
+//    private String mncp;
+//    private int ancp;
+//    private int gepcp;
+//    private String mepcp;
+//    private int aepcp;
 
     //La data di riconsegna deve essere successiva alla data riconsegna
     //Le date sono dello stesso mese
     //@ ensures DataRiconsegna - DataRitiro >= 0
-    public Preventivo() {
 
+    public int getPickMonth() {
+        return pickMonth;
+    }
+
+    public void setPickMonth(int pickMonth) {
+        this.pickMonth = pickMonth;
+    }
+
+    public int getPickYear() {
+        return pickYear;
+    }
+
+    public void setPickYear(int pickYear) {
+        this.pickYear = pickYear;
+    }
+
+    public int getReturnTime() {
+        return returnTime;
+    }
+
+    public void setReturnTime(int returnTime) {
+        this.returnTime = returnTime;
+    }
+
+    public int getReturnDay() {
+        return returnDay;
+    }
+
+    public void setReturnDay(int returnDay) {
+        this.returnDay = returnDay;
+    }
+
+    public int getReturnMonth() {
+        return returnMonth;
+    }
+
+    public void setReturnMonth(int returnMonth) {
+        this.returnMonth = returnMonth;
+    }
+
+    public int getReturnYear() {
+        return returnYear;
+    }
+
+    public void setReturnYear(int returnYear) {
+        this.returnYear = returnYear;
+    }
+
+    public int getPickDay() {
+        return pickDay;
     }
 
 
-    public void setIDPreventivo(int ID) {
-
-        this.IDPreventivo = ID;
-    }
-
-    public int getIDPreventivo() {
-
-        return IDPreventivo;
-    }
-
-    public void setDataRitiro(int DataRitiro) {
-
-        this.DataRitiro = DataRitiro;
-    }
-
-    public int getDataRitiro() {
-
-        return DataRitiro;
-    }
-
-    public void setOraRitiro(String OraRitiro) {
-
-        this.OraRitiro = OraRitiro;
-    }
-
-    public String getOraRitiro() {
-
-        return OraRitiro;
-    }
-
-    public void setDataRiconsegna(int DataRiconsegna) {
-
-        this.DataRiconsegna = DataRiconsegna;
-    }
-
-    public int getDataRiconsegna() {
-
-        return DataRiconsegna;
-    }
-
-    public void setOraRiconsegna(String OraRiconsegna) {
-
-        this.OraRiconsegna = OraRiconsegna;
-    }
-
-    public String getOraRiconsegna() {
-
-        return OraRiconsegna;
-    }
-
-    public void setgncp(int gncp) {
-
-        this.gncp = gncp;
-    }
-
-    public int getgncp() {
-
-        return gncp;
-    }
-
-    public void setmncp(String mncp) {
-
-        this.mncp = mncp;
-    }
-
-    public String getmncp() {
-
-        return mncp;
-    }
-
-    public void setancp(int ancp) {
-
-        this.ancp = ancp;
-    }
-
-    public int getancp() {
-
-        return ancp;
-    }
-
-    public void setgepcp(int gepcp) {
-
-        this.gepcp = gepcp;
-    }
-
-    public int getgepcp() {
-
-        return gepcp;
-    }
-
-    public void setmepcp(String mepcp) {
-
-        this.mepcp = mepcp;
-    }
-
-    public String getmepcp() {
-
-        return mepcp;
-    }
-
-    public void setaepcp(int aepcp) {
-
-        this.aepcp = aepcp;
-    }
-
-    public int getaepcp() {
-
-        return aepcp;
-    }
-
-    public void setCar(String car) {
-        this.car = car;
-    }
-
-    public String getCar() {
-        return car;
-    }
-
-    public void setPrice(float price) {
-
-        this.price = price;
-    }
-
-    public float getPrice() {
-        return price;
+    public int getPickTime() {
+        return pickTime;
     }
 
 
-    public void setseggiolino(String seggiolino) {
+    public void setCarPricePerHour(float carPricePerHour) {
 
-        this.seggiolino = seggiolino;
+        this.carPricePerHour = carPricePerHour;
     }
 
-    public String getseggiolino() {
-
-        return seggiolino;
+    public float getCarPricePerHour() {
+        return carPricePerHour;
     }
-
-    public void setcatene(String catene) {
-
-        this.catene = catene;
-    }
-
-    public String getcatene() {
-
-        return catene;
-    }
-
-    public void setnavigatore(String navigatore) {
-
-        this.navigatore = navigatore;
-    }
-
-    public String getnavigatore() {
-
-        return navigatore;
-    }
-
-    public void sethotspot(String hotspot) {
-
-        this.hotspot = hotspot;
-    }
-
-    public String gethotspot() {
-
-        return hotspot;
-    }
-
-    public void settotale(float totale) {
-
-
-        this.totale = totale;
-    }
-
-    public double gettotale() {
-
-        return totale;
-    }
-
 
 }
 

@@ -4,112 +4,122 @@ import javax.swing.*;
 
 public class RegistrationView {
 
-    private JLabel InformazioniPersonaliLabel;
-    private JLabel NomeLabel;
-    private JTextField NomeTextfield;
-    private JLabel PasswordUtenteLabel;
-    private JPasswordField PasswordUtenteTextField;
-    private JLabel CognomeLabel;
-    private JTextField CognomeTextfield;
-    private JLabel EmailLabel;
-    private JTextField EmailTextfield;
-    private JLabel PrefissoLabel;
-    private JComboBox<String> prefisso;
-    private String[] prefissi;
-    private JLabel TelefonoLabel;
-    private JTextField TelefonoTextfield;
-    private JLabel DatadinascitaLabel;
-    private JLabel GiornodnLabel;
-    private JComboBox<Integer> gdn;
-    private JLabel MesednLabel;
-    private JComboBox<String> mdn;
-    private JLabel AnnodnLabel;
-    private JComboBox<Integer> adn;
-    private JLabel InfoPatenteLabel;
-    private JLabel NPatenteLabel;
-    private JTextField NPatenteTextfield;
-    private JLabel PaeseEmissionePLabel;
-    private JComboBox<String> paese;
+    private JLabel personalInfoLabel;
+    private JLabel nameLabel;
+    private JTextField nameTextField;
+    private JLabel passwordLabel;
+    private JPasswordField passwordTextField;
+    private JLabel lastnameLabel;
+    private JTextField lastnameTextField;
+    private JLabel emailLabel;
+    private JTextField emailTextField;
+    private JLabel countryPrefixLabel;
+    private JComboBox<String> countryPrefixTextField;
+    private String[] prefixs;
+    private JLabel phoneNumberLabel;
+    private JTextField phoneNumberTextField;
+    private JLabel dateOfBirthLabel;
+    private JLabel dayOfBirthLabel;
+    private JComboBox<Integer> dayOfBirthTextField;
+    private JLabel monthOfBirthLabel;
+    private JComboBox<String> monthOfBirthTextField;
+    private JLabel yearOfBirthLabel;
+    private JComboBox<Integer> yearOfBirthTextField;
+    private JLabel driverLicenseInfoLabel;
+    private JLabel driverLicenseNumberLabel;
+    private JTextField driverLicenseNumberTextField;
+    private JLabel countryDriverLicenseLabel;
+    private JComboBox<String> countryDriverLicnseComboBox;
     private String[] paesi;
-    private JLabel GiornodeLabel;
-    private JComboBox<Integer> gde;
-    private JLabel MesedeLabel;
-    private JComboBox<String> mde;
-    private JLabel AnnodeLabel;
-    private JComboBox<Integer> ade;
-    private JLabel GiornodsLabel;
-    private JComboBox<Integer> gds;
-    private JLabel MesedsLabel;
-    private JComboBox<String> mds;
-    private JLabel AnnodsLabel;
-    private JComboBox<Integer> ads;
-    private JComboBox<Roles> roles;
-    private JLabel FatturazioneLabel;
-    private JLabel IndirizzoLabel;
-    private JTextField IndirizzoTextfield;
+    private JLabel driverLicnseIssueDayLabel;
+    private JComboBox<Integer> driverLicenseIssueDayComboBox;
+    private JLabel driverLicenseIssueMonthLabel;
+    private JComboBox<String> driverLicenseIssueMonthComboBox;
+    private JLabel driverLicenseIssueYearLabel;
+    private JComboBox<Integer> driverLicenseIssueYearComboBox;
+    private JLabel driverLicenseExpirationDayLabel;
+    private JComboBox<Integer> driverLicenseExpirationDayComboBox;
+    private JLabel driverLicenseExpirationMonthLabel;
+    private JComboBox<String> driverLicenseExpirationMonthCombobox;
+    private JLabel driverLicenseExpirationYearLabel;
+    private JComboBox<Integer> driverLicenseExpirationYearComboBox;
+    private JComboBox<Roles> rolesComboBox;
+    private JLabel creditCardlabel;
+    private JTextField creditCardTextField;
+    private JLabel addressLabel;
+    private JTextField addressTextField;
     private JLabel cityLabel;
     private JTextField cityTextField;
-    private JLabel PaeseResidenzaPLabel;
-    private JComboBox<String> paeseres;
-    private JLabel CPLabel;
-    private JLabel roleLabel;
-    private JTextField CPTextfield;
+    private JLabel countryResidenceLabel;
+    private JComboBox<String> countryResidenceTextField;
+    private JLabel zipCodeLabel;
+    private JLabel rolesLabel;
+    private JTextField zipCodeTextField;
     private JButton registrationButton;
     private JButton backButton;
 
+    public JTextField getCreditCardTextField() {
+        return creditCardTextField;
+    }
+
+    public void setCreditCardTextField(JTextField creditCardTextField) {
+        this.creditCardTextField = creditCardTextField;
+    }
+
     public RegistrationView(Client client, JFrame frame) {
 
-        InformazioniPersonaliLabel = new JLabel("Personal info");
-        NomeLabel = new JLabel("Nome :");
-        NomeTextfield = new JTextField();
-        PasswordUtenteLabel = new JLabel("Password :");
-        PasswordUtenteTextField = new JPasswordField();
-        CognomeLabel = new JLabel("Cognome :");
-        CognomeTextfield = new JTextField();
-        EmailLabel = new JLabel("Email :");
-        EmailTextfield = new JTextField();
-        PrefissoLabel = new JLabel("Prefisso : ");
-        prefissi = new String[]{"+39", "+33", "+1"};
-        prefisso = new JComboBox<String>(prefissi);
-        TelefonoLabel = new JLabel("Telefono :");
-        TelefonoTextfield = new JTextField();
-        DatadinascitaLabel = new JLabel("Data di nascita");
-        GiornodnLabel = new JLabel("Giorno : ");
-        gdn = new JComboBox<>(StaticData.DAYS);
-        MesednLabel = new JLabel("Mese : ");
-        mdn = new JComboBox<>(StaticData.MONTHS);
-        AnnodnLabel = new JLabel("Anno : ");
-        adn = new JComboBox<>(StaticData.YEARS);
-        roles = new JComboBox<>(Roles.values());
+        personalInfoLabel = new JLabel("Personal info");
+        nameLabel = new JLabel("Nome :");
+        nameTextField = new JTextField();
+        passwordLabel = new JLabel("Password :");
+        passwordTextField = new JPasswordField();
+        lastnameLabel = new JLabel("Cognome :");
+        lastnameTextField = new JTextField();
+        emailLabel = new JLabel("Email :");
+        emailTextField = new JTextField();
+        countryPrefixLabel = new JLabel("Prefisso : ");
+        prefixs = new String[]{"+39", "+33", "+1"};
+        countryPrefixTextField = new JComboBox<String>(prefixs);
+        phoneNumberLabel = new JLabel("Telefono :");
+        phoneNumberTextField = new JTextField();
+        dateOfBirthLabel = new JLabel("Data di nascita");
+        dayOfBirthLabel = new JLabel("Giorno : ");
+        dayOfBirthTextField = new JComboBox<>(StaticData.DAYS);
+        monthOfBirthLabel = new JLabel("Mese : ");
+        monthOfBirthTextField = new JComboBox<>(StaticData.MONTHS);
+        yearOfBirthLabel = new JLabel("Anno : ");
+        yearOfBirthTextField = new JComboBox<>(StaticData.YEARS_PAST);
+        rolesComboBox = new JComboBox<>(Roles.values());
 
-        InfoPatenteLabel = new JLabel("Info Patente  ");
-        NPatenteLabel = new JLabel("Numero Patente : ");
-        NPatenteTextfield = new JTextField();
-        PaeseEmissionePLabel = new JLabel("Paese Emissione Patente : ");
+        driverLicenseInfoLabel = new JLabel("Info Patente  ");
+        driverLicenseNumberLabel = new JLabel("Numero Patente : ");
+        driverLicenseNumberTextField = new JTextField();
+        countryDriverLicenseLabel = new JLabel("Paese Emissione Patente : ");
         paesi = new String[]{"Italia", "Francia", "America"};
-        paese = new JComboBox<String>(paesi);
-        GiornodeLabel = new JLabel("Giorno emissione : ");
-        gde = new JComboBox<Integer>(StaticData.DAYS);
-        MesedeLabel = new JLabel("Mese emissione : ");
-        mde = new JComboBox<String>(StaticData.MONTHS);
-        AnnodeLabel = new JLabel("Anno emissione: ");
-        ade = new JComboBox<Integer>(StaticData.YEARS);
-        GiornodsLabel = new JLabel("Giorno scadenza : ");
-        gds = new JComboBox<Integer>(StaticData.DAYS);
-        MesedsLabel = new JLabel("Mese scadenza : ");
-        mds = new JComboBox<String>(StaticData.MONTHS);
-        AnnodsLabel = new JLabel("Anno scadenza: ");
-        ads = new JComboBox<Integer>(StaticData.ANNIS);
-        FatturazioneLabel = new JLabel("Dati fatturazione");
-        IndirizzoLabel = new JLabel("Indirizzo :");
-        IndirizzoTextfield = new JTextField();
+        countryDriverLicnseComboBox = new JComboBox<String>(paesi);
+        driverLicnseIssueDayLabel = new JLabel("Giorno emissione : ");
+        driverLicenseIssueDayComboBox = new JComboBox<Integer>(StaticData.DAYS);
+        driverLicenseIssueMonthLabel = new JLabel("Mese emissione : ");
+        driverLicenseIssueMonthComboBox = new JComboBox<String>(StaticData.MONTHS);
+        driverLicenseIssueYearLabel = new JLabel("Anno emissione: ");
+        driverLicenseIssueYearComboBox = new JComboBox<Integer>(StaticData.YEARS_PAST);
+        driverLicenseExpirationDayLabel = new JLabel("Giorno scadenza : ");
+        driverLicenseExpirationDayComboBox = new JComboBox<Integer>(StaticData.DAYS);
+        driverLicenseExpirationMonthLabel = new JLabel("Mese scadenza : ");
+        driverLicenseExpirationMonthCombobox = new JComboBox<String>(StaticData.MONTHS);
+        driverLicenseExpirationYearLabel = new JLabel("Anno scadenza: ");
+        driverLicenseExpirationYearComboBox = new JComboBox<Integer>(StaticData.YEARS_FUTURE);
+        creditCardlabel = new JLabel("Carta di credit: ");
+        creditCardTextField = new JTextField();
+        addressLabel = new JLabel("Indirizzo :");
+        addressTextField = new JTextField();
         cityLabel = new JLabel("Citta':");
         cityTextField = new JTextField();
-        PaeseResidenzaPLabel = new JLabel("Paese :");
-        paeseres = new JComboBox<String>(paesi);
-        CPLabel = new JLabel("Codice Postale :");
-        CPTextfield = new JTextField();
-        roleLabel = new JLabel("Role: ");
+        countryResidenceLabel = new JLabel("Paese :");
+        countryResidenceTextField = new JComboBox<String>(paesi);
+        zipCodeLabel = new JLabel("Codice Postale :");
+        zipCodeTextField = new JTextField();
+        rolesLabel = new JLabel("Role: ");
         registrationButton = new JButton("Registration");
         backButton = new JButton("Back");
         // Add UI element to frame
@@ -120,314 +130,338 @@ public class RegistrationView {
         backButton.setBounds(1050, 575, 100, 50);
         frame.add(backButton);
 
-        InformazioniPersonaliLabel.setBounds(50, 25, 200, 70);
-        frame.add(InformazioniPersonaliLabel);
-        NomeLabel.setBounds(50, 75, 70, 70);
-        frame.add(NomeLabel);
-        NomeTextfield.setBounds(150, 100, 200, 20);
-        frame.add(NomeTextfield);
-        PasswordUtenteLabel.setBounds(400, 75, 100, 70);
-        frame.add(PasswordUtenteLabel);
-        PasswordUtenteTextField.setBounds(500, 100, 200, 20);
-        frame.add(PasswordUtenteTextField);
-        CognomeLabel.setBounds(50, 125, 70, 70);
-        frame.add(CognomeLabel);
-        CognomeTextfield.setBounds(150, 150, 200, 20);
-        frame.add(CognomeTextfield);
-        EmailLabel.setBounds(50, 175, 70, 70);
-        frame.add(EmailLabel);
-        EmailTextfield.setBounds(150, 200, 200, 20);
-        frame.add(EmailTextfield);
-        PrefissoLabel.setBounds(50, 225, 70, 70);
-        frame.add(PrefissoLabel);
-        prefisso.setBounds(150, 250, 70, 20);
-        frame.add(prefisso);
-        TelefonoLabel.setBounds(250, 225, 70, 70);
-        frame.add(TelefonoLabel);
-        TelefonoTextfield.setBounds(350, 250, 200, 20);
-        frame.add(TelefonoTextfield);
-        DatadinascitaLabel.setBounds(50, 275, 200, 70);
-        frame.add(DatadinascitaLabel);
-        GiornodnLabel.setBounds(200, 275, 70, 70);
-        frame.add(GiornodnLabel);
-        gdn.setBounds(300, 300, 70, 20);
-        frame.add(gdn);
-        MesednLabel.setBounds(400, 275, 70, 70);
-        frame.add(MesednLabel);
-        mdn.setBounds(500, 300, 100, 20);
-        frame.add(mdn);
-        AnnodnLabel.setBounds(650, 275, 70, 70);
-        frame.add(AnnodnLabel);
-        adn.setBounds(750, 300, 70, 20);
-        frame.add(adn);
-        InfoPatenteLabel.setBounds(50, 325, 100, 70);
-        frame.add(InfoPatenteLabel);
-        NPatenteLabel.setBounds(175, 325, 150, 70);
-        frame.add(NPatenteLabel);
-        NPatenteTextfield.setBounds(325, 350, 150, 20);
-        frame.add(NPatenteTextfield);
-        PaeseEmissionePLabel.setBounds(500, 325, 200, 70);
-        frame.add(PaeseEmissionePLabel);
-        paese.setBounds(700, 350, 100, 20);
-        frame.add(paese);
-        GiornodeLabel.setBounds(50, 375, 150, 70);
-        frame.add(GiornodeLabel);
-        gde.setBounds(200, 400, 70, 20);
-        frame.add(gde);
-        MesedeLabel.setBounds(300, 375, 150, 70);
-        frame.add(MesedeLabel);
-        mde.setBounds(450, 400, 100, 20);
-        frame.add(mde);
-        AnnodeLabel.setBounds(600, 375, 150, 70);
-        frame.add(AnnodeLabel);
-        ade.setBounds(750, 400, 70, 20);
-        frame.add(ade);
-        GiornodsLabel.setBounds(50, 425, 150, 70);
-        frame.add(GiornodsLabel);
-        gds.setBounds(200, 450, 70, 20);
-        frame.add(gds);
-        MesedsLabel.setBounds(300, 425, 150, 70);
-        frame.add(MesedsLabel);
-        mds.setBounds(450, 450, 100, 20);
-        frame.add(mds);
-        AnnodsLabel.setBounds(600, 425, 150, 70);
-        frame.add(AnnodsLabel);
-        ads.setBounds(750, 450, 70, 20);
-        frame.add(ads);
-        FatturazioneLabel.setBounds(50, 475, 150, 70);
-        frame.add(FatturazioneLabel);
-        IndirizzoLabel.setBounds(50, 525, 70, 70);
-        frame.add(IndirizzoLabel);
-        IndirizzoTextfield.setBounds(150, 550, 200, 20);
-        frame.add(IndirizzoTextfield);
+        personalInfoLabel.setBounds(50, 25, 200, 70);
+        frame.add(personalInfoLabel);
+        // name
+        nameLabel.setBounds(50, 75, 70, 70);
+        frame.add(nameLabel);
+        nameTextField.setBounds(150, 100, 200, 20);
+        frame.add(nameTextField);
+        // lastname
+        lastnameLabel.setBounds(400, 75, 100, 70);
+        frame.add(lastnameLabel);
+        lastnameTextField.setBounds(500, 100, 200, 20);
+        frame.add(lastnameTextField);
+        //password
+
+        passwordLabel.setBounds(50, 125, 70, 70);
+        frame.add(passwordLabel);
+        passwordTextField.setBounds(150, 150, 200, 20);
+        frame.add(passwordTextField);
+
+        emailLabel.setBounds(50, 175, 70, 70);
+        frame.add(emailLabel);
+        emailTextField.setBounds(150, 200, 200, 20);
+        frame.add(emailTextField);
+        countryPrefixLabel.setBounds(50, 225, 70, 70);
+        frame.add(countryPrefixLabel);
+        countryPrefixTextField.setBounds(150, 250, 70, 20);
+        frame.add(countryPrefixTextField);
+        phoneNumberLabel.setBounds(250, 225, 70, 70);
+        frame.add(phoneNumberLabel);
+        phoneNumberTextField.setBounds(350, 250, 200, 20);
+        frame.add(phoneNumberTextField);
+        dateOfBirthLabel.setBounds(50, 275, 200, 70);
+        frame.add(dateOfBirthLabel);
+
+        dayOfBirthLabel.setBounds(200, 275, 70, 70);
+        frame.add(dayOfBirthLabel);
+        dayOfBirthTextField.setBounds(300, 300, 70, 20);
+        frame.add(dayOfBirthTextField);
+
+        monthOfBirthLabel.setBounds(400, 275, 70, 70);
+        frame.add(monthOfBirthLabel);
+        monthOfBirthTextField.setBounds(500, 300, 100, 20);
+        frame.add(monthOfBirthTextField);
+
+        yearOfBirthLabel.setBounds(650, 275, 70, 70);
+        frame.add(yearOfBirthLabel);
+        yearOfBirthTextField.setBounds(750, 300, 70, 20);
+        frame.add(yearOfBirthTextField);
+
+        driverLicenseInfoLabel.setBounds(50, 325, 100, 70);
+        frame.add(driverLicenseInfoLabel);
+        driverLicenseNumberLabel.setBounds(175, 325, 150, 70);
+        frame.add(driverLicenseNumberLabel);
+        driverLicenseNumberTextField.setBounds(325, 350, 150, 20);
+        frame.add(driverLicenseNumberTextField);
+
+        countryDriverLicenseLabel.setBounds(500, 325, 200, 70);
+        frame.add(countryDriverLicenseLabel);
+        countryDriverLicnseComboBox.setBounds(700, 350, 100, 20);
+        frame.add(countryDriverLicnseComboBox);
+
+        driverLicnseIssueDayLabel.setBounds(50, 375, 150, 70);
+        frame.add(driverLicnseIssueDayLabel);
+        driverLicenseIssueDayComboBox.setBounds(200, 400, 70, 20);
+        frame.add(driverLicenseIssueDayComboBox);
+
+        driverLicenseIssueMonthLabel.setBounds(300, 375, 150, 70);
+        frame.add(driverLicenseIssueMonthLabel);
+        driverLicenseIssueMonthComboBox.setBounds(450, 400, 100, 20);
+        frame.add(driverLicenseIssueMonthComboBox);
+
+        driverLicenseIssueYearLabel.setBounds(600, 375, 150, 70);
+        frame.add(driverLicenseIssueYearLabel);
+        driverLicenseIssueYearComboBox.setBounds(750, 400, 70, 20);
+        frame.add(driverLicenseIssueYearComboBox);
+
+        driverLicenseExpirationDayLabel.setBounds(50, 425, 150, 70);
+        frame.add(driverLicenseExpirationDayLabel);
+        driverLicenseExpirationDayComboBox.setBounds(200, 450, 70, 20);
+        frame.add(driverLicenseExpirationDayComboBox);
+        
+        driverLicenseExpirationMonthLabel.setBounds(300, 425, 150, 70);
+        frame.add(driverLicenseExpirationMonthLabel);
+        driverLicenseExpirationMonthCombobox.setBounds(450, 450, 100, 20);
+        frame.add(driverLicenseExpirationMonthCombobox);
+        
+        driverLicenseExpirationYearLabel.setBounds(600, 425, 150, 70);
+        frame.add(driverLicenseExpirationYearLabel);
+        driverLicenseExpirationYearComboBox.setBounds(750, 450, 70, 20);
+        frame.add(driverLicenseExpirationYearComboBox);
+        
+        creditCardlabel.setBounds(50, 475, 150, 70);
+        frame.add(creditCardlabel);
+        creditCardTextField.setBounds(150, 500, 200, 20);
+        frame.add(creditCardTextField);
+
+        addressLabel.setBounds(50, 525, 70, 70);
+        frame.add(addressLabel);
+        addressTextField.setBounds(150, 550, 200, 20);
+        frame.add(addressTextField);
+
         cityLabel.setBounds(375, 525, 70, 70);
         frame.add(cityLabel);
         cityTextField.setBounds(450, 550, 200, 20);
         frame.add(cityTextField);
-        PaeseResidenzaPLabel.setBounds(50, 575, 70, 70);
-        frame.add(PaeseResidenzaPLabel);
-        paeseres.setBounds(150, 600, 100, 20);
-        frame.add(paeseres);
-        CPLabel.setBounds(275, 575, 150, 70);
-        frame.add(CPLabel);
-        CPTextfield.setBounds(400, 600, 200, 20);
-        frame.add(CPTextfield);
+
+        countryResidenceLabel.setBounds(50, 575, 70, 70);
+        frame.add(countryResidenceLabel);
+        countryResidenceTextField.setBounds(150, 600, 100, 20);
+        frame.add(countryResidenceTextField);
+
+        zipCodeLabel.setBounds(275, 575, 150, 70);
+        frame.add(zipCodeLabel);
+        zipCodeTextField.setBounds(400, 600, 200, 20);
+        frame.add(zipCodeTextField);
+
         if (client.getRole() == Roles.SERVICE_MANAGER) {
-            roleLabel.setBounds(800, 100, 100, 20);
-            frame.add(roleLabel);
-            roles.setBounds(900, 100, 100, 20);
-            frame.add(roles);
+            rolesLabel.setBounds(800, 100, 100, 20);
+            frame.add(rolesLabel);
+            rolesComboBox.setBounds(900, 100, 100, 20);
+            frame.add(rolesComboBox);
         }
 
         frame.repaint();
     }
 
-    public JLabel getInformazioniPersonaliLabel() {
-        return InformazioniPersonaliLabel;
+    public JLabel getPersonalInfoLabel() {
+        return personalInfoLabel;
     }
 
-    public void setInformazioniPersonaliLabel(JLabel informazioniPersonaliLabel) {
-        InformazioniPersonaliLabel = informazioniPersonaliLabel;
+    public void setPersonalInfoLabel(JLabel personalInfoLabel) {
+        this.personalInfoLabel = personalInfoLabel;
     }
 
-    public JLabel getNomeLabel() {
-        return NomeLabel;
+    public JLabel getNameLabel() {
+        return nameLabel;
     }
 
-    public void setNomeLabel(JLabel nomeLabel) {
-        NomeLabel = nomeLabel;
+    public void setNameLabel(JLabel nameLabel) {
+        this.nameLabel = nameLabel;
     }
 
-    public JTextField getNomeTextfield() {
-        return NomeTextfield;
+    public JTextField getNameTextField() {
+        return nameTextField;
     }
 
-    public void setNomeTextfield(JTextField nomeTextfield) {
-        NomeTextfield = nomeTextfield;
+    public void setNameTextField(JTextField nameTextField) {
+        this.nameTextField = nameTextField;
     }
 
-    public JLabel getPasswordUtenteLabel() {
-        return PasswordUtenteLabel;
+    public JLabel getPasswordLabel() {
+        return passwordLabel;
     }
 
-    public void setPasswordUtenteLabel(JLabel passwordUtenteLabel) {
-        PasswordUtenteLabel = passwordUtenteLabel;
+    public void setPasswordLabel(JLabel passwordLabel) {
+        this.passwordLabel = passwordLabel;
     }
 
-    public JPasswordField getPasswordUtenteTextField() {
-        return PasswordUtenteTextField;
+    public JPasswordField getPasswordTextField() {
+        return passwordTextField;
     }
 
-    public void setPasswordUtenteTextField(String pswd) {
-        PasswordUtenteTextField.setText(pswd);
+    public void setPasswordTextField(String pswd) {
+        passwordTextField.setText(pswd);
     }
 
-    public JLabel getCognomeLabel() {
-        return CognomeLabel;
+    public JLabel getLastnameLabel() {
+        return lastnameLabel;
     }
 
-    public void setCognomeLabel(JLabel cognomeLabel) {
-        CognomeLabel = cognomeLabel;
+    public void setLastnameLabel(JLabel lastnameLabel) {
+        this.lastnameLabel = lastnameLabel;
     }
 
-    public JTextField getCognomeTextfield() {
-        return CognomeTextfield;
+    public JTextField getLastnameTextField() {
+        return lastnameTextField;
     }
 
-    public void setCognomeTextfield(JTextField cognomeTextfield) {
-        CognomeTextfield = cognomeTextfield;
+    public void setLastnameTextField(JTextField lastnameTextField) {
+        this.lastnameTextField = lastnameTextField;
     }
 
     public JLabel getEmailLabel() {
-        return EmailLabel;
+        return emailLabel;
     }
 
     public void setEmailLabel(JLabel emailLabel) {
-        EmailLabel = emailLabel;
+        this.emailLabel = emailLabel;
     }
 
-    public JTextField getEmailTextfield() {
-        return EmailTextfield;
+    public JTextField getEmailTextField() {
+        return emailTextField;
     }
 
-    public void setEmailTextfield(JTextField emailTextfield) {
-        EmailTextfield = emailTextfield;
+    public void setEmailTextField(JTextField emailTextField) {
+        this.emailTextField = emailTextField;
     }
 
-    public JLabel getPrefissoLabel() {
-        return PrefissoLabel;
+    public JLabel getCountryPrefixLabel() {
+        return countryPrefixLabel;
     }
 
-    public void setPrefissoLabel(JLabel prefissoLabel) {
-        PrefissoLabel = prefissoLabel;
+    public void setCountryPrefixLabel(JLabel countryPrefixLabel) {
+        this.countryPrefixLabel = countryPrefixLabel;
     }
 
-    public String getPrefisso() {
-        return prefisso.getSelectedItem().toString();
+    public String getCountryPrefixTextField() {
+        return countryPrefixTextField.getSelectedItem().toString();
     }
 
-    public void setPrefisso(JComboBox<String> prefisso) {
-        this.prefisso = prefisso;
+    public void setCountryPrefixTextField(JComboBox<String> countryPrefixTextField) {
+        this.countryPrefixTextField = countryPrefixTextField;
     }
 
-    public String[] getPrefissi() {
-        return prefissi;
+    public String[] getPrefixs() {
+        return prefixs;
     }
 
-    public void setPrefissi(String[] prefissi) {
-        this.prefissi = prefissi;
+    public void setPrefixs(String[] prefixs) {
+        this.prefixs = prefixs;
     }
 
-    public JLabel getTelefonoLabel() {
-        return TelefonoLabel;
+    public JLabel getPhoneNumberLabel() {
+        return phoneNumberLabel;
     }
 
-    public void setTelefonoLabel(JLabel telefonoLabel) {
-        TelefonoLabel = telefonoLabel;
+    public void setPhoneNumberLabel(JLabel phoneNumberLabel) {
+        this.phoneNumberLabel = phoneNumberLabel;
     }
 
-    public JTextField getTelefonoTextfield() {
-        return TelefonoTextfield;
+    public JTextField getPhoneNumberTextField() {
+        return phoneNumberTextField;
     }
 
-    public void setTelefonoTextfield(JTextField telefonoTextfield) {
-        TelefonoTextfield = telefonoTextfield;
+    public void setPhoneNumberTextField(JTextField phoneNumberTextField) {
+        this.phoneNumberTextField = phoneNumberTextField;
     }
 
-    public JLabel getDatadinascitaLabel() {
-        return DatadinascitaLabel;
+    public JLabel getDateOfBirthLabel() {
+        return dateOfBirthLabel;
     }
 
-    public void setDatadinascitaLabel(JLabel datadinascitaLabel) {
-        DatadinascitaLabel = datadinascitaLabel;
+    public void setDateOfBirthLabel(JLabel dateOfBirthLabel) {
+        this.dateOfBirthLabel = dateOfBirthLabel;
     }
 
-    public JLabel getGiornodnLabel() {
-        return GiornodnLabel;
+    public JLabel getDayOfBirthLabel() {
+        return dayOfBirthLabel;
     }
 
-    public void setGiornodnLabel(JLabel giornodnLabel) {
-        GiornodnLabel = giornodnLabel;
+    public void setDayOfBirthLabel(JLabel dayOfBirthLabel) {
+        this.dayOfBirthLabel = dayOfBirthLabel;
     }
 
     public Integer getGdn() {
-        return Integer.parseInt(gdn.getSelectedItem().toString());
+        return Integer.parseInt(dayOfBirthTextField.getSelectedItem().toString());
     }
 
     public void setGdn(JComboBox<Integer> gdn) {
-        this.gdn = gdn;
+        this.dayOfBirthTextField = gdn;
     }
 
-    public JLabel getMesednLabel() {
-        return MesednLabel;
+    public JLabel getMonthOfBirthLabel() {
+        return monthOfBirthLabel;
     }
 
-    public void setMesednLabel(JLabel mesednLabel) {
-        MesednLabel = mesednLabel;
+    public void setMonthOfBirthLabel(JLabel monthOfBirthLabel) {
+        this.monthOfBirthLabel = monthOfBirthLabel;
     }
 
-    public String getMdn() {
-        return mdn.getSelectedItem().toString();
+    public String getMonthOfBirthTextField() {
+        return monthOfBirthTextField.getSelectedItem().toString();
     }
 
-    public void setMdn(JComboBox<String> mdn) {
-        this.mdn = mdn;
+    public void setMonthOfBirthTextField(JComboBox<String> monthOfBirthTextField) {
+        this.monthOfBirthTextField = monthOfBirthTextField;
     }
 
-    public JLabel getAnnodnLabel() {
-        return AnnodnLabel;
+    public JLabel getYearOfBirthLabel() {
+        return yearOfBirthLabel;
     }
 
-    public void setAnnodnLabel(JLabel annodnLabel) {
-        AnnodnLabel = annodnLabel;
+    public void setYearOfBirthLabel(JLabel yearOfBirthLabel) {
+        this.yearOfBirthLabel = yearOfBirthLabel;
     }
 
-    public Integer getAdn() {
-        return Integer.valueOf(adn.getSelectedItem().toString());
+    public Integer getYearOfBirthTextField() {
+        return Integer.valueOf(yearOfBirthTextField.getSelectedItem().toString());
     }
 
-    public void setAdn(JComboBox<Integer> adn) {
-        this.adn = adn;
+    public void setYearOfBirthTextField(JComboBox<Integer> yearOfBirthTextField) {
+        this.yearOfBirthTextField = yearOfBirthTextField;
     }
 
-    public JLabel getInfoPatenteLabel() {
-        return InfoPatenteLabel;
+    public JLabel getDriverLicenseInfoLabel() {
+        return driverLicenseInfoLabel;
     }
 
-    public void setInfoPatenteLabel(JLabel infoPatenteLabel) {
-        InfoPatenteLabel = infoPatenteLabel;
+    public void setDriverLicenseInfoLabel(JLabel driverLicenseInfoLabel) {
+        this.driverLicenseInfoLabel = driverLicenseInfoLabel;
     }
 
-    public JLabel getNPatenteLabel() {
-        return NPatenteLabel;
+    public JLabel getDriverLicenseNumberLabel() {
+        return driverLicenseNumberLabel;
     }
 
-    public void setNPatenteLabel(JLabel NPatenteLabel) {
-        this.NPatenteLabel = NPatenteLabel;
+    public void setDriverLicenseNumberLabel(JLabel driverLicenseNumberLabel) {
+        this.driverLicenseNumberLabel = driverLicenseNumberLabel;
     }
 
-    public JTextField getNPatenteTextfield() {
-        return NPatenteTextfield;
+    public JTextField getDriverLicenseNumberTextField() {
+        return driverLicenseNumberTextField;
     }
 
-    public void setNPatenteTextfield(JTextField NPatenteTextfield) {
-        this.NPatenteTextfield = NPatenteTextfield;
+    public void setDriverLicenseNumberTextField(JTextField driverLicenseNumberTextField) {
+        this.driverLicenseNumberTextField = driverLicenseNumberTextField;
     }
 
-    public JLabel getPaeseEmissionePLabel() {
-        return PaeseEmissionePLabel;
+    public JLabel getCountryDriverLicenseLabel() {
+        return countryDriverLicenseLabel;
     }
 
-    public void setPaeseEmissionePLabel(JLabel paeseEmissionePLabel) {
-        PaeseEmissionePLabel = paeseEmissionePLabel;
+    public void setCountryDriverLicenseLabel(JLabel countryDriverLicenseLabel) {
+        this.countryDriverLicenseLabel = countryDriverLicenseLabel;
     }
 
-    public String getPaese() {
-        return paese.getSelectedItem().toString();
+    public String getCountryDriverLicnseComboBox() {
+        return countryDriverLicnseComboBox.getSelectedItem().toString();
     }
 
-    public void setPaese(JComboBox<String> paese) {
-        this.paese = paese;
+    public void setCountryDriverLicnseComboBox(JComboBox<String> countryDriverLicnseComboBox) {
+        this.countryDriverLicnseComboBox = countryDriverLicnseComboBox;
     }
 
     public String[] getPaesi() {
@@ -438,124 +472,124 @@ public class RegistrationView {
         this.paesi = paesi;
     }
 
-    public JLabel getGiornodeLabel() {
-        return GiornodeLabel;
+    public JLabel getDriverLicnseIssueDayLabel() {
+        return driverLicnseIssueDayLabel;
     }
 
-    public void setGiornodeLabel(JLabel giornodeLabel) {
-        GiornodeLabel = giornodeLabel;
+    public void setDriverLicnseIssueDayLabel(JLabel driverLicnseIssueDayLabel) {
+        this.driverLicnseIssueDayLabel = driverLicnseIssueDayLabel;
     }
 
-    public Integer getGde() {
-        return Integer.valueOf(gde.getSelectedItem().toString());
+    public Integer getDriverLicenseIssueDayComboBox() {
+        return Integer.valueOf(driverLicenseIssueDayComboBox.getSelectedItem().toString());
     }
 
-    public void setGde(JComboBox<Integer> gde) {
-        this.gde = gde;
+    public void setDriverLicenseIssueDayComboBox(JComboBox<Integer> driverLicenseIssueDayComboBox) {
+        this.driverLicenseIssueDayComboBox = driverLicenseIssueDayComboBox;
     }
 
-    public JLabel getMesedeLabel() {
-        return MesedeLabel;
+    public JLabel getDriverLicenseIssueMonthLabel() {
+        return driverLicenseIssueMonthLabel;
     }
 
-    public void setMesedeLabel(JLabel mesedeLabel) {
-        MesedeLabel = mesedeLabel;
+    public void setDriverLicenseIssueMonthLabel(JLabel driverLicenseIssueMonthLabel) {
+        this.driverLicenseIssueMonthLabel = driverLicenseIssueMonthLabel;
     }
 
-    public String getMde() {
-        return mde.getSelectedItem().toString();
+    public String getDriverLicenseIssueMonthComboBox() {
+        return driverLicenseIssueMonthComboBox.getSelectedItem().toString();
     }
 
-    public void setMde(JComboBox<String> mde) {
-        this.mde = mde;
+    public void setDriverLicenseIssueMonthComboBox(JComboBox<String> driverLicenseIssueMonthComboBox) {
+        this.driverLicenseIssueMonthComboBox = driverLicenseIssueMonthComboBox;
     }
 
-    public JLabel getAnnodeLabel() {
-        return AnnodeLabel;
+    public JLabel getDriverLicenseIssueYearLabel() {
+        return driverLicenseIssueYearLabel;
     }
 
-    public void setAnnodeLabel(JLabel annodeLabel) {
-        AnnodeLabel = annodeLabel;
+    public void setDriverLicenseIssueYearLabel(JLabel driverLicenseIssueYearLabel) {
+        this.driverLicenseIssueYearLabel = driverLicenseIssueYearLabel;
     }
 
-    public Integer getAde() {
-        return Integer.valueOf(ade.getSelectedItem().toString());
+    public Integer getDriverLicenseIssueYearComboBox() {
+        return Integer.valueOf(driverLicenseIssueYearComboBox.getSelectedItem().toString());
     }
 
-    public void setAde(JComboBox<Integer> ade) {
-        this.ade = ade;
+    public void setDriverLicenseIssueYearComboBox(JComboBox<Integer> driverLicenseIssueYearComboBox) {
+        this.driverLicenseIssueYearComboBox = driverLicenseIssueYearComboBox;
     }
 
-    public JLabel getGiornodsLabel() {
-        return GiornodsLabel;
+    public JLabel getDriverLicenseExpirationDayLabel() {
+        return driverLicenseExpirationDayLabel;
     }
 
-    public void setGiornodsLabel(JLabel giornodsLabel) {
-        GiornodsLabel = giornodsLabel;
+    public void setDriverLicenseExpirationDayLabel(JLabel driverLicenseExpirationDayLabel) {
+        this.driverLicenseExpirationDayLabel = driverLicenseExpirationDayLabel;
     }
 
-    public Integer getGds() {
-        return Integer.valueOf(gds.getSelectedItem().toString());
+    public Integer getDriverLicenseExpirationDayComboBox() {
+        return Integer.valueOf(driverLicenseExpirationDayComboBox.getSelectedItem().toString());
     }
 
-    public void setGds(JComboBox<Integer> gds) {
-        this.gds = gds;
+    public void setDriverLicenseExpirationDayComboBox(JComboBox<Integer> driverLicenseExpirationDayComboBox) {
+        this.driverLicenseExpirationDayComboBox = driverLicenseExpirationDayComboBox;
     }
 
-    public JLabel getMesedsLabel() {
-        return MesedsLabel;
+    public JLabel getDriverLicenseExpirationMonthLabel() {
+        return driverLicenseExpirationMonthLabel;
     }
 
-    public void setMesedsLabel(JLabel mesedsLabel) {
-        MesedsLabel = mesedsLabel;
+    public void setDriverLicenseExpirationMonthLabel(JLabel driverLicenseExpirationMonthLabel) {
+        this.driverLicenseExpirationMonthLabel = driverLicenseExpirationMonthLabel;
     }
 
-    public String getMds() {
-        return mds.getSelectedItem().toString();
+    public String getDriverLicenseExpirationMonthCombobox() {
+        return driverLicenseExpirationMonthCombobox.getSelectedItem().toString();
     }
 
-    public void setMds(JComboBox<String> mds) {
-        this.mds = mds;
+    public void setDriverLicenseExpirationMonthCombobox(JComboBox<String> driverLicenseExpirationMonthCombobox) {
+        this.driverLicenseExpirationMonthCombobox = driverLicenseExpirationMonthCombobox;
     }
 
-    public JLabel getAnnodsLabel() {
-        return AnnodsLabel;
+    public JLabel getDriverLicenseExpirationYearLabel() {
+        return driverLicenseExpirationYearLabel;
     }
 
-    public void setAnnodsLabel(JLabel annodsLabel) {
-        AnnodsLabel = annodsLabel;
+    public void setDriverLicenseExpirationYearLabel(JLabel driverLicenseExpirationYearLabel) {
+        this.driverLicenseExpirationYearLabel = driverLicenseExpirationYearLabel;
     }
 
-    public Integer getAds() {
-        return Integer.valueOf(ads.getSelectedItem().toString());
+    public Integer getDriverLicenseExpirationYearComboBox() {
+        return Integer.valueOf(driverLicenseExpirationYearComboBox.getSelectedItem().toString());
     }
 
-    public void setAds(JComboBox<Integer> ads) {
-        this.ads = ads;
+    public void setDriverLicenseExpirationYearComboBox(JComboBox<Integer> driverLicenseExpirationYearComboBox) {
+        this.driverLicenseExpirationYearComboBox = driverLicenseExpirationYearComboBox;
     }
 
-    public JLabel getFatturazioneLabel() {
-        return FatturazioneLabel;
+    public JLabel getCreditCardlabel() {
+        return creditCardlabel;
     }
 
-    public void setFatturazioneLabel(JLabel fatturazioneLabel) {
-        FatturazioneLabel = fatturazioneLabel;
+    public void setCreditCardlabel(JLabel creditCardlabel) {
+        this.creditCardlabel = creditCardlabel;
     }
 
-    public JLabel getIndirizzoLabel() {
-        return IndirizzoLabel;
+    public JLabel getAddressLabel() {
+        return addressLabel;
     }
 
-    public void setIndirizzoLabel(JLabel indirizzoLabel) {
-        IndirizzoLabel = indirizzoLabel;
+    public void setAddressLabel(JLabel addressLabel) {
+        this.addressLabel = addressLabel;
     }
 
     public JTextField getIndirizzoTextfield() {
-        return IndirizzoTextfield;
+        return addressTextField;
     }
 
     public void setIndirizzoTextfield(JTextField indirizzoTextfield) {
-        IndirizzoTextfield = indirizzoTextfield;
+        addressTextField = indirizzoTextfield;
     }
 
     public JLabel getCityLabel() {
@@ -574,36 +608,36 @@ public class RegistrationView {
         this.cityTextField = cityTextField;
     }
 
-    public JLabel getPaeseResidenzaPLabel() {
-        return PaeseResidenzaPLabel;
+    public JLabel getCountryResidenceLabel() {
+        return countryResidenceLabel;
     }
 
-    public void setPaeseResidenzaPLabel(JLabel paeseResidenzaPLabel) {
-        PaeseResidenzaPLabel = paeseResidenzaPLabel;
+    public void setCountryResidenceLabel(JLabel countryResidenceLabel) {
+        this.countryResidenceLabel = countryResidenceLabel;
     }
 
-    public String getPaeseres() {
-        return paeseres.getSelectedItem().toString();
+    public String getCountryResidenceTextField() {
+        return countryResidenceTextField.getSelectedItem().toString();
     }
 
-    public void setPaeseres(JComboBox<String> paeseres) {
-        this.paeseres = paeseres;
+    public void setCountryResidenceTextField(JComboBox<String> countryResidenceTextField) {
+        this.countryResidenceTextField = countryResidenceTextField;
     }
 
-    public JLabel getCPLabel() {
-        return CPLabel;
+    public JLabel getZipCodeLabel() {
+        return zipCodeLabel;
     }
 
-    public void setCPLabel(JLabel CPLabel) {
-        this.CPLabel = CPLabel;
+    public void setZipCodeLabel(JLabel zipCodeLabel) {
+        this.zipCodeLabel = zipCodeLabel;
     }
 
-    public JTextField getCPTextfield() {
-        return CPTextfield;
+    public JTextField getZipCodeTextField() {
+        return zipCodeTextField;
     }
 
-    public void setCPTextfield(JTextField CPTextfield) {
-        this.CPTextfield = CPTextfield;
+    public void setZipCodeTextField(JTextField zipCodeTextField) {
+        this.zipCodeTextField = zipCodeTextField;
     }
 
     public JButton getRegistrationButton() {

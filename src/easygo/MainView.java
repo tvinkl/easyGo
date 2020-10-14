@@ -9,7 +9,7 @@ public class MainView { // View uses Swing framework to display UI to user
     //elementi iniziali
     private JFrame frame;
 
-    private JButton Annulla;
+    private JButton cancelButton;
 
     //elementi per la registrazione
     private JButton Registrati;
@@ -22,19 +22,35 @@ public class MainView { // View uses Swing framework to display UI to user
     private JLabel passwordutente;
 
     //elementi per il preventivo
-    private JLabel DataRitiroLabel;
-    private JComboBox<Integer> dataritiro; // дата взятия
+    private JLabel carPickTimeLabel;
+    private JLabel carPickDateLabel;
+
+
+    private JComboBox<Integer> carPickTimeComboBox;
+    private JComboBox<Integer> carPickDayComboBox; // дата взятия
+    private JComboBox<Integer> carPickMonthComboBox;
+    private JComboBox<Integer> carPickYearComboBox;
+
+    private JLabel carReturnDateLabel;
+    private JLabel carReturnTimeLabel;
+
+    private JComboBox<Integer> carReturnTimeComboBox;
+    private JComboBox<Integer> carReturnDayComboBox; // дата взятия
+    private JComboBox<Integer> carReturnMonthComboBox;
+    private JComboBox<Integer> carReturnYearComboBox;
+    
+    
+
     private JLabel DataRitirosegue;
-    private JLabel OraRitiroLabel;
-    private JComboBox<String> oraritiro; // время взятия
+
     private String[] ore;
     private JLabel DataRiconsegnaLabel;
     private JComboBox<Integer> datariconsegna; // дата возврата
     private JLabel DataRiconsegnasegue;
     private JLabel OraRiconsegnaLabel;
     private JComboBox<String> orariconsegna; // время возврата
-    private JLabel DNClienteLabel;
-    private JLabel GNClienteLabel;
+    private JLabel dateOfBirthLabel;
+    private JLabel dayOfBirth;
     private JComboBox<Integer> gnc;
     private JLabel MNClienteLabel;
     private JComboBox<String> mnc;
@@ -53,7 +69,7 @@ public class MainView { // View uses Swing framework to display UI to user
     private JComboBox<String> car;
     private String[] cars;
 
-    private JButton Prosegui;
+    private JButton continuteButton;
 
     private JButton Preventivo;
     private JButton Logout;
@@ -106,6 +122,7 @@ public class MainView { // View uses Swing framework to display UI to user
     private CalculationView calculationView;
     private ServiceManagerView serviceManagerView;
     private GarageView garageView;
+    private PreventivoView preventivoView;
 
     public MainView(String title) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         frame = new JFrame(title);
@@ -174,7 +191,7 @@ public class MainView { // View uses Swing framework to display UI to user
 
     }
 
-    public void richiestapreventivo() {
+    public void paymentQuote() {
 
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
@@ -182,68 +199,82 @@ public class MainView { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        DataRitiroLabel = new JLabel("Vehicle retreat date (dd/mm/yyyy): ");
-        giornipreventivo = new Integer[]{15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
-        dataritiro = new JComboBox<Integer>(giornipreventivo);
-        DataRitirosegue = new JLabel("May 2020");
-        OraRitiroLabel = new JLabel("Vehicle retreat time : ");
-        ore = new String[]{"9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"};
-        oraritiro = new JComboBox<String>(ore);
-        DataRiconsegnaLabel = new JLabel("Vehicle return date (dd/mm/yyyy): ");
-        datariconsegna = new JComboBox<Integer>(giornipreventivo);
-        DataRiconsegnasegue = new JLabel("May 2020");
-        OraRiconsegnaLabel = new JLabel("Vehicle return time : ");
-        orariconsegna = new JComboBox<String>(ore);
-        DNClienteLabel = new JLabel("Client birthday : ");
-        GNClienteLabel = new JLabel("Day : ");
+
+        carPickTimeLabel = new JLabel("Ora ritiro auto: ");
+        carPickDateLabel = new JLabel("Data ritiro auto (gg/mm/aaaa): ");
+
+        carPickTimeComboBox = new JComboBox<>(StaticData.HOURS_INT);
+        carPickDayComboBox = new JComboBox<>(StaticData.DAYS);
+        carPickMonthComboBox = new JComboBox<>(StaticData.MONTHS_INT);
+        carPickYearComboBox = new JComboBox<>(StaticData.YEARS_FUTURE);
+
+        carReturnTimeLabel = new JLabel("Ora riconsegna auto: ");
+        carReturnDateLabel = new JLabel("Data riconsegna auto (gg/mm/aaaa): ");
+        
+        carReturnTimeComboBox = new JComboBox<>(StaticData.HOURS_INT);
+        carReturnDayComboBox = new JComboBox<>(StaticData.DAYS);
+        carReturnMonthComboBox = new JComboBox<>(StaticData.MONTHS_INT);
+        carReturnYearComboBox = new JComboBox<>(StaticData.YEARS_FUTURE);
+
+        // start useless
+        dateOfBirthLabel = new JLabel("Client birthday : ");
+        dayOfBirth = new JLabel("Day : ");
         gnc = new JComboBox<>(StaticData.DAYS);
         MNClienteLabel = new JLabel("Month : ");
         mnc = new JComboBox<>(StaticData.MONTHS);
         ANClienteLabel = new JLabel("Year : ");
-        anc = new JComboBox<>(StaticData.YEARS);
+        anc = new JComboBox<>(StaticData.YEARS_PAST);
         DEPatenteLabel = new JLabel("License issue date : ");
         GEPatenteLabel = new JLabel("Day : ");
         gep = new JComboBox<>(StaticData.DAYS);
         MEPatenteLabel = new JLabel("Month : ");
         mep = new JComboBox<String>(StaticData.MONTHS);
         AEPatenteLabel = new JLabel("Year : ");
-        anniep = new Integer[]{1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978,
-                1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
-                2000, 2001, 2002};
-        aep = new JComboBox<>(anniep);
-        selezioneCluster = new JLabel("Select cluster: ");
+        aep = new JComboBox<>(StaticData.YEARS_PAST);
+        selezioneCluster = new JLabel("Select auto: ");
         cars = new String[]{"Audi TT", "Toyota Mark 2", "Mersedes Benz"};
         car = new JComboBox<String>(cars);
+        // end useless
 
-
-        Prosegui = new JButton("Continue");
-        Annulla = new JButton("Cancel");
+        continuteButton = new JButton("Continue");
+        cancelButton = new JButton("Cancel");
         // Add UI element to frame
         frame.setLayout(null);
-        DataRitiroLabel.setBounds(50, 50, 200, 70);
-        frame.add(DataRitiroLabel);
-        dataritiro.setBounds(300, 75, 100, 20);
-        frame.add(dataritiro);
-        DataRitirosegue.setBounds(400, 75, 100, 20);
-        frame.add(DataRitirosegue);
-        OraRitiroLabel.setBounds(50, 100, 200, 70);
-        frame.add(OraRitiroLabel);
-        oraritiro.setBounds(300, 125, 100, 20);
-        frame.add(oraritiro);
-        DataRiconsegnaLabel.setBounds(50, 150, 250, 70);
-        frame.add(DataRiconsegnaLabel);
-        datariconsegna.setBounds(300, 175, 100, 20);
-        frame.add(datariconsegna);
-        DataRiconsegnasegue.setBounds(400, 175, 100, 20);
-        frame.add(DataRiconsegnasegue);
-        OraRiconsegnaLabel.setBounds(50, 200, 200, 70);
-        frame.add(OraRiconsegnaLabel);
-        orariconsegna.setBounds(300, 225, 100, 20);
-        frame.add(orariconsegna);
-        DNClienteLabel.setBounds(50, 250, 200, 70);
-        frame.add(DNClienteLabel);
-        GNClienteLabel.setBounds(200, 250, 100, 70);
-        frame.add(GNClienteLabel);
+
+        carPickTimeLabel.setBounds(50, 20,200,70);
+        frame.add(carPickTimeLabel);
+        carPickTimeComboBox.setBounds(300,45,100,20);
+        frame.add(carPickTimeComboBox);
+
+        carPickDateLabel.setBounds(50, 50, 200, 70);
+        frame.add(carPickDateLabel);
+        carPickDayComboBox.setBounds(300, 75, 100, 20);
+        frame.add(carPickDayComboBox);
+        carPickMonthComboBox.setBounds(450,75,100,20);
+        frame.add(carPickMonthComboBox);
+        carPickYearComboBox.setBounds(600,75,100,20);
+        frame.add(carPickYearComboBox);
+
+        carReturnTimeLabel.setBounds(50,100,200,70);
+        frame.add(carReturnTimeLabel);
+        carReturnTimeComboBox.setBounds(300, 125, 100, 20);
+        frame.add(carReturnTimeComboBox);
+
+        carReturnDateLabel.setBounds(50, 125, 200, 70);
+        frame.add(carReturnDateLabel);
+
+        carReturnDayComboBox.setBounds(300, 150, 100, 20);
+        frame.add(carReturnDayComboBox);
+        carReturnMonthComboBox.setBounds(450, 150, 100, 20);
+        frame.add(carReturnMonthComboBox);
+        carReturnYearComboBox.setBounds(600, 150, 100, 20);
+        frame.add(carReturnYearComboBox);
+
+
+        dateOfBirthLabel.setBounds(50, 250, 200, 70);
+        frame.add(dateOfBirthLabel);
+        dayOfBirth.setBounds(200, 250, 100, 70);
+        frame.add(dayOfBirth);
         gnc.setBounds(300, 275, 100, 20);
         frame.add(gnc);
         MNClienteLabel.setBounds(450, 250, 100, 70);
@@ -275,120 +306,120 @@ public class MainView { // View uses Swing framework to display UI to user
         frame.add(car);
 
 
-        Prosegui.setBounds(900, 575, 100, 50);
-        frame.add(Prosegui);
-        Annulla.setBounds(1050, 575, 100, 50);
-        frame.add(Annulla);
+        continuteButton.setBounds(900, 575, 100, 50);
+        frame.add(continuteButton);
+        cancelButton.setBounds(1050, 575, 100, 50);
+        frame.add(cancelButton);
 
     }
 
-    public void impiegatorichiestapreventivo() {
-
-        frame.getContentPane().removeAll();
-        frame.getContentPane().setLayout(new BorderLayout());
-        frame.repaint();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        // Create UI elements
-        DataRitiroLabel = new JLabel("Data Ritiro veicolo (gg/mm/aaaa): ");
-        giornipreventivo = new Integer[]{15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
-        dataritiro = new JComboBox<Integer>(giornipreventivo);
-        DataRitirosegue = new JLabel("Maggio 2020");
-        OraRitiroLabel = new JLabel("Ora Ritiro veicolo : ");
-        ore = new String[]{"9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"};
-        oraritiro = new JComboBox<String>(ore);
-        DataRiconsegnaLabel = new JLabel("Data Riconsegna veicolo (gg/mm/aaaa): ");
-        datariconsegna = new JComboBox<Integer>(giornipreventivo);
-        DataRiconsegnasegue = new JLabel("Maggio 2020");
-        OraRiconsegnaLabel = new JLabel("Ora Riconsegna veicolo : ");
-        orariconsegna = new JComboBox<String>(ore);
-        DNClienteLabel = new JLabel("Data di nascita cliente : ");
-        GNClienteLabel = new JLabel("Giorno : ");
-        gnc = new JComboBox<Integer>(StaticData.DAYS);
-        MNClienteLabel = new JLabel("Mese : ");
-        mnc = new JComboBox<String>(StaticData.MONTHS);
-        ANClienteLabel = new JLabel("Anno : ");
-        anc = new JComboBox<Integer>(StaticData.YEARS);
-        DEPatenteLabel = new JLabel("Data emissione patente : ");
-        GEPatenteLabel = new JLabel("Giorno : ");
-        gep = new JComboBox<Integer>(StaticData.DAYS);
-        MEPatenteLabel = new JLabel("Mese : ");
-        mep = new JComboBox<String>(StaticData.MONTHS);
-        AEPatenteLabel = new JLabel("Anno : ");
-        anniep = new Integer[]{1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978,
-                1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
-                2000, 2001, 2002};
-        aep = new JComboBox<Integer>(anniep);
-        selezioneCluster = new JLabel("Selezionare uno dei seguenti cluster : ");
-        cars = new String[]{"Audi TT", "Toyota Mark 2", "Mersedes Benz"};
-        car = new JComboBox<String>(cars);
-
-
-        Prosegui = new JButton("Calculate");
-        backButton = new JButton("Back");
-        // Add UI element to frame
-        frame.setLayout(null);
-        DataRitiroLabel.setBounds(50, 50, 200, 70);
-        frame.add(DataRitiroLabel);
-        dataritiro.setBounds(300, 75, 100, 20);
-        frame.add(dataritiro);
-        DataRitirosegue.setBounds(400, 75, 100, 20);
-        frame.add(DataRitirosegue);
-        OraRitiroLabel.setBounds(50, 100, 200, 70);
-        frame.add(OraRitiroLabel);
-        oraritiro.setBounds(300, 125, 100, 20);
-        frame.add(oraritiro);
-        DataRiconsegnaLabel.setBounds(50, 150, 250, 70);
-        frame.add(DataRiconsegnaLabel);
-        datariconsegna.setBounds(300, 175, 100, 20);
-        frame.add(datariconsegna);
-        DataRiconsegnasegue.setBounds(400, 175, 100, 20);
-        frame.add(DataRiconsegnasegue);
-        OraRiconsegnaLabel.setBounds(50, 200, 200, 70);
-        frame.add(OraRiconsegnaLabel);
-        orariconsegna.setBounds(300, 225, 100, 20);
-        frame.add(orariconsegna);
-        DNClienteLabel.setBounds(50, 250, 200, 70);
-        frame.add(DNClienteLabel);
-        GNClienteLabel.setBounds(200, 250, 100, 70);
-        frame.add(GNClienteLabel);
-        gnc.setBounds(300, 275, 100, 20);
-        frame.add(gnc);
-        MNClienteLabel.setBounds(450, 250, 100, 70);
-        frame.add(MNClienteLabel);
-        mnc.setBounds(550, 275, 100, 20);
-        frame.add(mnc);
-        ANClienteLabel.setBounds(675, 250, 100, 70);
-        frame.add(ANClienteLabel);
-        anc.setBounds(750, 275, 100, 20);
-        frame.add(anc);
-
-        DEPatenteLabel.setBounds(50, 300, 200, 70);
-        frame.add(DEPatenteLabel);
-        GEPatenteLabel.setBounds(200, 300, 100, 70);
-        frame.add(GEPatenteLabel);
-        gep.setBounds(300, 325, 100, 20);
-        frame.add(gep);
-        MEPatenteLabel.setBounds(450, 300, 100, 70);
-        frame.add(MEPatenteLabel);
-        mep.setBounds(550, 325, 100, 20);
-        frame.add(mep);
-        AEPatenteLabel.setBounds(675, 300, 100, 70);
-        frame.add(AEPatenteLabel);
-        aep.setBounds(750, 325, 100, 20);
-        frame.add(aep);
-        selezioneCluster.setBounds(50, 350, 300, 70);
-        frame.add(selezioneCluster);
-        car.setBounds(300, 375, 100, 20);
-        frame.add(car);
-
-
-        Prosegui.setBounds(900, 575, 100, 50);
-        frame.add(Prosegui);
-        backButton.setBounds(1050, 575, 100, 50);
-        frame.add(backButton);
-
-    }
+//    public void impiegatorichiestapreventivo() {
+//
+//        frame.getContentPane().removeAll();
+//        frame.getContentPane().setLayout(new BorderLayout());
+//        frame.repaint();
+//        frame.setLocationRelativeTo(null);
+//        frame.setVisible(true);
+//        // Create UI elements
+//        carPickDateLabel = new JLabel("Data Ritiro veicolo (gg/mm/aaaa): ");
+//        giornipreventivo = new Integer[]{15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
+//        carPickDayComboBox = new JComboBox<Integer>(giornipreventivo);
+//        DataRitirosegue = new JLabel("Maggio 2020");
+//        carReturnDateLabel = new JLabel("Ora Ritiro veicolo : ");
+//        ore = new String[]{"9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"};
+//        carReturnTimeComboBox = new JComboBox<String>(ore);
+//        DataRiconsegnaLabel = new JLabel("Data Riconsegna veicolo (gg/mm/aaaa): ");
+//        datariconsegna = new JComboBox<Integer>(giornipreventivo);
+//        DataRiconsegnasegue = new JLabel("Maggio 2020");
+//        OraRiconsegnaLabel = new JLabel("Ora Riconsegna veicolo : ");
+//        orariconsegna = new JComboBox<String>(ore);
+//        dateOfBirthLabel = new JLabel("Data di nascita cliente : ");
+//        dayOfBirth = new JLabel("Giorno : ");
+//        gnc = new JComboBox<Integer>(StaticData.DAYS);
+//        MNClienteLabel = new JLabel("Mese : ");
+//        mnc = new JComboBox<String>(StaticData.MONTHS);
+//        ANClienteLabel = new JLabel("Anno : ");
+//        anc = new JComboBox<Integer>(StaticData.YEARS_PAST);
+//        DEPatenteLabel = new JLabel("Data emissione patente : ");
+//        GEPatenteLabel = new JLabel("Giorno : ");
+//        gep = new JComboBox<Integer>(StaticData.DAYS);
+//        MEPatenteLabel = new JLabel("Mese : ");
+//        mep = new JComboBox<String>(StaticData.MONTHS);
+//        AEPatenteLabel = new JLabel("Anno : ");
+//        anniep = new Integer[]{1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978,
+//                1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+//                2000, 2001, 2002};
+//        aep = new JComboBox<Integer>(anniep);
+//        selezioneCluster = new JLabel("Selezionare uno dei seguenti cluster : ");
+//        cars = new String[]{"Audi TT", "Toyota Mark 2", "Mersedes Benz"};
+//        car = new JComboBox<String>(cars);
+//
+//
+//        continuteButton = new JButton("Calculate");
+//        backButton = new JButton("Back");
+//        // Add UI element to frame
+//        frame.setLayout(null);
+//        carPickDateLabel.setBounds(50, 50, 200, 70);
+//        frame.add(carPickDateLabel);
+//        carPickDayComboBox.setBounds(300, 75, 100, 20);
+//        frame.add(carPickDayComboBox);
+//        DataRitirosegue.setBounds(400, 75, 100, 20);
+//        frame.add(DataRitirosegue);
+//        carReturnDateLabel.setBounds(50, 100, 200, 70);
+//        frame.add(carReturnDateLabel);
+//        carReturnTimeComboBox.setBounds(300, 125, 100, 20);
+//        frame.add(carReturnTimeComboBox);
+//        DataRiconsegnaLabel.setBounds(50, 150, 250, 70);
+//        frame.add(DataRiconsegnaLabel);
+//        datariconsegna.setBounds(300, 175, 100, 20);
+//        frame.add(datariconsegna);
+//        DataRiconsegnasegue.setBounds(400, 175, 100, 20);
+//        frame.add(DataRiconsegnasegue);
+//        OraRiconsegnaLabel.setBounds(50, 200, 200, 70);
+//        frame.add(OraRiconsegnaLabel);
+//        orariconsegna.setBounds(300, 225, 100, 20);
+//        frame.add(orariconsegna);
+//        dateOfBirthLabel.setBounds(50, 250, 200, 70);
+//        frame.add(dateOfBirthLabel);
+//        dayOfBirth.setBounds(200, 250, 100, 70);
+//        frame.add(dayOfBirth);
+//        gnc.setBounds(300, 275, 100, 20);
+//        frame.add(gnc);
+//        MNClienteLabel.setBounds(450, 250, 100, 70);
+//        frame.add(MNClienteLabel);
+//        mnc.setBounds(550, 275, 100, 20);
+//        frame.add(mnc);
+//        ANClienteLabel.setBounds(675, 250, 100, 70);
+//        frame.add(ANClienteLabel);
+//        anc.setBounds(750, 275, 100, 20);
+//        frame.add(anc);
+//
+//        DEPatenteLabel.setBounds(50, 300, 200, 70);
+//        frame.add(DEPatenteLabel);
+//        GEPatenteLabel.setBounds(200, 300, 100, 70);
+//        frame.add(GEPatenteLabel);
+//        gep.setBounds(300, 325, 100, 20);
+//        frame.add(gep);
+//        MEPatenteLabel.setBounds(450, 300, 100, 70);
+//        frame.add(MEPatenteLabel);
+//        mep.setBounds(550, 325, 100, 20);
+//        frame.add(mep);
+//        AEPatenteLabel.setBounds(675, 300, 100, 70);
+//        frame.add(AEPatenteLabel);
+//        aep.setBounds(750, 325, 100, 20);
+//        frame.add(aep);
+//        selezioneCluster.setBounds(50, 350, 300, 70);
+//        frame.add(selezioneCluster);
+//        car.setBounds(300, 375, 100, 20);
+//        frame.add(car);
+//
+//
+//        continuteButton.setBounds(900, 575, 100, 50);
+//        frame.add(continuteButton);
+//        backButton.setBounds(1050, 575, 100, 50);
+//        frame.add(backButton);
+//
+//    }
 
     public void calculateView(Client client) {
         frame.getContentPane().removeAll();
@@ -813,7 +844,7 @@ public class MainView { // View uses Swing framework to display UI to user
     }
 
     public JButton getChiudi() {
-        return Annulla;
+        return cancelButton;
     }
 
     public JButton getBackButton() {
@@ -833,7 +864,7 @@ public class MainView { // View uses Swing framework to display UI to user
     }
 
     public JButton getProseguiPreventivo() {
-        return Prosegui;
+        return continuteButton;
     }
 
     public JButton getModificateProfileButton() {
@@ -871,7 +902,7 @@ public class MainView { // View uses Swing framework to display UI to user
     //funzioni per il preventivo
     public int getdataritiro() {
 
-        String text = dataritiro.getSelectedItem().toString();
+        String text = carPickDayComboBox.getSelectedItem().toString();
         int valuedataritiro = Integer.parseInt(text);
 
         return valuedataritiro;
@@ -880,7 +911,7 @@ public class MainView { // View uses Swing framework to display UI to user
 
     public String getoraritiro() {
 
-        String valueritiro = oraritiro.getSelectedItem().toString();
+        String valueritiro = carReturnTimeComboBox.getSelectedItem().toString();
         return valueritiro;
 
     }
@@ -930,6 +961,70 @@ public class MainView { // View uses Swing framework to display UI to user
         int valuegep = Integer.parseInt(text);
 
         return valuegep;
+    }
+
+    public int getCarPickTimeComboBox() {
+        return Integer.parseInt(carPickTimeComboBox.getSelectedItem().toString());
+    }
+
+    public void setCarPickTimeComboBox(JComboBox<Integer> carPickTimeComboBox) {
+        this.carPickTimeComboBox = carPickTimeComboBox;
+    }
+
+    public int getCarPickDayComboBox() {
+        return Integer.parseInt(carPickDayComboBox.getSelectedItem().toString());
+    }
+
+    public void setCarPickDayComboBox(JComboBox<Integer> carPickDayComboBox) {
+        this.carPickDayComboBox = carPickDayComboBox;
+    }
+
+    public int getCarPickMonthComboBox() {
+        return Integer.parseInt(carPickMonthComboBox.getSelectedItem().toString());
+    }
+
+    public void setCarPickMonthComboBox(JComboBox<Integer> carPickMonthComboBox) {
+        this.carPickMonthComboBox = carPickMonthComboBox;
+    }
+
+    public int getCarPickYearComboBox() {
+        return Integer.parseInt(carPickYearComboBox.getSelectedItem().toString());
+    }
+
+    public void setCarPickYearComboBox(JComboBox<Integer> carPickYearComboBox) {
+        this.carPickYearComboBox = carPickYearComboBox;
+    }
+
+    public int getCarReturnTimeComboBox() {
+        return Integer.parseInt(carReturnTimeComboBox.getSelectedItem().toString());
+    }
+
+    public void setCarReturnTimeComboBox(JComboBox<Integer> carReturnTimeComboBox) {
+        this.carReturnTimeComboBox = carReturnTimeComboBox;
+    }
+
+    public int getCarReturnDayComboBox() {
+        return Integer.parseInt(carReturnDayComboBox.getSelectedItem().toString());
+    }
+
+    public void setCarReturnDayComboBox(JComboBox<Integer> carReturnDayComboBox) {
+        this.carReturnDayComboBox = carReturnDayComboBox;
+    }
+
+    public int getCarReturnMonthComboBox() {
+        return Integer.parseInt(carReturnMonthComboBox.getSelectedItem().toString());
+    }
+
+    public void setCarReturnMonthComboBox(JComboBox<Integer> carReturnMonthComboBox) {
+        this.carReturnMonthComboBox = carReturnMonthComboBox;
+    }
+
+    public int getCarReturnYearComboBox() {
+        return Integer.parseInt(carReturnYearComboBox.getSelectedItem().toString());
+    }
+
+    public void setCarReturnYearComboBox(JComboBox<Integer> carReturnYearComboBox) {
+        this.carReturnYearComboBox = carReturnYearComboBox;
     }
 
     public String getmep() {
