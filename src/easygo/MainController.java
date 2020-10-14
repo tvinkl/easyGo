@@ -19,8 +19,6 @@ public class MainController {
     private String jdbcUser;
     private String jdbcPassword;
 
-    // database credentials
-
     public MainController(MainView v) throws IOException {
         view = v;
         Properties properties = new Properties();
