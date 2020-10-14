@@ -57,7 +57,7 @@ public class RegistrationView {
     private JButton registrationButton;
     private JButton backButton;
 
-    public RegistrationView(Cliente cliente, JFrame frame) {
+    public RegistrationView(Client client, JFrame frame) {
 
         InformazioniPersonaliLabel = new JLabel("Personal info");
         NomeLabel = new JLabel("Nome :");
@@ -212,7 +212,7 @@ public class RegistrationView {
         frame.add(CPLabel);
         CPTextfield.setBounds(400, 600, 200, 20);
         frame.add(CPTextfield);
-        if (cliente.getRole() == Roles.SERVICE_MANAGER) {
+        if (client.getRole() == Roles.SERVICE_MANAGER) {
             roleLabel.setBounds(800, 100, 100, 20);
             frame.add(roleLabel);
             roles.setBounds(900, 100, 100, 20);

@@ -2,6 +2,7 @@ package easygo;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 
 public class MainView { // View uses Swing framework to display UI to user
@@ -113,6 +114,8 @@ public class MainView { // View uses Swing framework to display UI to user
     private RegistrationView registrationView;
     private ModificationView modificationView;
     private CalculationView calculationView;
+    private ServiceManagerView serviceManagerView;
+    private GarageView garageView;
 
     public MainView(String title) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         frame = new JFrame(title);
@@ -148,7 +151,7 @@ public class MainView { // View uses Swing framework to display UI to user
     }
 
     //registrazione di un nuovo cliente
-    public void registrazione(Cliente cliente) {
+    public void registrazione(Client client) {
 
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
@@ -157,10 +160,10 @@ public class MainView { // View uses Swing framework to display UI to user
         frame.setVisible(true);
         // Create UI elements
 
-        registrationView = new RegistrationView(cliente, frame);
+        registrationView = new RegistrationView(client, frame);
     }
 
-    public void impiegatoregistrazione(Cliente cliente) {
+    public void impiegatoregistrazione(Client client) {
 
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
@@ -168,7 +171,7 @@ public class MainView { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        registrationView = new RegistrationView(cliente, frame);
+        registrationView = new RegistrationView(client, frame);
 
         Registrati = new JButton("Registrati");
         backButton = new JButton("Back");
@@ -397,14 +400,14 @@ public class MainView { // View uses Swing framework to display UI to user
 
     }
 
-    public void calculateView(Cliente cliente) {
+    public void calculateView(Client client) {
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
         frame.repaint();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        calculationView = new CalculationView(frame, cliente);
+        calculationView = new CalculationView(frame, client);
     }
 
     public void pagamentofine(String message) {
@@ -485,66 +488,6 @@ public class MainView { // View uses Swing framework to display UI to user
 
 
     }
-
-    //view impiegato garage dopo login
-    public void garageimpiegato() {
-
-        frame.getContentPane().removeAll();
-        frame.getContentPane().setLayout(new BorderLayout());
-        frame.repaint();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        // Create UI elements
-        Ritiro = new JButton("Ritiro");
-        Riconsegna = new JButton("Riconsegna");
-        GestioneParcoMacchine = new JButton("Gestione Parco Macchine");
-        Logout = new JButton("Logout");
-
-        // Add UI element to frame
-        frame.setLayout(null);
-        Ritiro.setBounds(200, 150, 200, 150);
-        frame.add(Ritiro);
-        Riconsegna.setBounds(700, 150, 200, 150);
-        frame.add(Riconsegna);
-        GestioneParcoMacchine.setBounds(700, 400, 200, 150);
-        frame.add(GestioneParcoMacchine);
-        Logout.setBounds(1100, 50, 100, 50);
-        frame.add(Logout);
-
-        frame.setVisible(true);
-
-    }
-
-    public void modificaveicolo() {
-
-        //frame = new JFrame("Larmor - Autonoleggio");
-        frame.getContentPane().removeAll();
-        frame.getContentPane().setLayout(new BorderLayout());
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        // Create UI elements
-
-        ModificaVeicoloLabel = new JLabel("Targa del veicolo da modificare : ");
-        TargaVeicoloModificaTextField = new JTextField();
-        ModificaProsegui = new JButton("Modifica");
-        backButton = new JButton("Back");
-
-        // Add UI element to frame
-        frame.setLayout(null);
-
-        ModificaVeicoloLabel.setBounds(25, 25, 250, 50);
-        frame.add(ModificaVeicoloLabel);
-        TargaVeicoloModificaTextField.setBounds(275, 40, 100, 20);
-        frame.add(TargaVeicoloModificaTextField);
-
-        backButton.setBounds(1100, 50, 100, 50);
-        frame.add(backButton);
-        ModificaProsegui.setBounds(1100, 125, 100, 50);
-        frame.add(ModificaProsegui);
-
-        frame.setVisible(true);
-    }
-
 
     public void eliminafine() {
 
@@ -702,6 +645,24 @@ public class MainView { // View uses Swing framework to display UI to user
 
     }
 
+    public void serviceManagerView() {
+        frame.getContentPane().removeAll();
+        frame.getContentPane().setLayout(new BorderLayout());
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
+        serviceManagerView = new ServiceManagerView(frame);
+    }
+
+    public void viewGarage(List<Car> cars) {
+        frame.getContentPane().removeAll();
+        frame.getContentPane().setLayout(new BorderLayout());
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
+        garageView = new GarageView(frame, cars);
+    }
+
     public void cliente() {
 
         frame.getContentPane().removeAll();
@@ -763,77 +724,6 @@ public class MainView { // View uses Swing framework to display UI to user
         Fine.setBounds(1100, 50, 100, 50);
         frame.add(Fine);
 
-
-    }
-
-    public void rimuovifine() {
-
-        frame.getContentPane().removeAll();
-        frame.getContentPane().setLayout(new BorderLayout());
-        frame.repaint();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        // Create UI elements
-        Fine = new JButton("Fine");
-        Esito = new JLabel("Veicolo rimosso con successo");
-
-        // Add UI element to frame
-        frame.setLayout(null);
-        Esito.setBounds(200, 150, 200, 150);
-        frame.add(Esito);
-
-        Fine.setBounds(1100, 50, 100, 50);
-        frame.add(Fine);
-
-
-    }
-
-    public void modificaveicolofine() {
-
-        frame.getContentPane().removeAll();
-        frame.getContentPane().setLayout(new BorderLayout());
-        frame.repaint();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        // Create UI elements
-        Fine = new JButton("Fine");
-        Esito = new JLabel("Modifiche apportate successo");
-
-        // Add UI element to frame
-        frame.setLayout(null);
-        Esito.setBounds(200, 150, 200, 150);
-        frame.add(Esito);
-
-        Fine.setBounds(1100, 50, 100, 50);
-        frame.add(Fine);
-
-
-    }
-
-    public void finalizzarenoleggio() {
-
-        frame.getContentPane().removeAll();
-        frame.getContentPane().setLayout(new BorderLayout());
-        frame.repaint();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        // Create UI elements
-        NContratto = new JLabel("Inserire numero del contratto : ");
-        NCTextField = new JTextField();
-        Cerca = new JButton("Cerca");
-        backButton = new JButton("Back");
-
-
-        // Add UI element to frame
-        frame.setLayout(null);
-        NContratto.setBounds(50, 50, 200, 50);
-        frame.add(NContratto);
-        NCTextField.setBounds(250, 65, 100, 20);
-        frame.add(NCTextField);
-        Cerca.setBounds(400, 50, 100, 50);
-        frame.add(Cerca);
-        backButton.setBounds(1100, 50, 100, 50);
-        frame.add(backButton);
 
     }
 
@@ -1131,5 +1021,13 @@ public class MainView { // View uses Swing framework to display UI to user
 
     public CalculationView getCalculationView() {
         return calculationView;
+    }
+
+    public ServiceManagerView getServiceManagerView() {
+        return serviceManagerView;
+    }
+
+    public GarageView getGarageView() {
+        return garageView;
     }
 }

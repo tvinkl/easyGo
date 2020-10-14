@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -41,9 +45,9 @@ public class MainController {
 
     public void welcome() {
         view.option();
-        view.getWelcomeView().getRegistrationButton().addActionListener(e -> registration(new Cliente()));
+        view.getWelcomeView().getRegistrationButton().addActionListener(e -> registration(new Client()));
         view.getWelcomeView().getLoginButton().addActionListener(e -> login());
-        view.getWelcomeView().getCalculatePriceButton().addActionListener(e -> paymentQuote(new Cliente()));
+        view.getWelcomeView().getCalculatePriceButton().addActionListener(e -> paymentQuote(new Client()));
     }
 
     private void login() {
@@ -67,15 +71,15 @@ public class MainController {
             String sql = "Select * from cliente where userid='" + login + "' and Password='" + password + "'";
             ResultSet res = stmt.executeQuery(sql);
             if (res.next()) {
-                Cliente cliente = new Cliente(res);
-                if (cliente.getRole() == Roles.CLIENT) {
-                    cliente(cliente);
-                } else if (cliente.getRole() == Roles.SERVICE_MANAGER) {
-//                    impiegatodesk(cliente);
-                } else if (cliente.getRole() == Roles.GARAGE_MANAGER) {
+                Client client = new Client(res);
+                if (client.getRole() == Roles.CLIENT) {
+                    cliente(client);
+                } else if (client.getRole() == Roles.SERVICE_MANAGER) {
+                    serviceManager();
+                } else if (client.getRole() == Roles.GARAGE_MANAGER) {
 //                    impiegatogarage(cliente);
                 } else {
-                    view.error(String.format("Role %s is not supported", cliente.getRole()));
+                    view.error(String.format("Role %s is not supported", client.getRole()));
                 }
             } else {
                 view.error("User id or password incorrect");
@@ -86,12 +90,40 @@ public class MainController {
         }
     }
 
-    private void registration(Cliente cliente) {
-        if (Objects.nonNull(cliente.getRole()) && cliente.getRole() == Roles.SERVICE_MANAGER) {
-            view.impiegatoregistrazione(cliente);
+    public void serviceManager() {
+        view.serviceManagerView();
+
+//        view.getServiceManagerView().getAddCar().addActionListener(e -> addCar());
+//        view.getServiceManagerView().getDeleteCar().addActionListener(e -> deleteCar());
+//        view.getServiceManagerView().getTransferCar().addActionListener(e -> transferCar());
+        view.getServiceManagerView().getViewGarage().addActionListener(e -> viewGarage());
+        view.getServiceManagerView().getLogout().addActionListener(e -> Logout());
+    }
+
+    private void viewGarage() {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("select * from cars");
+            List<Car> cars = new ArrayList<>();
+            while(rs.next()) {
+                cars.add(new Car(rs));
+            }
+            view.viewGarage(cars);
+
+            view.getGarageView().getBackButton().addActionListener(e -> serviceManager());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void registration(Client client) {
+        if (Objects.nonNull(client.getRole()) && client.getRole() == Roles.SERVICE_MANAGER) {
+            view.impiegatoregistrazione(client);
             view.getRegistrati().addActionListener(e -> register());
         } else {
-            view.registrazione(cliente);
+            view.registrazione(client);
             view.getRegistrationView().getRegistrationButton().addActionListener(e -> register());
             view.getRegistrationView().getBackButton().addActionListener(e -> welcome());
         }
@@ -99,16 +131,16 @@ public class MainController {
 
 
     private void register() {
-        Cliente cliente = makeNewClient(Roles.CLIENT);
-        if (!isUserAdult(cliente)) {
+        Client client = makeNewClient(Roles.CLIENT);
+        if (!isUserAdult(client)) {
             view.error();
         }
         try {
             Connection con = getConnection();
             Statement stmt = con.createStatement();
-            String sql = "Insert into cliente (userid, Nome, Cognome, Email, Prefisso,Telefono, Dngiorno, Dnmese, Dnanno, Numpatente, Paesepatente,Giornoep, Meseep, Annoep, Giornosp, Mesesp, Annosp, Indirizzo,city, Paese, Codpostale, password, role) values (NULL, '" + cliente.getNome() + "', '" + cliente.getCognome() + "', '" + cliente.getEmail() + "', '" +
-                    cliente.getPrefisso() + "', '" + view.getRegistrationView().getTelefonoTextfield().getText() + "', '" + cliente.getDngiorno() + "', '" + cliente.getDnmese() + "', '" + cliente.getDnanno() + "', '" + cliente.getNumpatente() + "', '" + cliente.getPaesePatente() + "', '" + cliente.getGiornoep() + "', '" + cliente.getMeseep() + "', '" + cliente.getAnnoep() + "', '" + cliente.getGiornosp() + "', '" + cliente.getMesesp()
-                    + "', '" + cliente.getAnnosp() + "', '" + cliente.getIndirizzo() + "', '" + cliente.getCity() + "', '" + cliente.getPaese() + "', '" + view.getRegistrationView().getCPTextfield().getText() + "', '" + cliente.getPassword() + "', '" + cliente.getRole() + "')";
+            String sql = "Insert into cliente (userid, Nome, Cognome, Email, Prefisso,Telefono, Dngiorno, Dnmese, Dnanno, Numpatente, Paesepatente,Giornoep, Meseep, Annoep, Giornosp, Mesesp, Annosp, Indirizzo,city, Paese, Codpostale, password, role) values (NULL, '" + client.getNome() + "', '" + client.getCognome() + "', '" + client.getEmail() + "', '" +
+                    client.getPrefisso() + "', '" + view.getRegistrationView().getTelefonoTextfield().getText() + "', '" + client.getDngiorno() + "', '" + client.getDnmese() + "', '" + client.getDnanno() + "', '" + client.getNumpatente() + "', '" + client.getPaesePatente() + "', '" + client.getGiornoep() + "', '" + client.getMeseep() + "', '" + client.getAnnoep() + "', '" + client.getGiornosp() + "', '" + client.getMesesp()
+                    + "', '" + client.getAnnosp() + "', '" + client.getIndirizzo() + "', '" + client.getCity() + "', '" + client.getPaese() + "', '" + view.getRegistrationView().getCPTextfield().getText() + "', '" + client.getPassword() + "', '" + client.getRole() + "')";
             stmt.executeUpdate(sql);
             try {
                 String sql2 = "SELECT * FROM cliente ORDER BY userid DESC LIMIT 1";
@@ -129,95 +161,95 @@ public class MainController {
         }
     }
 
-    private boolean isUserAdult(Cliente cliente) {
-        return LocalDate.now().getYear() - cliente.getDnanno() >= 18;
+    private boolean isUserAdult(Client client) {
+        return LocalDate.now().getYear() - client.getDnanno() >= 18;
     }
 
-    private Cliente makeNewClient(Roles role) {
-        Cliente cliente = new Cliente();
-        cliente.setNome(view.getRegistrationView().getNomeTextfield().getText());
-        cliente.setCognome(view.getRegistrationView().getCognomeTextfield().getText());
-        cliente.setPassword(view.getRegistrationView().getPasswordUtenteTextField().getText());
-        cliente.setEmail(view.getRegistrationView().getEmailTextfield().getText());
-        cliente.setPrefisso(view.getRegistrationView().getPrefisso());
-        cliente.setDngiorno(view.getRegistrationView().getGdn());
-        cliente.setDnmese(view.getRegistrationView().getMdn());
-        cliente.setDnanno(view.getRegistrationView().getAdn());
-        cliente.setNumpatente(view.getRegistrationView().getNPatenteTextfield().getText());
-        cliente.setPaesePatente(view.getRegistrationView().getPaese());
-        cliente.setGiornoep(view.getRegistrationView().getGde());
-        cliente.setMeseep(view.getRegistrationView().getMde());
-        cliente.setAnnoep(view.getRegistrationView().getAde());
-        cliente.setGiornosp(view.getRegistrationView().getGds());
-        cliente.setMesesp(view.getRegistrationView().getMds());
-        cliente.setAnnosp(view.getRegistrationView().getAds());
-        cliente.setIndirizzo(view.getRegistrationView().getIndirizzoTextfield().getText());
-        cliente.setCity(view.getRegistrationView().getCityTextField().getText());
-        cliente.setPaese(view.getRegistrationView().getPaeseres());
-        cliente.setRole(role);
-        return cliente;
+    private Client makeNewClient(Roles role) {
+        Client client = new Client();
+        client.setNome(view.getRegistrationView().getNomeTextfield().getText());
+        client.setCognome(view.getRegistrationView().getCognomeTextfield().getText());
+        client.setPassword(view.getRegistrationView().getPasswordUtenteTextField().getText());
+        client.setEmail(view.getRegistrationView().getEmailTextfield().getText());
+        client.setPrefisso(view.getRegistrationView().getPrefisso());
+        client.setDngiorno(view.getRegistrationView().getGdn());
+        client.setDnmese(view.getRegistrationView().getMdn());
+        client.setDnanno(view.getRegistrationView().getAdn());
+        client.setNumpatente(view.getRegistrationView().getNPatenteTextfield().getText());
+        client.setPaesePatente(view.getRegistrationView().getPaese());
+        client.setGiornoep(view.getRegistrationView().getGde());
+        client.setMeseep(view.getRegistrationView().getMde());
+        client.setAnnoep(view.getRegistrationView().getAde());
+        client.setGiornosp(view.getRegistrationView().getGds());
+        client.setMesesp(view.getRegistrationView().getMds());
+        client.setAnnosp(view.getRegistrationView().getAds());
+        client.setIndirizzo(view.getRegistrationView().getIndirizzoTextfield().getText());
+        client.setCity(view.getRegistrationView().getCityTextField().getText());
+        client.setPaese(view.getRegistrationView().getPaeseres());
+        client.setRole(role);
+        return client;
     }
 
-    private void paymentQuote(Cliente cliente) {
+    private void paymentQuote(Client client) {
 
-        if (cliente.getRole() == Roles.SERVICE_MANAGER) {
+        if (client.getRole() == Roles.SERVICE_MANAGER) {
             //se entro qui sono impiegato desk
             view.impiegatorichiestapreventivo();
-            view.getProseguiPreventivo().addActionListener(e -> calculatePrice(cliente));
+            view.getProseguiPreventivo().addActionListener(e -> calculatePrice(client));
 //            view.getIndietro().addActionListener(e -> impiegatodesk(cliente));
-        } else if (cliente.getRole() == Roles.CLIENT) {
+        } else if (client.getRole() == Roles.CLIENT) {
             //se entro qui sono un cliente
             view.impiegatorichiestapreventivo();
-            view.getProseguiPreventivo().addActionListener(e -> calculatePrice(cliente));
-            view.getBackButton().addActionListener(e -> cliente(cliente));
+            view.getProseguiPreventivo().addActionListener(e -> calculatePrice(client));
+            view.getBackButton().addActionListener(e -> cliente(client));
         } else {
             //se entro qui non mi sono autenticato
             view.richiestapreventivo();
-            view.getProseguiPreventivo().addActionListener(e -> calculatePrice(cliente));
+            view.getProseguiPreventivo().addActionListener(e -> calculatePrice(client));
             view.getChiudi().addActionListener(e -> welcome());
         }
 
 
     }
 
-    private void cancelTheLease(Cliente c) {
+    private void cancelTheLease(Client c) {
         view.deleteContractFrame();
         view.getDeleteContractButton().addActionListener(e -> deleteContract(c));
         view.getBackButton().addActionListener(e -> cliente(c));
     }
 
-    private void deleteContract(Cliente cliente) {
+    private void deleteContract(Client client) {
         try {
             String contractNumber = view.getnumeroPreventivoTextField().getText();
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
             statement.executeUpdate("delete from preventivo where id = " + contractNumber);
             view.pagamentofine("Contract with number " + contractNumber + "was deleted.");
-            view.getFine().addActionListener(e -> cliente(cliente));
+            view.getFine().addActionListener(e -> cliente(client));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private void calculatePrice(Cliente cliente) {
+    private void calculatePrice(Client client) {
         Preventivo p = makePreventivo();
-        view.calculateView(cliente);
+        view.calculateView(client);
         view.getCalculationView().setPeriodoselezionatoinizio(p.getDataRitiro());
         view.getCalculationView().setPeriodoselezionatofine(p.getDataRiconsegna());
         view.getCalculationView().setDurataNoleggio(p.getDataRiconsegna() - p.getDataRitiro() + 1);
         view.getCalculationView().setClusterSelezionato(p.getCar());
         view.getCalculationView().setTotale(p.gettotale());
 
-        if (Objects.isNull(cliente.getRole())) {
-            view.getCalculationView().getTornaallaselezione().addActionListener(e -> paymentQuote(cliente));
-        } else if (cliente.getRole() == Roles.CLIENT) {
-            view.getCalculationView().getBackButton().addActionListener(e -> cliente(cliente));
-            view.getCalculationView().getCreateContractButton().addActionListener(e -> createContract(cliente, p));
+        if (Objects.isNull(client.getRole())) {
+            view.getCalculationView().getTornaallaselezione().addActionListener(e -> paymentQuote(client));
+        } else if (client.getRole() == Roles.CLIENT) {
+            view.getCalculationView().getBackButton().addActionListener(e -> cliente(client));
+            view.getCalculationView().getCreateContractButton().addActionListener(e -> createContract(client, p));
         }
     }
 
-    private void createContract(Cliente cliente, Preventivo p) {
+    private void createContract(Client client, Preventivo p) {
         try {
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
@@ -227,7 +259,7 @@ public class MainController {
             ResultSet rs = statement.executeQuery("select max(id) as id from preventivo");
             rs.next();
             view.successCreateContract(rs.getInt("id"));
-            view.getFine().addActionListener(e -> cliente(cliente));
+            view.getFine().addActionListener(e -> cliente(client));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -265,56 +297,56 @@ public class MainController {
     }
 
 
-    private void modifyProfile(Cliente cliente) {
+    private void modifyProfile(Client client) {
 
         view.modificadati();
-        view.getModificationView().setNomeClienteLabel(cliente.getNome());
-        view.getModificationView().setPasswordUtenteTextField(cliente.getPassword());
-        view.getModificationView().setCognomeClienteLabel(cliente.getCognome());
-        view.getModificationView().setEmailClienteTextField(cliente.getEmail());
-        view.getModificationView().setPrefissoCliente(cliente.getPrefisso());
-        view.getModificationView().setTelefonoClienteTextField(cliente.getTelefono());
-        view.getModificationView().setgdnClienteLabel(cliente.getDngiorno());
-        view.getModificationView().setmdnClienteLabel(cliente.getDnmese());
-        view.getModificationView().setadnClienteLabel(cliente.getDnanno());
-        view.getModificationView().setNPatenteClienteTextField(cliente.getNumpatente());
-        view.getModificationView().setPaesePatenteCliente(cliente.getPaesePatente());
-        view.getModificationView().setgdeClienteLabel(cliente.getGiornoep());
-        view.getModificationView().setmdeClienteLabel(cliente.getMeseep());
-        view.getModificationView().setadeClienteLabel(cliente.getAnnoep());
-        view.getModificationView().setgdsCliente(cliente.getGiornosp());
-        view.getModificationView().setmdsCliente(cliente.getMesesp());
-        view.getModificationView().setadsCliente(cliente.getGiornosp());
-        view.getModificationView().setIndirizzoClienteTextField(cliente.getIndirizzo());
-        view.getModificationView().setCityClientTextField(cliente.getCity());
-        view.getModificationView().setPaeseResCliente(cliente.getPaese());
-        view.getModificationView().setCPClienteTextField(cliente.getCodpostale());
+        view.getModificationView().setNomeClienteLabel(client.getNome());
+        view.getModificationView().setPasswordUtenteTextField(client.getPassword());
+        view.getModificationView().setCognomeClienteLabel(client.getCognome());
+        view.getModificationView().setEmailClienteTextField(client.getEmail());
+        view.getModificationView().setPrefissoCliente(client.getPrefisso());
+        view.getModificationView().setTelefonoClienteTextField(client.getTelefono());
+        view.getModificationView().setgdnClienteLabel(client.getDngiorno());
+        view.getModificationView().setmdnClienteLabel(client.getDnmese());
+        view.getModificationView().setadnClienteLabel(client.getDnanno());
+        view.getModificationView().setNPatenteClienteTextField(client.getNumpatente());
+        view.getModificationView().setPaesePatenteCliente(client.getPaesePatente());
+        view.getModificationView().setgdeClienteLabel(client.getGiornoep());
+        view.getModificationView().setmdeClienteLabel(client.getMeseep());
+        view.getModificationView().setadeClienteLabel(client.getAnnoep());
+        view.getModificationView().setgdsCliente(client.getGiornosp());
+        view.getModificationView().setmdsCliente(client.getMesesp());
+        view.getModificationView().setadsCliente(client.getGiornosp());
+        view.getModificationView().setIndirizzoClienteTextField(client.getIndirizzo());
+        view.getModificationView().setCityClientTextField(client.getCity());
+        view.getModificationView().setPaeseResCliente(client.getPaese());
+        view.getModificationView().setCPClienteTextField(client.getCodpostale());
 
-        view.getModificationView().getSalvaModifiche().addActionListener(e -> salvamodifiche(cliente));
-        view.getModificationView().getIndietro().addActionListener(e -> cliente(cliente));
+        view.getModificationView().getSalvaModifiche().addActionListener(e -> salvamodifiche(client));
+        view.getModificationView().getIndietro().addActionListener(e -> cliente(client));
     }
 
-    private void salvamodifiche(Cliente cliente) {
-        cliente.setPassword(view.getModificationView().getPasswordUtenteTextField().getText());
-        cliente.setEmail(view.getModificationView().getEmailClienteTextField().getText());
-        cliente.setPrefisso(view.getModificationView().getprefissocliente());
-        cliente.setNumpatente(view.getModificationView().getNPatenteClienteTextField().getText());
-        cliente.setPaesePatente(view.getModificationView().getpaeseCliente());
-        cliente.setGiornosp(view.getModificationView().getgdsCliente());
-        cliente.setMesesp(view.getModificationView().getmdsCliente());
-        cliente.setAnnosp(view.getModificationView().getadsCliente());
-        cliente.setIndirizzo(view.getModificationView().getIndirizzoClienteTextField().getText());
-        cliente.setCity(view.getModificationView().getCityClientTextField().getText());
-        cliente.setPaese(view.getModificationView().getpaeseresCliente());
+    private void salvamodifiche(Client client) {
+        client.setPassword(view.getModificationView().getPasswordUtenteTextField().getText());
+        client.setEmail(view.getModificationView().getEmailClienteTextField().getText());
+        client.setPrefisso(view.getModificationView().getprefissocliente());
+        client.setNumpatente(view.getModificationView().getNPatenteClienteTextField().getText());
+        client.setPaesePatente(view.getModificationView().getpaeseCliente());
+        client.setGiornosp(view.getModificationView().getgdsCliente());
+        client.setMesesp(view.getModificationView().getmdsCliente());
+        client.setAnnosp(view.getModificationView().getadsCliente());
+        client.setIndirizzo(view.getModificationView().getIndirizzoClienteTextField().getText());
+        client.setCity(view.getModificationView().getCityClientTextField().getText());
+        client.setPaese(view.getModificationView().getpaeseresCliente());
         try {
             Connection con2 = getConnection();
             Statement stmt2 = con2.createStatement();
-            String sql2 = "Update cliente set Email = '" + cliente.getEmail() + "', Prefisso = '" + cliente.getPrefisso() + "', Telefono = '" + view.getModificationView().getTelefonoClienteTextField().getText() + "', Numpatente = '" + cliente.getNumpatente() + "', Paesepatente = '" + cliente.getPaesePatente() + "', Giornosp = '" + cliente.getGiornosp() + "', Mesesp = '" + cliente.getMesesp() + "', Annosp = '" + cliente.getAnnosp() + "', Indirizzo = '" + cliente.getIndirizzo() + "', city = '" + cliente.getCity() + "', Paese = '" + cliente.getPaese() + "', Codpostale = '" + view.getModificationView().getCPClienteTextField().getText() + "', password = '" + cliente.getPassword() + "' where userid = '" + cliente.getID() + "'";
+            String sql2 = "Update cliente set Email = '" + client.getEmail() + "', Prefisso = '" + client.getPrefisso() + "', Telefono = '" + view.getModificationView().getTelefonoClienteTextField().getText() + "', Numpatente = '" + client.getNumpatente() + "', Paesepatente = '" + client.getPaesePatente() + "', Giornosp = '" + client.getGiornosp() + "', Mesesp = '" + client.getMesesp() + "', Annosp = '" + client.getAnnosp() + "', Indirizzo = '" + client.getIndirizzo() + "', city = '" + client.getCity() + "', Paese = '" + client.getPaese() + "', Codpostale = '" + view.getModificationView().getCPClienteTextField().getText() + "', password = '" + client.getPassword() + "' where userid = '" + client.getID() + "'";
             int rs2 = stmt2.executeUpdate(sql2);
             if (rs2 > -1) {
 
                 view.modificadatifine();
-                view.getFine().addActionListener(e -> cliente(cliente));
+                view.getFine().addActionListener(e -> cliente(client));
 
             } else
                 view.error();
@@ -325,15 +357,15 @@ public class MainController {
 
     }
 
-    private void cliente(Cliente cliente) {
+    private void cliente(Client client) {
         view.cliente();
-        view.setNomeClienteLabel(cliente.getNome());
-        view.setCognomeClienteLabel(cliente.getCognome());
+        view.setNomeClienteLabel(client.getNome());
+        view.setCognomeClienteLabel(client.getCognome());
 
-        view.getModificateProfileButton().addActionListener(e -> modifyProfile(cliente));
-        view.getPreventivo().addActionListener(e -> paymentQuote(cliente));
-        view.getCancelTheLease().addActionListener(e -> cancelTheLease(cliente));
-        view.getDeleteProfileButton().addActionListener(e -> deleteProfile(cliente.getID()));
+        view.getModificateProfileButton().addActionListener(e -> modifyProfile(client));
+        view.getPreventivo().addActionListener(e -> paymentQuote(client));
+        view.getCancelTheLease().addActionListener(e -> cancelTheLease(client));
+        view.getDeleteProfileButton().addActionListener(e -> deleteProfile(client.getID()));
         view.getLogout().addActionListener(e -> Logout());
     }
 

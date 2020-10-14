@@ -22,7 +22,7 @@ public class CalculationView {
     private JButton backButton;
     private JButton createContractButton;
 
-    public CalculationView(JFrame frame, Cliente cliente) {
+    public CalculationView(JFrame frame, Client client) {
         // Create UI elements
         Riepilogo = new JLabel("Total info");
         Periodo = new JLabel("Periodo del noleggio : ");
@@ -37,7 +37,7 @@ public class CalculationView {
         TotaleLabel = new JLabel("Totale : ");
         Totale = new JLabel();
 
-        if (Objects.isNull(cliente.getRole())) {
+        if (Objects.isNull(client.getRole())) {
             JOptionPane.showMessageDialog(frame,
                     "You will not be able to complete your booking. Please register your profile.",
                     "Warning",
@@ -45,7 +45,7 @@ public class CalculationView {
             Tornaallaselezione = new JButton("Back");
             Tornaallaselezione.setBounds(825, 500, 150, 70);
             frame.add(Tornaallaselezione);
-        } else if (cliente.getRole() == Roles.CLIENT) {
+        } else if (client.getRole() == Roles.CLIENT) {
             backButton = new JButton("Back");
             backButton.setBounds(600, 500, 200, 70);
             frame.add(backButton);
