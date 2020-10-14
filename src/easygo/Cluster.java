@@ -1,3 +1,5 @@
+package easygo;
+
 public class Cluster {
 
     private String Nome;

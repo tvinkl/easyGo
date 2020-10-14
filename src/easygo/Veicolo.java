@@ -1,3 +1,5 @@
+package easygo;
+
 public class Veicolo {
 	
 	private String Targa;

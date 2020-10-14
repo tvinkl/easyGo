@@ -1,3 +1,5 @@
+package easygo;
+
 public class Contratto {
 
     private int IDContratto;

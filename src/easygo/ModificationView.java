@@ -1,4 +1,4 @@
-package views;
+package easygo;
 
 import javax.swing.*;
 
@@ -270,9 +270,9 @@ public class ModificationView {
         this.IndirizzoClienteTextField.setText(N);
     }
 
-    public void setgdnClienteLabel(int N) {
+    public void setgdnClienteLabel(long N) {
 
-        this.gdnClienteLabel.setText(Integer.toString(N));
+        this.gdnClienteLabel.setText(Long.toString(N));
     }
 
     public void setmdnClienteLabel(String N) {
@@ -280,14 +280,14 @@ public class ModificationView {
         this.mdnClienteLabel.setText(N);
     }
 
-    public void setadnClienteLabel(int N) {
+    public void setadnClienteLabel(long N) {
 
-        this.adnClienteLabel.setText(Integer.toString(N));
+        this.adnClienteLabel.setText(Long.toString(N));
     }
 
-    public void setgdeClienteLabel(int N) {
+    public void setgdeClienteLabel(long N) {
 
-        this.gdeClienteLabel.setText(Integer.toString(N));
+        this.gdeClienteLabel.setText(Long.toString(N));
     }
 
     public void setmdeClienteLabel(String N) {
@@ -295,9 +295,9 @@ public class ModificationView {
         this.mdeClienteLabel.setText(N);
     }
 
-    public void setadeClienteLabel(int N) {
+    public void setadeClienteLabel(long N) {
 
-        this.adeClienteLabel.setText(Integer.toString(N));
+        this.adeClienteLabel.setText(Long.toString(N));
     }
 
     public void setCityClientTextField(String N) {
@@ -305,9 +305,9 @@ public class ModificationView {
         this.cityClientTextField.setText(N);
     }
 
-    public void setCPClienteTextField(int N) {
+    public void setCPClienteTextField(long N) {
 
-        this.CPClienteTextField.setText(Integer.toString(N));
+        this.CPClienteTextField.setText(Long.toString(N));
     }
 
     public void setPaesePatenteCliente(String N) {
@@ -316,7 +316,7 @@ public class ModificationView {
 
     }
 
-    public void setgdsCliente(int N) {
+    public void setgdsCliente(long N) {
 
         this.gdsCliente.setSelectedItem(N);
 
@@ -328,7 +328,7 @@ public class ModificationView {
 
     }
 
-    public void setadsCliente(int N) {
+    public void setadsCliente(long N) {
 
         this.adsCliente.setSelectedItem(N);
 
@@ -397,5 +397,9 @@ public class ModificationView {
     public String getpaeseresCliente() {
         String text = paeseresCliente.getSelectedItem().toString();
         return text;
+    }
+
+    public JButton getIndietro() {
+        return Indietro;
     }
 }

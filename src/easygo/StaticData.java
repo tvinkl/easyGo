@@ -1,4 +1,4 @@
-package views;
+package easygo;
 
 public class StaticData {
 

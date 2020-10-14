@@ -1,9 +1,11 @@
+package easygo;
+
 public class Preventivo {
 
     private int IDPreventivo;
-    private /*@ spec_public @*/ int DataRitiro;
+    private int DataRitiro;
     private String OraRitiro;
-    private /*@ spec_public @*/ int DataRiconsegna;
+    private int DataRiconsegna;
     private String OraRiconsegna;
     private int gncp;
     private String mncp;
@@ -11,8 +13,8 @@ public class Preventivo {
     private int gepcp;
     private String mepcp;
     private int aepcp;
-    private String clusterscelto;
-    private float prezzo;
+    private String car;
+    private float price;
     private String seggiolino;
     private String catene;
     private String navigatore;
@@ -137,24 +139,21 @@ public class Preventivo {
         return aepcp;
     }
 
-    public void setclusterscelto(String clusterscelto) {
-
-        this.clusterscelto = clusterscelto;
+    public void setCar(String car) {
+        this.car = car;
     }
 
-    public String getclusterscelto() {
-
-        return clusterscelto;
+    public String getCar() {
+        return car;
     }
 
-    public void setprezzo(float prezzo) {
+    public void setPrice(float price) {
 
-        this.prezzo = prezzo;
+        this.price = price;
     }
 
-    public float getprezzo() {
-
-        return prezzo;
+    public float getPrice() {
+        return price;
     }
 
 

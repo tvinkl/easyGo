@@ -1,4 +1,4 @@
-package views;
+package easygo;
 
 import javax.swing.*;
 
@@ -43,6 +43,7 @@ public class RegistrationView {
     private JComboBox<String> mds;
     private JLabel AnnodsLabel;
     private JComboBox<Integer> ads;
+    private JComboBox<Roles> roles;
     private JLabel FatturazioneLabel;
     private JLabel IndirizzoLabel;
     private JTextField IndirizzoTextfield;
@@ -51,9 +52,10 @@ public class RegistrationView {
     private JLabel PaeseResidenzaPLabel;
     private JComboBox<String> paeseres;
     private JLabel CPLabel;
+    private JLabel roleLabel;
     private JTextField CPTextfield;
 
-    public RegistrationView(JFrame frame) {
+    public RegistrationView(Cliente cliente, JFrame frame) {
 
         InformazioniPersonaliLabel = new JLabel("Informazioni Personali");
         NomeLabel = new JLabel("Nome :");
@@ -76,6 +78,7 @@ public class RegistrationView {
         mdn = new JComboBox<>(StaticData.MONTHS);
         AnnodnLabel = new JLabel("Anno : ");
         adn = new JComboBox<>(StaticData.YEARS);
+        roles = new JComboBox<>(Roles.values());
 
         InfoPatenteLabel = new JLabel("Info Patente  ");
         NPatenteLabel = new JLabel("Numero Patente : ");
@@ -104,6 +107,7 @@ public class RegistrationView {
         paeseres = new JComboBox<String>(paesi);
         CPLabel = new JLabel("Codice Postale :");
         CPTextfield = new JTextField();
+        roleLabel = new JLabel("Role: ");
 
         InformazioniPersonaliLabel.setBounds(50, 25, 200, 70);
         frame.add(InformazioniPersonaliLabel);
@@ -197,6 +201,12 @@ public class RegistrationView {
         frame.add(CPLabel);
         CPTextfield.setBounds(400, 600, 200, 20);
         frame.add(CPTextfield);
+        if (cliente.getRole() == Roles.SERVICE_MANAGER) {
+            roleLabel.setBounds(800, 100, 100, 20);
+            frame.add(roleLabel);
+            roles.setBounds(900, 100, 100, 20);
+            frame.add(roles);
+        }
 
         frame.repaint();
     }

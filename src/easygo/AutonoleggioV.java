@@ -1,10 +1,8 @@
-import views.LoginView;
-import views.ModificationView;
-import views.RegistrationView;
-import views.StaticData;
+package easygo;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 
 public class AutonoleggioV { // View uses Swing framework to display UI to user
@@ -31,16 +29,16 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
     //elementi per il preventivo
     private JLabel DataRitiroLabel;
-    private JComboBox<Integer> dataritiro;
+    private JComboBox<Integer> dataritiro; // дата взятия
     private JLabel DataRitirosegue;
     private JLabel OraRitiroLabel;
-    private JComboBox<String> oraritiro;
+    private JComboBox<String> oraritiro; // время взятия
     private String[] ore;
     private JLabel DataRiconsegnaLabel;
-    private JComboBox<Integer> datariconsegna;
+    private JComboBox<Integer> datariconsegna; // дата возврата
     private JLabel DataRiconsegnasegue;
     private JLabel OraRiconsegnaLabel;
-    private JComboBox<String> orariconsegna;
+    private JComboBox<String> orariconsegna; // время возврата
     private JLabel DNClienteLabel;
     private JLabel GNClienteLabel;
     private JComboBox<Integer> gnc;
@@ -58,11 +56,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
     private Integer[] anniep;
     private Integer[] giornipreventivo;
     private JLabel selezioneCluster;
-    private JLabel BGM;
-    private JLabel BMA;
-    private JLabel BPMX;
-    private JComboBox<String> clusterscelto;
-    private String[] cluster;
+    private JComboBox<String> car;
+    private String[] cars;
 
     private JButton Prosegui;
 
@@ -80,30 +75,12 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
     private JLabel TotaleLabel;
     private JLabel Totale;
     private JLabel SimboloE;
-    private JLabel SceltaExtra;
-    private String[] extra;
-    private JComboBox<String> seggiolino;
-    private JLabel costoseggiolinoLabel;
-    private JLabel costoseggiolino;
-    private JComboBox<String> navigatore;
-    private JLabel costonavigatoreLabel;
-    private JLabel costonavigatore;
-    private JComboBox<String> catene;
-    private JLabel costocateneLabel;
-    private JLabel costocatene;
-    private JComboBox<String> hotspot;
-    private JLabel costohotspotLabel;
-    private JLabel costohotspot;
 
-    private JButton RiepilogoeTotale;
+    private JButton welcomeButton;
     private JButton Tornaallaselezione;
     private JLabel esc;
 
     //elementi riepilogo finale preventivo
-    private JLabel SeggiolinoLabel;
-    private JLabel CateneLabel;
-    private JLabel NavigatoreLabel;
-    private JLabel HotspotLabel;
     private JLabel Seggiolino;
     private JLabel Catene;
     private JLabel Navigatore;
@@ -290,8 +267,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
 
     private JButton ModificaDati;
-    private JButton NuovoNoleggio;
-    private JButton StoricoNoleggi;
+    private JButton cancelTheLease;
     private JButton EliminaProfilo;
     private JButton Cancella;
 
@@ -321,6 +297,10 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
     private JLabel ErroreLabel;
     private JLabel immagine;
 
+    private JButton createContractButton;
+    private JButton backToManagerMenuButton;
+    private JButton deleteContractButton;
+
     private LoginView loginView;
     private RegistrationView registrationView;
     private ModificationView modificationView;
@@ -334,7 +314,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
         // Create UI elements
         accediButton = new JButton("Accedi");
-        image = new ImageIcon(getClass().getResource("download.jpg"));
+        image = new ImageIcon(getClass().getResource("/easygo/download.jpg"));
         immagine = new JLabel(image);
         frame.setLayout(null);
         immagine.setBounds(300, 50, 690, 380);
@@ -383,7 +363,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
     }
 
     //registrazione di un nuovo cliente
-    public void registrazione() {
+    public void registrazione(Cliente cliente) {
 
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
@@ -392,7 +372,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setVisible(true);
         // Create UI elements
 
-        registrationView = new RegistrationView(frame);
+        registrationView = new RegistrationView(cliente, frame);
 
         Registrati = new JButton("Registrati");
         Annulla = new JButton("Annulla");
@@ -406,7 +386,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
     }
 
-    public void impiegatoregistrazione() {
+    public void impiegatoregistrazione(Cliente cliente) {
 
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
@@ -414,7 +394,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        registrationView = new RegistrationView(frame);
+        registrationView = new RegistrationView(cliente, frame);
 
         Registrati = new JButton("Registrati");
         Indietro = new JButton("Indietro");
@@ -465,11 +445,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
                 2000, 2001, 2002};
         aep = new JComboBox<>(anniep);
         selezioneCluster = new JLabel("Select cluster: ");
-        BGM = new JLabel("BGM - Berlina di dimensioni grandi con cambio manuale. 5 porte e 5 posti con alimentazione Diesel o Benzina");
-        BMA = new JLabel("BMA - Berlina di dimensioni medie con cambio automatico. 5 porte e 5 posti con alimentazione Diesel o Benzina");
-        BPMX = new JLabel("BPMX - Berlina di dimensioni piccole con cambio manuale. 3 porte e 4 posti con alimentazione Diesel o Benzina. Idonea per i neopatentati");
-        cluster = new String[]{"BGM", "BMA", "BPMX"};
-        clusterscelto = new JComboBox<String>(cluster);
+        cars = new String[]{"Audi TT", "Toyota Mark 2", "Mersedes Benz"};
+        car = new JComboBox<String>(cars);
 
 
         Prosegui = new JButton("Continute");
@@ -527,14 +504,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.add(aep);
         selezioneCluster.setBounds(50, 350, 300, 70);
         frame.add(selezioneCluster);
-        BGM.setBounds(50, 400, 700, 70);
-        frame.add(BGM);
-        BMA.setBounds(50, 450, 700, 70);
-        frame.add(BMA);
-        BPMX.setBounds(50, 500, 800, 70);
-        frame.add(BPMX);
-        clusterscelto.setBounds(300, 375, 100, 20);
-        frame.add(clusterscelto);
+        car.setBounds(300, 375, 100, 20);
+        frame.add(car);
 
 
         Prosegui.setBounds(900, 575, 100, 50);
@@ -582,11 +553,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
                 2000, 2001, 2002};
         aep = new JComboBox<Integer>(anniep);
         selezioneCluster = new JLabel("Selezionare uno dei seguenti cluster : ");
-        BGM = new JLabel("BGM - Berlina di dimensioni grandi con cambio manuale. 5 porte e 5 posti con alimentazione Diesel o Benzina");
-        BMA = new JLabel("BMA - Berlina di dimensioni medie con cambio automatico. 5 porte e 5 posti con alimentazione Diesel o Benzina");
-        BPMX = new JLabel("BPMX - Berlina di dimensioni piccole con cambio manuale. 3 porte e 4 posti con alimentazione Diesel o Benzina. Idonea per i neopatentati");
-        cluster = new String[]{"BGM", "BMA", "BPMX"};
-        clusterscelto = new JComboBox<String>(cluster);
+        cars = new String[]{"Audi TT", "Toyota Mark 2", "Mersedes Benz"};
+        car = new JComboBox<String>(cars);
 
 
         Prosegui = new JButton("Prosegui");
@@ -644,14 +612,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.add(aep);
         selezioneCluster.setBounds(50, 350, 300, 70);
         frame.add(selezioneCluster);
-        BGM.setBounds(50, 400, 700, 70);
-        frame.add(BGM);
-        BMA.setBounds(50, 450, 700, 70);
-        frame.add(BMA);
-        BPMX.setBounds(50, 500, 800, 70);
-        frame.add(BPMX);
-        clusterscelto.setBounds(300, 375, 100, 20);
-        frame.add(clusterscelto);
+        car.setBounds(300, 375, 100, 20);
+        frame.add(car);
 
 
         Prosegui.setBounds(900, 575, 100, 50);
@@ -682,11 +644,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         OraRiconsegnaLabel = new JLabel("Ora Riconsegna veicolo : ");
         orariconsegna = new JComboBox<String>(ore);
         selezioneCluster = new JLabel("Selezionare uno dei seguenti cluster : ");
-        BGM = new JLabel("BGM - Berlina di dimensioni grandi con cambio manuale. 5 porte e 5 posti con alimentazione Diesel o Benzina");
-        BMA = new JLabel("BMA - Berlina di dimensioni medie con cambio automatico. 5 porte e 5 posti con alimentazione Diesel o Benzina");
-        BPMX = new JLabel("BPMX - Berlina di dimensioni piccole con cambio manuale. 3 porte e 4 posti con alimentazione Diesel o Benzina. Idonea per i neopatentati");
-        cluster = new String[]{"BGM", "BMA", "BPMX"};
-        clusterscelto = new JComboBox<String>(cluster);
+        cars = new String[]{"Audi TT", "Toyota Mark 2", "Mersedes Benz"};
+        car = new JComboBox<String>(cars);
 
 
         Prosegui = new JButton("Prosegui");
@@ -716,14 +675,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
         selezioneCluster.setBounds(50, 250, 300, 70);
         frame.add(selezioneCluster);
-        BGM.setBounds(50, 300, 700, 70);
-        frame.add(BGM);
-        BMA.setBounds(50, 350, 700, 70);
-        frame.add(BMA);
-        BPMX.setBounds(50, 400, 800, 70);
-        frame.add(BPMX);
-        clusterscelto.setBounds(300, 270, 100, 20);
-        frame.add(clusterscelto);
+        car.setBounds(300, 270, 100, 20);
+        frame.add(car);
 
         Prosegui.setBounds(900, 575, 100, 50);
         frame.add(Prosegui);
@@ -732,7 +685,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
     }
 
-    public void sceltaextra() {
+    public void sceltaextra(Cliente cliente) {
 
         //frame = new JFrame("Larmor - Autonoleggio");
         frame.getContentPane().removeAll();
@@ -741,7 +694,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        Riepilogo = new JLabel("Riepilogo");
+        Riepilogo = new JLabel("Total info");
         Periodo = new JLabel("Periodo del noleggio : ");
         Periodoselezionatoinizio = new JLabel();
         Periodoselezionatoiniziomese = new JLabel("Maggio 2020");
@@ -749,32 +702,27 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         Periodoselezionatofinemese = new JLabel("Maggio 2020");
         DurataNoleggioLabel = new JLabel("Durata noleggio : ");
         DurataNoleggio = new JLabel();
-        ClusterSelezionatoLabel = new JLabel("Cluster veicolo selezionato : ");
+        ClusterSelezionatoLabel = new JLabel("Selected car : ");
         ClusterSelezionato = new JLabel();
         TotaleLabel = new JLabel("Totale : ");
         Totale = new JLabel();
-        SimboloE = new JLabel("�");
-        SceltaExtra = new JLabel("Extra disponibili :");
-        extra = new String[]{"SI", "NO"};
-        SeggiolinoLabel = new JLabel("Seggiolino : ");
-        seggiolino = new JComboBox<String>(extra);
-        costoseggiolinoLabel = new JLabel("Costo per giorno : ");
-        costoseggiolino = new JLabel();
-        NavigatoreLabel = new JLabel("Navigatore : ");
-        navigatore = new JComboBox<String>(extra);
-        costonavigatoreLabel = new JLabel("Costo per giorno : ");
-        costonavigatore = new JLabel();
-        CateneLabel = new JLabel("Catene : ");
-        catene = new JComboBox<String>(extra);
-        costocateneLabel = new JLabel("Costo per giorno : ");
-        costocatene = new JLabel();
-        HotspotLabel = new JLabel("Hotspot : ");
-        hotspot = new JComboBox<String>(extra);
-        costohotspotLabel = new JLabel("Costo per giorno : ");
-        costohotspot = new JLabel();
 
-        RiepilogoeTotale = new JButton("Riepilogo e Totale");
-        Tornaallaselezione = new JButton("Indietro");
+        if (Objects.isNull(cliente.getRole())) {
+            welcomeButton = new JButton("In Welcome page");
+            Tornaallaselezione = new JButton("Back");
+            welcomeButton.setBounds(600, 500, 200, 70);
+            frame.add(welcomeButton);
+            Tornaallaselezione.setBounds(825, 500, 150, 70);
+            frame.add(Tornaallaselezione);
+        } else if (cliente.getRole() == Roles.CLIENT) {
+            backToManagerMenuButton = new JButton("Back to manager menu");
+            backToManagerMenuButton.setBounds(600, 500, 200, 70);
+            frame.add(backToManagerMenuButton);
+            createContractButton = new JButton("Create contract");
+            createContractButton.setBounds(825, 500, 150, 70);
+            frame.add(createContractButton);
+        }
+
         esc = new JLabel();
 
         //Add elements
@@ -802,47 +750,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.add(TotaleLabel);
         Totale.setBounds(450, 125, 100, 70);
         frame.add(Totale);
-        SimboloE.setBounds(500, 125, 50, 70);
-        frame.add(SimboloE);
-        SceltaExtra.setBounds(50, 175, 100, 70);
-        frame.add(SceltaExtra);
-        SeggiolinoLabel.setBounds(50, 225, 150, 70);
-        frame.add(SeggiolinoLabel);
-        seggiolino.setBounds(200, 250, 100, 20);
-        frame.add(seggiolino);
-        costoseggiolinoLabel.setBounds(325, 225, 200, 70);
-        frame.add(costoseggiolinoLabel);
-        costoseggiolino.setBounds(525, 225, 100, 70);
-        frame.add(costoseggiolino);
-        NavigatoreLabel.setBounds(50, 275, 150, 70);
-        frame.add(NavigatoreLabel);
-        navigatore.setBounds(200, 300, 100, 20);
-        frame.add(navigatore);
-        costonavigatoreLabel.setBounds(325, 275, 200, 70);
-        frame.add(costonavigatoreLabel);
-        costonavigatore.setBounds(525, 275, 150, 70);
-        frame.add(costonavigatore);
-        CateneLabel.setBounds(50, 325, 150, 70);
-        frame.add(CateneLabel);
-        catene.setBounds(200, 350, 100, 20);
-        frame.add(catene);
-        costocateneLabel.setBounds(325, 325, 200, 70);
-        frame.add(costocateneLabel);
-        costocatene.setBounds(525, 325, 150, 70);
-        frame.add(costocatene);
-        HotspotLabel.setBounds(50, 375, 150, 70);
-        frame.add(HotspotLabel);
-        hotspot.setBounds(200, 400, 100, 20);
-        frame.add(hotspot);
-        costohotspotLabel.setBounds(325, 375, 200, 70);
-        frame.add(costohotspotLabel);
-        costohotspot.setBounds(525, 375, 150, 70);
-        frame.add(costohotspot);
 
-        RiepilogoeTotale.setBounds(600, 500, 200, 70);
-        frame.add(RiepilogoeTotale);
-        Tornaallaselezione.setBounds(825, 500, 150, 70);
-        frame.add(Tornaallaselezione);
         esc.setBounds(0, 0, 1, 1);
         frame.add(esc);
 
@@ -868,14 +776,9 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         DurataNoleggio = new JLabel();
         ClusterSelezionatoLabel = new JLabel("Cluster veicolo selezionato : ");
         ClusterSelezionato = new JLabel();
-        SceltaExtra = new JLabel("Selezione extra :");
-        SeggiolinoLabel = new JLabel("Seggiolino per bambini : ");
         Seggiolino = new JLabel();
-        NavigatoreLabel = new JLabel("Navigatore satellitare : ");
         Navigatore = new JLabel();
-        CateneLabel = new JLabel("Catene da neve ");
         Catene = new JLabel();
-        HotspotLabel = new JLabel("Dispositivo hotspot : ");
         Hotspot = new JLabel();
         TotaleLabel = new JLabel("Totale : ");
         Totale = new JLabel();
@@ -905,25 +808,15 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         ClusterSelezionato.setBounds(250, 125, 100, 70);
         frame.add(ClusterSelezionato);
 
-        SceltaExtra.setBounds(50, 175, 100, 70);
-        frame.add(SceltaExtra);
-        SeggiolinoLabel.setBounds(50, 225, 150, 70);
-        frame.add(SeggiolinoLabel);
 
         Seggiolino.setBounds(200, 225, 100, 70);
         frame.add(Seggiolino);
-        NavigatoreLabel.setBounds(50, 275, 150, 70);
-        frame.add(NavigatoreLabel);
 
         Navigatore.setBounds(200, 275, 150, 70);
         frame.add(Navigatore);
-        CateneLabel.setBounds(50, 325, 150, 70);
-        frame.add(CateneLabel);
 
         Catene.setBounds(200, 325, 150, 70);
         frame.add(Catene);
-        HotspotLabel.setBounds(50, 375, 150, 70);
-        frame.add(HotspotLabel);
 
         Hotspot.setBounds(200, 375, 150, 70);
         frame.add(Hotspot);
@@ -1097,7 +990,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
     }
 
-    public void pagamentofine() {
+    public void pagamentofine(String message) {
 
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
@@ -1106,29 +999,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setVisible(true);
         // Create UI elements
         Fine = new JButton("Fine");
-        Esito = new JLabel("Pagamento effettuato con successo");
-
-        // Add UI element to frame
-        frame.setLayout(null);
-        Esito.setBounds(200, 150, 300, 150);
-        frame.add(Esito);
-
-        Fine.setBounds(1100, 50, 100, 50);
-        frame.add(Fine);
-
-
-    }
-
-    public void impiegatoprenotazionefine() {
-
-        frame.getContentPane().removeAll();
-        frame.getContentPane().setLayout(new BorderLayout());
-        frame.repaint();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        // Create UI elements
-        Fine = new JButton("Stampa");
-        Esito = new JLabel("Noleggio effettuato con successo");
+        Esito = new JLabel(message);
 
         // Add UI element to frame
         frame.setLayout(null);
@@ -1201,7 +1072,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
     }
 
-    public void depositofine() {
+    public void successCreateContract(Integer contractNumber) {
 
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
@@ -1210,7 +1081,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setVisible(true);
         // Create UI elements
         Fine = new JButton("Fine");
-        Esito = new JLabel("Deposito cauzionale effettuato con successo");
+        Esito = new JLabel("Car was booked successfully. Contract number is " + contractNumber);
 
         // Add UI element to frame
         frame.setLayout(null);
@@ -2051,24 +1922,18 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         ExtraLabel = new JLabel("Extra equipaggiati : ");
         SeggiolinoExtraLabel = new JLabel("Seggiolino : ");
         SeggiolinoExtra = new JLabel();
-        extra = new String[]{"SI", "NO"};
-        seggiolino = new JComboBox<String>(extra);
         //SeggiolinoMora = new JTextField();
         CateneExtraLabel = new JLabel("Catene : ");
         CateneExtra = new JLabel();
         //CateneMora = new JTextField();
-        catene = new JComboBox<String>(extra);
         NavigatoreExtraLabel = new JLabel("Navigatore : ");
         NavigatoreExtra = new JLabel();
         //NavigatoreMora = new JTextField();
-        navigatore = new JComboBox<String>(extra);
         HotspotExtraLabel = new JLabel("Hotspot : ");
         HotspotExtra = new JLabel();
         //HotspotMora = new JTextField();
-        hotspot = new JComboBox<String>(extra);
         DanniLabel = new JLabel("Danni : ");
         DanniVeicolo = new JLabel();
-        danni = new JComboBox<String>(extra);
         KmLabel = new JLabel("Km : ");
         Km = new JLabel();
         MoraKm = new JTextField();
@@ -2105,26 +1970,18 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.add(SeggiolinoExtraLabel);
         SeggiolinoExtra.setBounds(150, 150, 100, 50);
         frame.add(SeggiolinoExtra);
-        seggiolino.setBounds(250, 165, 100, 20);
-        frame.add(seggiolino);
         CateneExtraLabel.setBounds(50, 200, 100, 50);
         frame.add(CateneExtraLabel);
         CateneExtra.setBounds(150, 200, 100, 50);
         frame.add(CateneExtra);
-        catene.setBounds(250, 215, 100, 20);
-        frame.add(catene);
         NavigatoreExtraLabel.setBounds(50, 250, 100, 50);
         frame.add(NavigatoreExtraLabel);
         NavigatoreExtra.setBounds(150, 250, 100, 50);
         frame.add(NavigatoreExtra);
-        navigatore.setBounds(250, 265, 100, 20);
-        frame.add(navigatore);
         HotspotExtraLabel.setBounds(50, 300, 100, 50);
         frame.add(HotspotExtraLabel);
         HotspotExtra.setBounds(150, 300, 100, 50);
         frame.add(HotspotExtra);
-        hotspot.setBounds(250, 315, 100, 20);
-        frame.add(hotspot);
         DanniLabel.setBounds(50, 350, 100, 50);
         frame.add(DanniLabel);
         DanniVeicolo.setBounds(150, 350, 100, 50);
@@ -2216,11 +2073,10 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         NomeClienteLabel = new JLabel();
         CognomeClienteLabel = new JLabel();
         Logout = new JButton("Logout");
-        ModificaDati = new JButton("Modifica i tuoi dati");
+        ModificaDati = new JButton("Modify profile");
         Preventivo = new JButton("Richiesta preventivo");
-        NuovoNoleggio = new JButton("Noleggio");
-        StoricoNoleggi = new JButton("Storico noleggi");
-        EliminaProfilo = new JButton("Elimina profilo");
+        cancelTheLease = new JButton("Cancel the lease");
+        EliminaProfilo = new JButton("Delete profile");
 
         // Add UI element to frame
         frame.setLayout(null);
@@ -2235,11 +2091,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.add(ModificaDati);
         Preventivo.setBounds(700, 150, 200, 150);
         frame.add(Preventivo);
-        NuovoNoleggio.setBounds(200, 400, 200, 150);
-        frame.add(NuovoNoleggio);
-        StoricoNoleggi.setBounds(700, 400, 200, 150);
-        frame.add(StoricoNoleggi);
-
+        cancelTheLease.setBounds(200, 400, 200, 150);
+        frame.add(cancelTheLease);
 
         Logout.setBounds(1100, 50, 130, 50);
         frame.add(Logout);
@@ -2397,7 +2250,9 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setVisible(true);
         // Create UI elements
 
+        modificationView = new ModificationView(frame);
 
+        frame.repaint();
     }
 
     public void prenotazione() {
@@ -2408,10 +2263,10 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        numeroPreventivoLabel = new JLabel("Numero preventivo : ");
+        numeroPreventivoLabel = new JLabel("Enter contract number : ");
         numeroPreventivoTextField = new JTextField();
 
-        Prosegui = new JButton("Prosegui");
+        deleteContractButton = new JButton("Delete");
         Indietro = new JButton("Indietro");
 
         frame.setLayout(null);
@@ -2420,8 +2275,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         numeroPreventivoTextField.setBounds(250, 75, 100, 20);
         frame.add(numeroPreventivoTextField);
 
-        Prosegui.setBounds(500, 400, 100, 70);
-        frame.add(Prosegui);
+        deleteContractButton.setBounds(500, 400, 100, 70);
+        frame.add(deleteContractButton);
         Indietro.setBounds(625, 400, 100, 70);
         frame.add(Indietro);
 
@@ -2624,9 +2479,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
     }
 
-    public void success() {
+    public void success(String message) {
 
-        //frame = new JFrame("Larmor - Autonoleggio");
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -2634,7 +2488,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        SuccessoLabel = new JLabel("Successo!");
+        SuccessoLabel = new JLabel("Successo!" + message);
         frame.add(SuccessoLabel);
         frame.setVisible(true);
 
@@ -2642,6 +2496,10 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
 
     public void error() {
+        error("");
+    }
+
+    public void error(String message) {
 
         //frame = new JFrame("Larmor - Autonoleggio");
         frame.getContentPane().removeAll();
@@ -2651,7 +2509,7 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Create UI elements
-        ErroreLabel = new JLabel("Errore!");
+        ErroreLabel = new JLabel("Errore! " + message);
         frame.add(ErroreLabel);
         frame.setVisible(true);
 
@@ -2770,12 +2628,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         return ModificaDati;
     }
 
-    public JButton getNuovoNoleggio() {
-        return NuovoNoleggio;
-    }
-
-    public JButton getStoricoNoleggi() {
-        return StoricoNoleggi;
+    public JButton getCancelTheLease() {
+        return cancelTheLease;
     }
 
     public void setNomeClienteLabel(String N) {
@@ -2885,11 +2739,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         return valueaep;
     }
 
-    public String getclusterscelto() {
-
-        String valuecluster = clusterscelto.getSelectedItem().toString();
-        return valuecluster;
-
+    public String getCar() {
+        return car.getSelectedItem().toString();
     }
 
 
@@ -2914,8 +2765,8 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
         this.ClusterSelezionato.setText(N);
     }
 
-    public JButton getRiepilogoeTotale() {
-        return RiepilogoeTotale;
+    public JButton getWelcomeButton() {
+        return welcomeButton;
     }
 
     public JButton getTornaallaselezione() {
@@ -2985,60 +2836,12 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
     }
 
     public void setclusterscelto(String N) {
-        this.clusterscelto.setSelectedItem(N);
+        this.car.setSelectedItem(N);
     }
 
     public void settotale(float N) {
 
         this.Totale.setText(Float.toString(N));
-    }
-
-    public void setcostoseggiolino(float N) {
-
-        this.costoseggiolino.setText(Float.toString(N));
-    }
-
-    public void setcostocatene(float N) {
-
-        this.costocatene.setText(Float.toString(N));
-    }
-
-    public void setcostonavigatore(float N) {
-
-        this.costonavigatore.setText(Float.toString(N));
-    }
-
-    public void setcostohotspot(float N) {
-
-        this.costohotspot.setText(Float.toString(N));
-    }
-
-    public String getseggiolino() {
-
-        String values = seggiolino.getSelectedItem().toString();
-        return values;
-
-    }
-
-    public String getcatene() {
-
-        String valuec = catene.getSelectedItem().toString();
-        return valuec;
-
-    }
-
-    public String getnavigatore() {
-
-        String valuen = navigatore.getSelectedItem().toString();
-        return valuen;
-
-    }
-
-    public String gethotspot() {
-
-        String valueh = hotspot.getSelectedItem().toString();
-        return valueh;
-
     }
 
     public void setseggiolino(String N) {
@@ -3483,5 +3286,17 @@ public class AutonoleggioV { // View uses Swing framework to display UI to user
 
     public JButton getCancella() {
         return Cancella;
+    }
+
+    public JButton getCreateContractButton() {
+        return createContractButton;
+    }
+
+    public JButton getBackToManagerMenuButton() {
+        return backToManagerMenuButton;
+    }
+
+    public JButton getDeleteContractButton() {
+        return deleteContractButton;
     }
 }

@@ -1,4 +1,4 @@
-package views;
+package easygo;
 
 import javax.swing.*;
 
