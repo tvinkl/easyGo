@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -93,9 +91,6 @@ public class MainController {
     public void serviceManager() {
         view.serviceManagerView();
 
-//        view.getServiceManagerView().getAddCar().addActionListener(e -> addCar());
-//        view.getServiceManagerView().getDeleteCar().addActionListener(e -> deleteCar());
-//        view.getServiceManagerView().getTransferCar().addActionListener(e -> transferCar());
         view.getServiceManagerView().getViewGarage().addActionListener(e -> viewGarage());
         view.getServiceManagerView().getLogout().addActionListener(e -> Logout());
     }
@@ -106,13 +101,39 @@ public class MainController {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("select * from cars");
             List<Car> cars = new ArrayList<>();
-            while(rs.next()) {
+            while (rs.next()) {
                 cars.add(new Car(rs));
             }
             view.viewGarage(cars);
 
+            view.getGarageView().getAddCar().addActionListener(e -> createCar());
+            view.getGarageView().getDeleteCar().addActionListener(e -> deleteCar());
             view.getGarageView().getBackButton().addActionListener(e -> serviceManager());
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteCar() {
+    }
+
+    private void createCar() {
+        try {
+            CreateCarView createCarView = new CreateCarView("Create car");
+            createCarView.getCreateCarButton().addActionListener(e -> createCar(createCarView));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createCar(CreateCarView carView) {
+        try {
+            Car car = new Car(carView.getCarName(), carView.getCarPrice(), carView.getCarColor());
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(String.format("insert into cars(name, price, color) values ('%s', %s, '%s')", car.getName(), car.getPrice(), car.getColor()));
+            view.successAlert(String.format("Car [%s] successfully created", car));
         } catch (Exception e) {
             e.printStackTrace();
         }

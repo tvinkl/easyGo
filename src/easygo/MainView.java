@@ -676,7 +676,7 @@ public class MainView { // View uses Swing framework to display UI to user
         CognomeClienteLabel = new JLabel();
         Logout = new JButton("Logout");
         modificateProfileButton = new JButton("Modify profile");
-        Preventivo = new JButton("Richiesta preventivo");
+        Preventivo = new JButton("Calculate booking");
         cancelTheLease = new JButton("Cancel the lease");
         deleteProfileButton = new JButton("Delete profile");
 
@@ -1029,5 +1029,12 @@ public class MainView { // View uses Swing framework to display UI to user
 
     public GarageView getGarageView() {
         return garageView;
+    }
+
+    public void successAlert(String message) {
+        JOptionPane.showMessageDialog(frame,
+                message,
+                "Info",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 }

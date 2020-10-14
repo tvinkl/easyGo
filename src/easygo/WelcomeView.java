@@ -9,9 +9,9 @@ public class WelcomeView {
     private JButton calculatePriceButton;
 
     public WelcomeView(JFrame frame) {
-        registrationButton = new JButton("Registrazione");
+        registrationButton = new JButton("Registration");
         loginButton = new JButton("Login");
-        calculatePriceButton = new JButton("Richiesta Preventivo");
+        calculatePriceButton = new JButton("Calculate booking");
 
         frame.setLayout(null);
         registrationButton.setBounds(200, 200, 200, 150);
