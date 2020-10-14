@@ -14,9 +14,6 @@ import java.util.Properties;
 public class MainController {
 
     private MainView view;
-    private Preventivo preventivo;
-    private Veicolo veicolo;
-    private Contratto contratto;
 
     private String jdbcUrl;
     private String jdbcUser;
@@ -26,10 +23,6 @@ public class MainController {
 
     public MainController(MainView v) throws IOException {
         view = v;
-        preventivo = new Preventivo();
-        veicolo = new Veicolo();
-        contratto = new Contratto();
-
         Properties properties = new Properties();
         properties.load(this.getClass().getResourceAsStream("/config.properties"));
         jdbcUrl = properties.getProperty("jdbc.url");
@@ -411,130 +404,4 @@ public class MainController {
         view.getFine().addActionListener(e -> welcome());
 
     }
-
-
-    private void ritiro(int userid) {
-
-        view.ritiroveicolo();
-
-        view.getCerca().addActionListener(e -> ritiroprosegui(userid));
-
-    }
-
-    private void ritiroprosegui(int userid) {
-
-        view.proseguiritiro();
-
-        try {
-            Connection con = getConnection();
-            Statement stmt = con.createStatement();
-            String sql = "Select * from contratto where ID='" + view.getNumeroContratto().getText() + "'";
-            ResultSet rs = stmt.executeQuery(sql);
-            if (rs.next()) {
-
-                contratto.setIDContratto(rs.getInt("ID"));
-                contratto.setUserID(rs.getInt("Cliente"));
-                contratto.setIDPreventivo(rs.getInt("Preventivo"));
-                contratto.setTarga(rs.getString("Targa"));
-
-                try {
-
-                    String sql2 = "Select * from veicolo where Targa='" + contratto.getTarga() + "'";
-                    ResultSet rs2 = stmt.executeQuery(sql2);
-                    if (rs2.next()) {
-
-                        veicolo.setTarga(rs2.getString("Targa"));
-                        veicolo.setDanni(rs2.getString("Danni"));
-
-                        try {
-
-                            String sql3 = "Select * from preventivo where ID='" + contratto.getIDPreventivo() + "'";
-                            ResultSet rs3 = stmt.executeQuery(sql3);
-                            if (rs3.next()) {
-
-                                preventivo.setseggiolino(rs3.getString("seggiolino"));
-                                preventivo.setcatene(rs3.getString("catene"));
-                                preventivo.setnavigatore(rs3.getString("navigatore"));
-                                preventivo.sethotspot(rs3.getString("hotspot"));
-
-                                view.setVeicoloAssegnato(veicolo.getTarga());
-                                view.setSeggiolinoExtra(preventivo.getseggiolino());
-                                view.setCateneExtra(preventivo.getcatene());
-                                view.setNavigatoreExtra(preventivo.getnavigatore());
-                                view.setHotspotExtra(preventivo.gethotspot());
-                                view.setDanni(veicolo.getDanni());
-
-                                view.getStampadocfinale().addActionListener(e -> stampafinale("In noleggio", userid));
-                                view.getBackButton().addActionListener(e -> ritiro(userid));
-
-
-                            } else
-                                view.error();
-
-
-                        } catch (Exception e) {
-                            System.out.print(e);
-                        }
-
-                    }
-
-                } catch (Exception e) {
-                    System.out.print(e);
-                }
-
-            } else
-                view.error();
-            con.close();
-        } catch (Exception e) {
-            System.out.print(e);
-        }
-
-
-    }
-
-    private void stampafinale(String statofinale, int userid) {
-
-        try {
-            Connection con2 = getConnection();
-            Statement stmt2 = con2.createStatement();
-            String sql2 = "Update veicolo set Stato = '" + statofinale + "' where Targa = '" + contratto.getTarga() + "'";
-            int rs2 = stmt2.executeUpdate(sql2);
-            if (rs2 > -1) {
-
-                view.stampafinale();
-//                view.getFine().addActionListener(e -> impiegatogarage(userid));
-
-            } else
-                view.error();
-            con2.close();
-        } catch (Exception e) {
-            System.out.print(e);
-        }
-
-
-    }
-
-    private void stampadocumentofinale(String statofinale, int userid) {
-
-        try {
-            Connection con = getConnection();
-            Statement stmt2 = con.createStatement();
-            String sql2 = "Update veicolo set Stato = '" + statofinale + "' where Targa = '" + contratto.getTarga() + "'";
-            int rs2 = stmt2.executeUpdate(sql2);
-            if (rs2 > -1) {
-
-                view.morapagamentofine();
-//                view.getFine().addActionListener(e -> impiegatogarage(userid));
-
-            } else
-                view.error();
-            con.close();
-        } catch (Exception e) {
-            System.out.print(e);
-        }
-
-
-    }
-
-
 }

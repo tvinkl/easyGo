@@ -56,19 +56,9 @@ public class MainView { // View uses Swing framework to display UI to user
     private JButton Prosegui;
 
     private JButton Preventivo;
-    private JButton GestioneParcoMacchine;
     private JButton Logout;
 
-    private JButton Ritiro;
-    private JButton Riconsegna;
-
-
     private JButton backButton;
-
-
-    private JButton ModificaProsegui;
-    private JTextField TargaVeicoloModificaTextField;
-    private JLabel ModificaVeicoloLabel;
 
     private JButton Fine;
     private JLabel Esito;
@@ -641,8 +631,6 @@ public class MainView { // View uses Swing framework to display UI to user
 
         Fine.setBounds(1100, 50, 100, 50);
         frame.add(Fine);
-
-
     }
 
     public void serviceManagerView() {
@@ -965,34 +953,6 @@ public class MainView { // View uses Swing framework to display UI to user
 
     public JTextField getnumeroPreventivoTextField() {
         return numeroPreventivoTextField;
-    }
-
-    public void setVeicoloAssegnato(String n) {
-        this.VeicoloAssegnato.setText(n);
-    }
-
-    public void setSeggiolinoExtra(String n) {
-        this.SeggiolinoExtra.setText(n);
-    }
-
-    public void setCateneExtra(String n) {
-        this.CateneExtra.setText(n);
-    }
-
-    public void setNavigatoreExtra(String n) {
-        this.NavigatoreExtra.setText(n);
-    }
-
-    public void setHotspotExtra(String n) {
-        this.HotspotExtra.setText(n);
-    }
-
-    public void setDanni(String n) {
-        this.Danni.setText(n);
-    }
-
-    public JButton getStampadocfinale() {
-        return Stampadocfinale;
     }
 
     public void setnumeroutente(int n) {
