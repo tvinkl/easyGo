@@ -8,6 +8,8 @@ public class LoginView {
     private JLabel PasswordLabel;
     private JTextField UserIdTextfield;
     private JTextField PasswordTextfield;
+    private JButton loginButton;
+    private JButton backButton;
 
     public LoginView(JFrame frame) {
         UserIdLabel = new JLabel("UserId :");
@@ -24,38 +26,28 @@ public class LoginView {
         frame.add(UserIdTextfield);
         PasswordTextfield.setBounds(200, 225, 200, 20);
         frame.add(PasswordTextfield);
+        loginButton = new JButton("Login");
+        backButton = new JButton("Back");
+        loginButton.setBounds(100, 400, 100, 60);
+        frame.add(loginButton);
+        backButton.setBounds(400, 400, 100, 60);
+        frame.add(backButton);
         frame.repaint();
-    }
-
-    public JLabel getUserIdLabel() {
-        return UserIdLabel;
-    }
-
-    public void setUserIdLabel(JLabel userIdLabel) {
-        UserIdLabel = userIdLabel;
-    }
-
-    public JLabel getPasswordLabel() {
-        return PasswordLabel;
-    }
-
-    public void setPasswordLabel(JLabel passwordLabel) {
-        PasswordLabel = passwordLabel;
     }
 
     public JTextField getUserIdTextfield() {
         return UserIdTextfield;
     }
 
-    public void setUserIdTextfield(JTextField userIdTextfield) {
-        UserIdTextfield = userIdTextfield;
-    }
-
     public JTextField getPasswordTextfield() {
         return PasswordTextfield;
     }
 
-    public void setPasswordTextfield(JTextField passwordTextfield) {
-        PasswordTextfield = passwordTextfield;
+    public JButton getLoginButton() {
+        return loginButton;
+    }
+
+    public JButton getBackButton() {
+        return backButton;
     }
 }

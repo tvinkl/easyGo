@@ -19,7 +19,7 @@ public class Preventivo {
     private String catene;
     private String navigatore;
     private String hotspot;
-    private float totale;
+    private double totale;
 
     //La data di riconsegna deve essere successiva alla data riconsegna
     //Le date sono dello stesso mese
@@ -203,7 +203,7 @@ public class Preventivo {
         this.totale = totale;
     }
 
-    public float gettotale() {
+    public double gettotale() {
 
         return totale;
     }

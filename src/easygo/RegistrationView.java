@@ -54,10 +54,12 @@ public class RegistrationView {
     private JLabel CPLabel;
     private JLabel roleLabel;
     private JTextField CPTextfield;
+    private JButton registrationButton;
+    private JButton backButton;
 
     public RegistrationView(Cliente cliente, JFrame frame) {
 
-        InformazioniPersonaliLabel = new JLabel("Informazioni Personali");
+        InformazioniPersonaliLabel = new JLabel("Personal info");
         NomeLabel = new JLabel("Nome :");
         NomeTextfield = new JTextField();
         PasswordUtenteLabel = new JLabel("Password :");
@@ -108,6 +110,15 @@ public class RegistrationView {
         CPLabel = new JLabel("Codice Postale :");
         CPTextfield = new JTextField();
         roleLabel = new JLabel("Role: ");
+        registrationButton = new JButton("Registration");
+        backButton = new JButton("Back");
+        // Add UI element to frame
+        frame.setLayout(null);
+
+        registrationButton.setBounds(900, 575, 100, 50);
+        frame.add(registrationButton);
+        backButton.setBounds(1050, 575, 100, 50);
+        frame.add(backButton);
 
         InformazioniPersonaliLabel.setBounds(50, 25, 200, 70);
         frame.add(InformazioniPersonaliLabel);
@@ -593,5 +604,13 @@ public class RegistrationView {
 
     public void setCPTextfield(JTextField CPTextfield) {
         this.CPTextfield = CPTextfield;
+    }
+
+    public JButton getRegistrationButton() {
+        return registrationButton;
+    }
+
+    public JButton getBackButton() {
+        return backButton;
     }
 }

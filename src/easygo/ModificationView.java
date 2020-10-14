@@ -55,7 +55,7 @@ public class ModificationView {
     private JButton Indietro;
 
     public ModificationView(JFrame frame) {
-        InformazioniPersonaliLabel = new JLabel("Informazioni Personali");
+        InformazioniPersonaliLabel = new JLabel("Your information");
         NomeLabel = new JLabel("Nome :");
         NomeClienteLabel = new JLabel();
         PasswordUtenteLabel = new JLabel("Password :");
@@ -107,8 +107,8 @@ public class ModificationView {
         CPLabel = new JLabel("Codice Postale :");
         CPClienteTextField = new JTextField();
 
-        SalvaModifiche = new JButton("Salva Modifiche");
-        Indietro = new JButton("Indietro");
+        SalvaModifiche = new JButton("Save");
+        Indietro = new JButton("Back");
 
         // Add UI element to frame
         frame.setLayout(null);
