@@ -22,14 +22,14 @@ public class RegistrationView {
     private JLabel dayOfBirthLabel;
     private JComboBox<Integer> dayOfBirthTextField;
     private JLabel monthOfBirthLabel;
-    private JComboBox<String> monthOfBirthTextField;
+    private JComboBox<Integer> monthOfBirthTextField;
     private JLabel yearOfBirthLabel;
     private JComboBox<Integer> yearOfBirthTextField;
     private JLabel driverLicenseInfoLabel;
     private JLabel driverLicenseNumberLabel;
-    private JTextField driverLicenseNumberTextField;
+    private JTextField driverLicenseIdTextField;
     private JLabel countryDriverLicenseLabel;
-    private JComboBox<String> countryDriverLicnseComboBox;
+    private JComboBox<String> driverLicenseCountryComboBox;
     private String[] paesi;
     private JLabel driverLicnseIssueDayLabel;
     private JComboBox<Integer> driverLicenseIssueDayComboBox;
@@ -51,7 +51,7 @@ public class RegistrationView {
     private JLabel cityLabel;
     private JTextField cityTextField;
     private JLabel countryResidenceLabel;
-    private JComboBox<String> countryResidenceTextField;
+    private JComboBox<String> countryTextField;
     private JLabel zipCodeLabel;
     private JLabel rolesLabel;
     private JTextField zipCodeTextField;
@@ -86,17 +86,17 @@ public class RegistrationView {
         dayOfBirthLabel = new JLabel("Giorno : ");
         dayOfBirthTextField = new JComboBox<>(StaticData.DAYS);
         monthOfBirthLabel = new JLabel("Mese : ");
-        monthOfBirthTextField = new JComboBox<>(StaticData.MONTHS);
+        monthOfBirthTextField = new JComboBox<>(StaticData.MONTHS_INT);
         yearOfBirthLabel = new JLabel("Anno : ");
         yearOfBirthTextField = new JComboBox<>(StaticData.YEARS_PAST);
         rolesComboBox = new JComboBox<>(Roles.values());
 
         driverLicenseInfoLabel = new JLabel("Info Patente  ");
         driverLicenseNumberLabel = new JLabel("Numero Patente : ");
-        driverLicenseNumberTextField = new JTextField();
+        driverLicenseIdTextField = new JTextField();
         countryDriverLicenseLabel = new JLabel("Paese Emissione Patente : ");
         paesi = new String[]{"Italia", "Francia", "America"};
-        countryDriverLicnseComboBox = new JComboBox<String>(paesi);
+        driverLicenseCountryComboBox = new JComboBox<String>(paesi);
         driverLicnseIssueDayLabel = new JLabel("Giorno emissione : ");
         driverLicenseIssueDayComboBox = new JComboBox<Integer>(StaticData.DAYS);
         driverLicenseIssueMonthLabel = new JLabel("Mese emissione : ");
@@ -116,7 +116,7 @@ public class RegistrationView {
         cityLabel = new JLabel("Citta':");
         cityTextField = new JTextField();
         countryResidenceLabel = new JLabel("Paese :");
-        countryResidenceTextField = new JComboBox<String>(paesi);
+        countryTextField = new JComboBox<String>(paesi);
         zipCodeLabel = new JLabel("Codice Postale :");
         zipCodeTextField = new JTextField();
         rolesLabel = new JLabel("Role: ");
@@ -183,13 +183,13 @@ public class RegistrationView {
         frame.add(driverLicenseInfoLabel);
         driverLicenseNumberLabel.setBounds(175, 325, 150, 70);
         frame.add(driverLicenseNumberLabel);
-        driverLicenseNumberTextField.setBounds(325, 350, 150, 20);
-        frame.add(driverLicenseNumberTextField);
+        driverLicenseIdTextField.setBounds(325, 350, 150, 20);
+        frame.add(driverLicenseIdTextField);
 
         countryDriverLicenseLabel.setBounds(500, 325, 200, 70);
         frame.add(countryDriverLicenseLabel);
-        countryDriverLicnseComboBox.setBounds(700, 350, 100, 20);
-        frame.add(countryDriverLicnseComboBox);
+        driverLicenseCountryComboBox.setBounds(700, 350, 100, 20);
+        frame.add(driverLicenseCountryComboBox);
 
         driverLicnseIssueDayLabel.setBounds(50, 375, 150, 70);
         frame.add(driverLicnseIssueDayLabel);
@@ -238,8 +238,8 @@ public class RegistrationView {
 
         countryResidenceLabel.setBounds(50, 575, 70, 70);
         frame.add(countryResidenceLabel);
-        countryResidenceTextField.setBounds(150, 600, 100, 20);
-        frame.add(countryResidenceTextField);
+        countryTextField.setBounds(150, 600, 100, 20);
+        frame.add(countryTextField);
 
         zipCodeLabel.setBounds(275, 575, 150, 70);
         frame.add(zipCodeLabel);
@@ -384,7 +384,7 @@ public class RegistrationView {
         this.dayOfBirthLabel = dayOfBirthLabel;
     }
 
-    public Integer getGdn() {
+    public Integer getDayOfBirthTextField() {
         return Integer.parseInt(dayOfBirthTextField.getSelectedItem().toString());
     }
 
@@ -400,12 +400,8 @@ public class RegistrationView {
         this.monthOfBirthLabel = monthOfBirthLabel;
     }
 
-    public String getMonthOfBirthTextField() {
-        return monthOfBirthTextField.getSelectedItem().toString();
-    }
-
-    public void setMonthOfBirthTextField(JComboBox<String> monthOfBirthTextField) {
-        this.monthOfBirthTextField = monthOfBirthTextField;
+    public Integer getMonthOfBirthTextField() {
+        return Integer.parseInt(monthOfBirthTextField.getSelectedItem().toString());
     }
 
     public JLabel getYearOfBirthLabel() {
@@ -440,12 +436,12 @@ public class RegistrationView {
         this.driverLicenseNumberLabel = driverLicenseNumberLabel;
     }
 
-    public JTextField getDriverLicenseNumberTextField() {
-        return driverLicenseNumberTextField;
+    public JTextField getDriverLicenseIdTextField() {
+        return driverLicenseIdTextField;
     }
 
-    public void setDriverLicenseNumberTextField(JTextField driverLicenseNumberTextField) {
-        this.driverLicenseNumberTextField = driverLicenseNumberTextField;
+    public void setDriverLicenseIdTextField(JTextField driverLicenseIdTextField) {
+        this.driverLicenseIdTextField = driverLicenseIdTextField;
     }
 
     public JLabel getCountryDriverLicenseLabel() {
@@ -456,12 +452,12 @@ public class RegistrationView {
         this.countryDriverLicenseLabel = countryDriverLicenseLabel;
     }
 
-    public String getCountryDriverLicnseComboBox() {
-        return countryDriverLicnseComboBox.getSelectedItem().toString();
+    public String getDriverLicenseCountryComboBox() {
+        return driverLicenseCountryComboBox.getSelectedItem().toString();
     }
 
-    public void setCountryDriverLicnseComboBox(JComboBox<String> countryDriverLicnseComboBox) {
-        this.countryDriverLicnseComboBox = countryDriverLicnseComboBox;
+    public void setDriverLicenseCountryComboBox(JComboBox<String> driverLicenseCountryComboBox) {
+        this.driverLicenseCountryComboBox = driverLicenseCountryComboBox;
     }
 
     public String[] getPaesi() {
@@ -584,7 +580,7 @@ public class RegistrationView {
         this.addressLabel = addressLabel;
     }
 
-    public JTextField getIndirizzoTextfield() {
+    public JTextField getAddressTextField() {
         return addressTextField;
     }
 
@@ -616,12 +612,12 @@ public class RegistrationView {
         this.countryResidenceLabel = countryResidenceLabel;
     }
 
-    public String getCountryResidenceTextField() {
-        return countryResidenceTextField.getSelectedItem().toString();
+    public String getCountryTextField() {
+        return countryTextField.getSelectedItem().toString();
     }
 
-    public void setCountryResidenceTextField(JComboBox<String> countryResidenceTextField) {
-        this.countryResidenceTextField = countryResidenceTextField;
+    public void setCountryTextField(JComboBox<String> countryTextField) {
+        this.countryTextField = countryTextField;
     }
 
     public JLabel getZipCodeLabel() {

@@ -1,6 +1,6 @@
 package easygo;
 
-public class Preventivo {
+public class PaymentQuote {
 
     private int pickTime;
     private int pickDay;
@@ -51,21 +51,7 @@ public class Preventivo {
         return carId;
     }
 
-    public void setCarId(int carId) {
-        this.carId = carId;
-    }
-
-
-//    private int gncp;
-//    private String mncp;
-//    private int ancp;
-//    private int gepcp;
-//    private String mepcp;
-//    private int aepcp;
-
-    //La data di riconsegna deve essere successiva alla data riconsegna
-    //Le date sono dello stesso mese
-    //@ ensures DataRiconsegna - DataRitiro >= 0
+    public void setCarId(int carId) { this.carId = carId; }
 
     public int getPickMonth() {
         return pickMonth;
@@ -125,11 +111,7 @@ public class Preventivo {
     }
 
 
-    public void setCarPricePerHour(float carPricePerHour) {
-
-        this.carPricePerHour = carPricePerHour;
-    }
-
+    public void setCarPricePerHour(float carPricePerHour) { this.carPricePerHour = carPricePerHour; }
     public float getCarPricePerHour() {
         return carPricePerHour;
     }

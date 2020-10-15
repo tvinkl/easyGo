@@ -8,17 +8,13 @@ import java.util.List;
 public class GarageView {
 
     private JButton backButton;
-    private JButton addCar;
-    private JButton deleteCar;
+    private JButton addCarButton;
+    private JButton deleteCarButton;
 
-    public GarageView(JFrame frame, List<Car> cars) {
+    public GarageView(JFrame frame, List<Car> cars, Client client) {
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
         frame.setVisible(true);
-
-        addCar = new JButton("Add car");
-        deleteCar = new JButton("Delete car");
-        backButton = new JButton("Back");
 
         String[] col = {"Id", "Name", "Price", "Color", "Is available"};
 
@@ -35,8 +31,13 @@ public class GarageView {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
 
-        buttonPanel.add(addCar);
-        buttonPanel.add(deleteCar);
+        if(client.getRole() == Roles.SERVICE_MANAGER){
+            addCarButton = new JButton("Add car");
+            deleteCarButton = new JButton("Delete car");
+            buttonPanel.add(addCarButton);
+            buttonPanel.add(deleteCarButton);
+        }
+        backButton = new JButton("Back");
         buttonPanel.add(backButton);
         frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.repaint();
@@ -47,11 +48,11 @@ public class GarageView {
         return backButton;
     }
 
-    public JButton getAddCar() {
-        return addCar;
+    public JButton getAddCarButton() {
+        return addCarButton;
     }
 
-    public JButton getDeleteCar() {
-        return deleteCar;
+    public JButton getDeleteCarButton() {
+        return deleteCarButton;
     }
 }

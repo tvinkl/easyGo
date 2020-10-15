@@ -5,272 +5,81 @@ import java.sql.SQLException;
 
 public class Client {
 
-    private long userId;
-    private String nome;
-    private String cognome;
-    private String email;
-    private String prefisso;
-    private long telefono;
-    private long dngiorno;
-    private String dnmese;
-    private long dnanno;
-    private String numpatente;
-    private String paesePatente;
-    private long giornoep;
-    private String meseep;
-    private long annoep;
-    private long giornosp;
-    private String mesesp;
-    private long annosp;
-    private String indirizzo;
-    private String city;
-    private String paese;
-    private long codpostale;
-    private Roles role;
+    private int userId;
+    private String name;
+    private String lastname;
     private String password;
+    private Roles role;
+    private String email;
+    private int dayOfBirth;
+    private int monthOfBirth;
+    private int yearOfBirth;
+    private String phone_number;
+    private String driverLicenseId;
+    private String driverLicenseCountry;
+    private String address;
+    private String city;
+    private String country;
 
     //ogni cliente deve avere et� >= 18 anni
     //controllo semplificato verifica solo anno poich� non � stata creata una variabile anni
     //@ requires 2020 - Dnanno >= 18
-    public Client() {
+    public Client(){
 
     }
 
-    public Client(ResultSet rs) throws SQLException {
-        this.userId = rs.getLong("userId");
-        this.nome = rs.getString("nome");
-        this.cognome = rs.getString("cognome");
-        this.email = rs.getString("email");
-        this.prefisso = rs.getString("prefisso");
-        this.telefono = rs.getLong("telefono");
-        this.dngiorno = rs.getLong("dngiorno");
-        this.dnmese = rs.getString("dnmese");
-        this.dnanno = rs.getLong("dnanno");
-        this.numpatente = rs.getString("numpatente");
-        this.paesePatente = rs.getString("paesePatente");
-        this.giornoep = rs.getLong("giornoep");
-        this.meseep = rs.getString("meseep");
-        this.annoep = rs.getLong("annoep");
-        this.giornosp = rs.getLong("giornosp");
-        this.mesesp = rs.getString("mesesp");
-        this.annosp = rs.getLong("annosp");
-        this.indirizzo = rs.getString("indirizzo");
-        this.city = rs.getString("city");
-        this.paese = rs.getString("paese");
-        this.codpostale = rs.getLong("codpostale");
-        this.role = Roles.valueOf(rs.getString("role"));
-        this.password = rs.getString("password");
+    public Client(ResultSet rs) {
+        try{
+            this.userId = rs.getInt("userid");
+            this.name = rs.getString("name");
+            this.lastname = rs.getString("lastname");
+            this.password = rs.getString("password");
+            this.role = Roles.valueOf(rs.getString("role"));
+            this.email = rs.getString("email");
+            this.phone_number = rs.getString("phone_number");
+            this.dayOfBirth = rs.getInt("day_of_birth");
+            this.monthOfBirth = rs.getInt("month_of_birth");
+            this.yearOfBirth = rs.getInt("year_of_birth");
+            this.driverLicenseId = rs.getString("driver_license_id");
+            this.driverLicenseCountry = rs.getString("driver_license_country");
+            this.address = rs.getString("address");
+            this.city = rs.getString("city");
+            this.country = rs.getString("country");
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
-    public void setUserId(int ID) {
-
-        this.userId = ID;
-    }
-
-    public long getID() {
-
+    public int getUserId() {
         return userId;
     }
 
-    public void setNome(String Nome) {
-
-        this.nome = Nome;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public String getNome() {
-
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setCognome(String Cognome) {
-
-        this.cognome = Cognome;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getCognome() {
-
-        return cognome;
+    public String getLastname() {
+        return lastname;
     }
 
-
-    public void setEmail(String Email) {
-
-        this.email = Email;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public String getEmail() {
-
-        return email;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPrefisso(String Prefisso) {
-
-        this.prefisso = Prefisso;
-    }
-
-    public String getPrefisso() {
-
-        return prefisso;
-    }
-
-    public void setTelefono(Long telefono) {
-
-        this.telefono = telefono;
-    }
-
-    public Long getTelefono() {
-
-        return telefono;
-    }
-
-    public void setDngiorno(int Dngiorno) {
-
-        this.dngiorno = Dngiorno;
-    }
-
-    public long getDngiorno() {
-
-        return dngiorno;
-    }
-
-    public void setDnmese(String Dnmese) {
-
-        this.dnmese = Dnmese;
-    }
-
-    public String getDnmese() {
-
-        return dnmese;
-    }
-
-    public void setDnanno(int Dnanno) {
-
-        this.dnanno = Dnanno;
-    }
-
-    public long getDnanno() {
-
-        return dnanno;
-    }
-
-    public void setNumpatente(String Numpatente) {
-
-        this.numpatente = Numpatente;
-    }
-
-    public String getNumpatente() {
-
-        return numpatente;
-    }
-
-    public void setPaesePatente(String PaesePatente) {
-
-        this.paesePatente = PaesePatente;
-    }
-
-    public String getPaesePatente() {
-
-        return paesePatente;
-    }
-
-    public void setGiornoep(int Giornoep) {
-
-        this.giornoep = Giornoep;
-    }
-
-    public long getGiornoep() {
-
-        return giornoep;
-    }
-
-    public void setMeseep(String Meseep) {
-
-        this.meseep = Meseep;
-    }
-
-    public String getMeseep() {
-
-        return meseep;
-    }
-
-    public void setAnnoep(int Annoep) {
-
-        this.annoep = Annoep;
-    }
-
-    public long getAnnoep() {
-
-        return annoep;
-    }
-
-    public void setGiornosp(int Giornosp) {
-
-        this.giornosp = Giornosp;
-    }
-
-    public long getGiornosp() {
-
-        return giornosp;
-    }
-
-    public void setMesesp(String Mesesp) {
-
-        this.mesesp = Mesesp;
-    }
-
-    public String getMesesp() {
-
-        return mesesp;
-    }
-
-    public void setAnnosp(int Annosp) {
-
-        this.annosp = Annosp;
-    }
-
-    public long getAnnosp() {
-
-        return annosp;
-    }
-
-    public void setIndirizzo(String Indirizzo) {
-
-        this.indirizzo = Indirizzo;
-    }
-
-    public String getIndirizzo() {
-
-        return indirizzo;
-    }
-
-    public void setCity(String city) {
-
-        this.city = city;
-    }
-
-    public String getCity() {
-
-        return city;
-    }
-
-    public void setPaese(String Paese) {
-
-        this.paese = Paese;
-    }
-
-    public String getPaese() {
-
-        return paese;
-    }
-
-    public void setCodpostale(int Codpostale) {
-
-        this.codpostale = Codpostale;
-    }
-
-    public long getCodpostale() {
-
-        return codpostale;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Roles getRole() {
@@ -281,11 +90,83 @@ public class Client {
         this.role = role;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getDayOfBirth() {
+        return dayOfBirth;
+    }
+
+    public void setDayOfBirth(int dayOfBirth) {
+        this.dayOfBirth = dayOfBirth;
+    }
+
+    public int getMonthOfBirth() {
+        return monthOfBirth;
+    }
+
+    public void setMonthOfBirth(int monthOfBirth) {
+        this.monthOfBirth = monthOfBirth;
+    }
+
+    public int getYearOfBirth() {
+        return yearOfBirth;
+    }
+
+    public void setYearOfBirth(int yearOfBirth) {
+        this.yearOfBirth = yearOfBirth;
+    }
+
+    public String getPhone_number() {
+        return phone_number;
+    }
+
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
+    }
+
+    public String getDriverLicenseId() {
+        return driverLicenseId;
+    }
+
+    public void setDriverLicenseId(String driverLicenseId) {
+        this.driverLicenseId = driverLicenseId;
+    }
+
+    public String getDriverLicenseCountry() {
+        return driverLicenseCountry;
+    }
+
+    public void setDriverLicenseCountry(String driverLicenseCountry) {
+        this.driverLicenseCountry = driverLicenseCountry;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

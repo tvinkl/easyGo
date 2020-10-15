@@ -37,7 +37,6 @@ public class CalculationView {
         totalCostLabel = new JLabel("Costo totale : ");
         totalCostLabelInput = new JLabel();
 
-
         createContractButton = new JButton("Create contract");
         createContractButton.setBounds(825, 500, 150, 70);
 
@@ -54,20 +53,20 @@ public class CalculationView {
         backButton.setBounds(600, 500, 200, 70);
         frame.add(backButton);
 
-        //Add elements
+        //Add elements "durata totale del noleggio"
         totalHoursLabel.setBounds(50, 50, 200, 70);
         frame.add(totalHoursLabel);
-        totalHoursLabelInput.setBounds(250, 50, 50, 70);
+        totalHoursLabelInput.setBounds(250, 50, 100, 70);
         frame.add(totalHoursLabelInput);
-
+        // auto selezionata
         selectedCarLabel.setBounds(50, 100, 200, 70);
         frame.add(selectedCarLabel);
-        selectedCarLabelInput.setBounds(250, 100, 50, 70);
+        selectedCarLabelInput.setBounds(250, 100, 100, 70);
         frame.add(selectedCarLabelInput);
 
         totalCostLabel.setBounds(50, 150, 200, 70);
         frame.add(totalCostLabel);
-        totalCostLabelInput.setBounds(250, 150, 50, 70);
+        totalCostLabelInput.setBounds(250, 150, 100, 70);
         frame.add(totalCostLabelInput);
 
 //        totalHoursLabel.setBounds(500, 75, 100, 70);
@@ -95,7 +94,9 @@ public class CalculationView {
     }
 
     public void setTotalCostLabelInput(float totalCost) {
-        this.totalCostLabelInput.setText(String.valueOf(totalCost));
+        String cost = String.valueOf(totalCost);
+        cost += " Euro";
+        this.totalCostLabelInput.setText(cost);
     }
 
     public void setSelectedCarLabelInput(int selectedCar) {
