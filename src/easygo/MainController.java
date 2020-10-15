@@ -285,8 +285,6 @@ public class MainController {
 
     }
 
-
-
     private void createBooking(Client client, PaymentQuote pq) {
         try {
             Connection connection = getConnection();

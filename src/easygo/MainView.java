@@ -43,10 +43,11 @@ public class MainView {
 
     private void clearView() {
         mainFrame.getContentPane().removeAll();
-        mainFrame.getContentPane().setLayout(new BorderLayout());
+        mainFrame.getContentPane().setLayout(null);
         mainFrame.repaint();
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
+
     }
 
     public MainView(String title) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
@@ -66,17 +67,14 @@ public class MainView {
         clearView();
         welcomeView = new MenuView(mainFrame);
     }
-
     public void login() {
         clearView();
         loginView = new LoginView(mainFrame);
     }
-
     public void registration(Client client) {
         clearView();
         registrationView = new RegistrationView(client, mainFrame);
     }
-
     public void paymentQuote(List<Car> cars) {
         clearView();
         paymentQuoteView = new PaymentQuoteView(cars, mainFrame);
@@ -116,7 +114,6 @@ public class MainView {
         okButton.setBounds(1100, 50, 100, 50);
         mainFrame.add(okButton);
     }
-
 
     public void registrationResult() {
         clearView();
