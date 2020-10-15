@@ -16,7 +16,7 @@ public class StartView {
         panel.setLayout(new BorderLayout());
         // Create UI elements
         startButton = new JButton("GO");
-        image = new ImageIcon(getClass().getResource("/download.jpg"));
+        image = new ImageIcon(getClass().getResource("/rental_service.jpg"));
         imageLabel = new JLabel(image);
         imageLabel.setBounds(300, 50, 690, 380);
         panel.add(imageLabel, BorderLayout.CENTER);

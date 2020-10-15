@@ -2,25 +2,23 @@ package easygo;
 
 import javax.swing.*;
 
-public class WelcomeView {
+public class MenuView {
 
     private JButton registrationButton;
     private JButton loginButton;
     private JButton calculatePriceButton;
 
-    public WelcomeView(JFrame frame) {
+    public MenuView(JFrame frame) {
         registrationButton = new JButton("Registration");
         loginButton = new JButton("Login");
-        calculatePriceButton = new JButton("Calculate booking");
-
+        calculatePriceButton = new JButton("Payment Quote");
         frame.setLayout(null);
-        registrationButton.setBounds(200, 200, 200, 150);
-        frame.add(registrationButton);
-        loginButton.setBounds(500, 200, 200, 150);
+        loginButton.setBounds(200, 200, 200, 150);
         frame.add(loginButton);
+        registrationButton.setBounds(500, 200, 200, 150);
+        frame.add(registrationButton);
         calculatePriceButton.setBounds(800, 200, 200, 150);
         frame.add(calculatePriceButton);
-
         frame.repaint();
     }
 

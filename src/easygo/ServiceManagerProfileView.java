@@ -3,12 +3,13 @@ package easygo;
 import javax.swing.*;
 import java.awt.*;
 
-public class ServiceManagerView {
+public class ServiceManagerProfileView {
 
     private JButton viewGarage;
     private JButton logout;
+    private JButton registrationButton;
 
-    public ServiceManagerView(JFrame frame) {
+    public ServiceManagerProfileView(JFrame frame) {
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
         frame.setLayout(null);
@@ -16,13 +17,21 @@ public class ServiceManagerView {
         frame.setVisible(true);
 
         viewGarage = new JButton("View garage");
+        registrationButton = new JButton("Register new user");
         logout = new JButton("Logout");
 
-        viewGarage.setBounds(50, 50, 100, 50);
+
+        viewGarage.setBounds(200,150,200,150);
         frame.add(viewGarage);
+        registrationButton.setBounds(700,150,200,150);
+        frame.add(registrationButton);
         logout.setBounds(1100, 50, 130, 50);
         frame.add(logout);
         frame.repaint();
+    }
+
+    public JButton getRegistrationButton() {
+        return registrationButton;
     }
 
     public JButton getViewGarage() {

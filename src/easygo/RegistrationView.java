@@ -256,6 +256,10 @@ public class RegistrationView {
         frame.repaint();
     }
 
+    public String getRole(){
+        return this.rolesComboBox.getSelectedItem().toString();
+    }
+
     public JLabel getPersonalInfoLabel() {
         return personalInfoLabel;
     }

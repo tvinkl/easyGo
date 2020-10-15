@@ -4,43 +4,43 @@ import javax.swing.*;
 
 public class LoginView {
 
-    private JLabel UserIdLabel;
-    private JLabel PasswordLabel;
-    private JTextField UserIdTextfield;
-    private JTextField PasswordTextfield;
+    private JLabel userIdLabel;
+    private JLabel passwordLabel;
+    private JTextField userIdTextField;
+    private JTextField passwordTextField;
     private JButton loginButton;
     private JButton backButton;
 
     public LoginView(JFrame frame) {
-        UserIdLabel = new JLabel("UserId :");
-        PasswordLabel = new JLabel("Password :");
-        UserIdTextfield = new JTextField();
-        PasswordTextfield = new JPasswordField();
+        userIdLabel = new JLabel("User Id");
+        passwordLabel = new JLabel("Password");
+        userIdTextField = new JTextField();
+        passwordTextField = new JPasswordField();
         // Add UI element to frame
         frame.setLayout(null);
-        UserIdLabel.setBounds(100, 100, 70, 70);
-        frame.add(UserIdLabel);
-        PasswordLabel.setBounds(100, 200, 70, 70);
-        frame.add(PasswordLabel);
-        UserIdTextfield.setBounds(200, 125, 200, 20);
-        frame.add(UserIdTextfield);
-        PasswordTextfield.setBounds(200, 225, 200, 20);
-        frame.add(PasswordTextfield);
+        userIdLabel.setBounds(200, 200, 70, 70);
+        frame.add(userIdLabel);
+        passwordLabel.setBounds(200, 300, 70, 70);
+        frame.add(passwordLabel);
+        userIdTextField.setBounds(300, 225, 200, 20);
+        frame.add(userIdTextField);
+        passwordTextField.setBounds(300, 325, 200, 20);
+        frame.add(passwordTextField);
         loginButton = new JButton("Login");
         backButton = new JButton("Back");
-        loginButton.setBounds(100, 400, 100, 60);
+        loginButton.setBounds(250, 500, 100, 60);
         frame.add(loginButton);
-        backButton.setBounds(400, 400, 100, 60);
+        backButton.setBounds(500, 500, 100, 60);
         frame.add(backButton);
         frame.repaint();
     }
 
-    public JTextField getUserIdTextfield() {
-        return UserIdTextfield;
+    public JTextField getUserIdTextField() {
+        return userIdTextField;
     }
 
-    public JTextField getPasswordTextfield() {
-        return PasswordTextfield;
+    public JTextField getPasswordTextField() {
+        return passwordTextField;
     }
 
     public JButton getLoginButton() {

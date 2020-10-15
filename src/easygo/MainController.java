@@ -34,35 +34,68 @@ public class MainController {
     }
 
     public void init() {
-        mainView.getHelloView().getStartButton().addActionListener(e -> showWelcome());
+        mainView.getHelloView().getStartButton().addActionListener(e -> showMenu());
     }
 
-    public void showWelcome() {
-        mainView.option();
+    public void showMenu() {
+        mainView.welcome();
         mainView.getWelcomeView().getRegistrationButton().addActionListener(e -> showRegistration(new Client()));
         mainView.getWelcomeView().getLoginButton().addActionListener(e -> showLogin());
-        mainView.getWelcomeView().getCalculatePriceButton().addActionListener(e -> showCalculateCost(new Client()));
+        mainView.getWelcomeView().getCalculatePriceButton().addActionListener(e -> showPaymentQuote(new Client()));
     }
 
     private void showLogin() {
         mainView.login();
-        mainView.getLoginView().getLoginButton().addActionListener(e -> loginAction());
-        mainView.getLoginView().getBackButton().addActionListener(e -> showWelcome());
+        mainView.getLoginView().getLoginButton().addActionListener(e -> login());
+        mainView.getLoginView().getBackButton().addActionListener(e -> showMenu());
     }
 
-    private void showCalculateCost(Client client) {
-        mainView.paymentQuote();
-        mainView.getCalculatePaymentButton().addActionListener(e -> calculatePrice(client));
-       if (client.getRole() == Roles.CLIENT || client.getRole() == Roles.SERVICE_MANAGER) {
-           mainView.getPaymentViewBackButton().addActionListener(e -> showProfile(client));
-        } else {
-           mainView.getPaymentViewBackButton().addActionListener(e -> showWelcome());
+    private void showRegistration(Client client) {
+        mainView.registration(client);
+        mainView.getRegistrationView().getRegistrationButton().addActionListener(e -> registration(client));
+        mainView.getRegistrationView().getBackButton().addActionListener(e -> showMenu());
+    }
+
+    private void showPaymentQuote(Client client) {
+        try{
+            Connection con = getConnection();
+            Statement stmt = con.createStatement();
+            String sql = "select * from car where num_available > 0";
+            ResultSet rs = stmt.executeQuery(sql);
+            List<Car> cars = new ArrayList<>();
+            while(rs.next()){
+                cars.add(new Car(rs));
+            }
+            mainView.paymentQuote(cars);
+            mainView.getPaymentQuoteView().getCalculatePaymentButton().addActionListener(e -> calculatePayment(client));
+            if (client.getRole() == Roles.CLIENT || client.getRole() == Roles.SERVICE_MANAGER) {
+                mainView.getPaymentQuoteView().getBackButton().addActionListener(e -> showProfile(client));
+            } else {
+                mainView.getPaymentQuoteView().getBackButton().addActionListener(e -> showMenu());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
-    public void loginAction() {
-        String userid = mainView.getLoginView().getUserIdTextfield().getText();
-        String password = mainView.getLoginView().getPasswordTextfield().getText();
+    private void calculatePayment(Client client) {
+        PaymentQuote pq = createPaymentQuote();
+        mainView.calculateView(client);
+        mainView.getCalculationView().setTotalCostLabelInput(pq.getTotalCost());
+        mainView.getCalculationView().setTotalHoursLabelInput(pq.getTotalHours());
+        mainView.getCalculationView().setSelectedCarLabelInput(pq.getCarId());
+
+        if (Objects.isNull(client.getRole())) {
+            mainView.getCalculationView().getBackButton().addActionListener(e -> showPaymentQuote(client));
+        } else if (client.getRole() == Roles.CLIENT) {
+            mainView.getCalculationView().getCreateContractButton().addActionListener(e -> createBooking(client, pq));
+            mainView.getCalculationView().getBackButton().addActionListener(e -> showProfile(client));
+        }
+    }
+
+    public void login() {
+        String userid = mainView.getLoginView().getUserIdTextField().getText();
+        String password = mainView.getLoginView().getPasswordTextField().getText();
         try {
             Connection con = getConnection();
             Statement stmt = con.createStatement();
@@ -85,28 +118,27 @@ public class MainController {
         }else if (client.getRole() == Roles.SERVICE_MANAGER) {
             showServiceManagerProfile(client);
         }else {
-            mainView.error(String.format("Role %s is not supported", client.getRole()));
+            showMenu();
+            //mainView.error(String.format("Role %s is not supported", client.getRole()));
         }
+    }
+    private void showClientProfile(Client client) {
+        mainView.clientProfile();
+        mainView.getClientProfileView().setNameLabel(client.getName());
+        mainView.getClientProfileView().setLastnameLabel(client.getLastname());
+        mainView.getClientProfileView().getProfileModificationButton().addActionListener(e -> showProfileModification(client));
+        mainView.getClientProfileView().getPaymentQuoteButton().addActionListener(e -> showPaymentQuote(client));
+        mainView.getClientProfileView().getCancelReservationButton().addActionListener(e -> showBookingCancel(client));
+        mainView.getClientProfileView().getGarageButton().addActionListener(e -> showGarageClient(client));
+        mainView.getClientProfileView().getDeleteProfileButton().addActionListener(e -> deleteProfile(client.getUserId()));
+        mainView.getClientProfileView().getLogoutButton().addActionListener(e -> logout());
     }
 
     public void showServiceManagerProfile(Client client) {
         mainView.serviceManagerProfile();
         mainView.getServiceManagerView().getViewGarage().addActionListener(e -> showGarageManager(client));
+        mainView.getServiceManagerView().getRegistrationButton().addActionListener(e -> showRegistration(client));
         mainView.getServiceManagerView().getLogout().addActionListener(e -> logout());
-    }
-
-    private void showClientProfile(Client client) {
-        mainView.clientProfile();
-
-        mainView.setNameLabel(client.getName());
-        mainView.setLastnameLabel(client.getLastname());
-
-        mainView.getProfileModificationButton().addActionListener(e -> showProfileModification(client));
-        mainView.getCalculateBookingButton().addActionListener(e -> showCalculateCost(client));
-        mainView.getCancelPrenotationButton().addActionListener(e -> showBookingCancelling(client));
-        mainView.getClientViewGarageButton().addActionListener(e -> showGarageClient(client));
-        mainView.getDeleteProfileButton().addActionListener(e -> deleteProfile(client.getUserId()));
-        mainView.getLogout().addActionListener(e -> logout());
     }
 
     private void showGarageClient(Client client) {
@@ -120,7 +152,6 @@ public class MainController {
             }
             mainView.viewGarage(cars, client);
             mainView.getGarageView().getBackButton().addActionListener(e -> showProfile(client));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -159,36 +190,26 @@ public class MainController {
 
     private void addCar(CreateCarView carView) {
         try {
-            Car car = new Car(carView.getCarName(), carView.getCarPrice(), carView.getCarColor());
+            Car car = new Car(carView.getCarBrand(),carView.getCarModel(), carView.getCarColor(), carView.getCarPrice());
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
-            statement.executeUpdate(String.format("insert into car(name, price, color) values ('%s', %s, '%s')", car.getName(), car.getPrice(), car.getColor()));
+            statement.executeUpdate(String.format("insert into car(brand, model, color, price) values ('%s','%s', '%s', %s)",
+                    car.getBrand(), car.getModel(), car.getColor(), car.getPrice()));
             mainView.successAlert(String.format("Car [%s] successfully created", car));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-//    private void showRegistration(Client client) {
-//        if (Objects.nonNull(client.getRole()) && client.getRole() == Roles.SERVICE_MANAGER) {
-//            mainView.registration(client);
-//            mainView.getRegistrationButton().addActionListener(e -> registrationAction());
-//        } else {
-//            mainView.registration(client);
-//            mainView.getRegistrationView().getRegistrationButton().addActionListener(e -> registrationAction());
-//            mainView.getRegistrationView().getBackButton().addActionListener(e -> showWelcome());
-//        }
-//    }
 
-    private void showRegistration(Client client) {
-        mainView.registration(client);
-        mainView.getRegistrationView().getRegistrationButton().addActionListener(e -> registrationAction());
-        mainView.getRegistrationView().getBackButton().addActionListener(e -> showWelcome());
-    }
+    private void registration(Client currentClient) {
+        Client client;
+        if(currentClient.getRole() == null){
+            client = createClient(Roles.CLIENT);
+        }else{
+            client = createClient(Roles.valueOf(mainView.getRegistrationView().getRole()));
+        }
 
-
-    private void registrationAction() {
-        Client client = makeNewClient(Roles.CLIENT);
         if (!isUserAdult(client)) {
             mainView.error("Il cliente non e' maggiorenne!");
         }
@@ -201,10 +222,10 @@ public class MainController {
                 String sql2 = "SELECT * FROM user ORDER BY userid DESC LIMIT 1";
                 ResultSet rs2 = statement.executeQuery(sql2);
                 if (rs2.next()) {
-                    mainView.endOfRegistration();
+                    mainView.registrationResult();
                     mainView.setnumeroutente(rs2.getInt("userid"));
                     mainView.setpasswordutente(rs2.getString("password"));
-                    mainView.getEndOfRegOkButton().addActionListener(e -> showWelcome());
+                    mainView.getOkButton().addActionListener(e -> showProfile(currentClient));
                 }
                 con.close();
             } catch (Exception e) {
@@ -212,7 +233,7 @@ public class MainController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            mainView.error();
+            mainView.error("Database error!");
         }
     }
 
@@ -220,7 +241,7 @@ public class MainController {
         return LocalDate.now().getYear() - client.getYearOfBirth() >= 18;
     }
 
-    private Client makeNewClient(Roles role) {
+    private Client createClient(Roles role) {
         Client client = new Client();
         client.setName(mainView.getRegistrationView().getNameTextField().getText());
         client.setLastname(mainView.getRegistrationView().getLastnameTextField().getText());
@@ -234,11 +255,12 @@ public class MainController {
         client.setAddress(mainView.getRegistrationView().getAddressTextField().getText());
         client.setCity(mainView.getRegistrationView().getCityTextField().getText());
         client.setCountry(mainView.getRegistrationView().getCountryTextField());
+
         client.setRole(role);
         return client;
     }
 
-    private void showBookingCancelling(Client client) {
+    private void showBookingCancel(Client client) {
         mainView.deleteContractFrame();
         mainView.getDeleteContractButton().addActionListener(e -> cancelBooking(client));
         mainView.getBackButton().addActionListener(e -> showClientProfile(client));
@@ -249,70 +271,67 @@ public class MainController {
             String contractNumber = mainView.getnumeroPreventivoTextField().getText();
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
-            statement.executeUpdate("delete from booking where id = " + contractNumber);
-            mainView.pagamentofine("Contract with number " + contractNumber + "was deleted.");
-            mainView.getEndOfRegOkButton().addActionListener(e -> showClientProfile(client));
+            int result = statement.executeUpdate("delete from booking where id = " + contractNumber + " and userid=" + client.getUserId());
+            if(result == 0){
+                mainView.error("The system cannot find a booking for that user");
+            }else{
+                mainView.endOperation("Contract with number " + contractNumber + " was deleted.");
+                mainView.getOkButton().addActionListener(e -> showClientProfile(client));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+    }
+
+
+
+    private void createBooking(Client client, PaymentQuote pq) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+
+            String sql = String.format("Insert into booking (userid,pick_time, pick_day, pick_month, pick_year, return_time, return_day, return_month, return_year,car_id,total_cost) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    client.getUserId(),pq.getPickTime(), pq.getPickDay(), pq.getPickMonth(), pq.getPickYear(), pq.getReturnTime(),pq.getReturnDay(),pq.getReturnMonth(),pq.getReturnYear(),pq.getCarId(),pq.getTotalCost());
+            statement.executeUpdate(sql);
+            ResultSet rs = statement.executeQuery("select max(id) as id from booking");
+            rs.next();
+            int booking_id = rs.getInt("id");
+            statement.executeUpdate("update car set num_available = (SELECT c.num_available - 1 from car c where c.id = " +pq.getCarId()+"), num_rented = (SELECT c.num_rented + 1 from car c where c.id = " +pq.getCarId()+") where id = " + pq.getCarId());
+            mainView.endOperation("Car was booked successfully. Contract number is " + booking_id);
+            mainView.getOkButton().addActionListener(e -> showClientProfile(client));
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
-    private void calculatePrice(Client client) {
-        PaymentQuote pq = makePaymentQuote();
-        mainView.calculateView(client);
-        mainView.getCalculationView().setTotalCostLabelInput(pq.getTotalCost());
-        mainView.getCalculationView().setTotalHoursLabelInput(pq.getTotalHours());
-        mainView.getCalculationView().setSelectedCarLabelInput(pq.getCarId());
-
-        if (Objects.isNull(client.getRole())) {
-            mainView.getCalculationView().getBackButton().addActionListener(e -> showCalculateCost(client));
-        } else if (client.getRole() == Roles.CLIENT) {
-            mainView.getCalculationView().getBackButton().addActionListener(e -> showProfile(client));
-            //mainView.getCalculationView().getCreateContractButton().addActionListener(e -> createContract(client, pq));
-        }
-    }
-
-//    private void createContract(Client client, Preventivo p) {
-//        try {
-//            Connection connection = getConnection();
-//            Statement statement = connection.createStatement();
-//            String sql = "Insert into preventivo (ID, DataRitiro, OraRitiro, DataRiconsegna, OraRiconsegna, gncp, mncp, ancp, gepcp, mepcp, aepcp, " +
-//                    "car, seggiolino, catene, navigatore, hotspot, Totale) values (NULL, '" + mainView.getdataritiro() + "', '" + mainView.getoraritiro() + "', '" + mainView.getdatariconsegna() + "', '" + mainView.getorariconsegna() + "', '" + mainView.getgnc() + "', '" + mainView.getmnc() + "', '" + mainView.getanc() + "', '" + mainView.getgep() + "', '" + mainView.getmep() + "', '" + mainView.getaep() + "', '" + mainView.getCar() + "', '" + p.getseggiolino() + "', '" + p.getcatene() + "', '" + p.getnavigatore() + "', '" + p.gethotspot() + "', '" + p.gettotale() + "')";
-//            statement.executeUpdate(sql);
-//            ResultSet rs = statement.executeQuery("select max(id) as id from preventivo");
-//            rs.next();
-//            mainView.successCreateContract(rs.getInt("id"));
-//            mainView.getFine().addActionListener(e -> showClientProfile(client));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
 
     //calcola preventivo
-    private PaymentQuote makePaymentQuote() {
+    private PaymentQuote createPaymentQuote() {
         PaymentQuote pq = new PaymentQuote();
-        pq.setPickTime(mainView.getCarPickTimeComboBox());
-        pq.setPickDay(mainView.getCarPickDayComboBox());
-        pq.setPickMonth(mainView.getCarPickMonthComboBox());
-        pq.setPickYear(mainView.getCarPickYearComboBox());
+        pq.setPickTime(mainView.getPaymentQuoteView().getCarPickTimeComboBox());
+        pq.setPickDay(mainView.getPaymentQuoteView().getCarPickDayComboBox());
+        pq.setPickMonth(mainView.getPaymentQuoteView().getCarPickMonthComboBox());
+        pq.setPickYear(mainView.getPaymentQuoteView().getCarPickYearComboBox());
 
-        pq.setReturnTime(mainView.getCarReturnTimeComboBox());
-        pq.setReturnDay(mainView.getCarReturnDayComboBox());
-        pq.setReturnMonth(mainView.getCarReturnMonthComboBox());
-        pq.setReturnYear(mainView.getCarReturnYearComboBox());
-        pq.setCarId(1);
+        pq.setReturnTime(mainView.getPaymentQuoteView().getCarReturnTimeComboBox());
+        pq.setReturnDay(mainView.getPaymentQuoteView().getCarReturnDayComboBox());
+        pq.setReturnMonth(mainView.getPaymentQuoteView().getCarReturnMonthComboBox());
+        pq.setReturnYear(mainView.getPaymentQuoteView().getCarReturnYearComboBox());
+        pq.setBrand(mainView.getPaymentQuoteView().getBrand());
+        pq.setModel(mainView.getPaymentQuoteView().getModel());
+        //
+
         try {
             Connection con = getConnection();
             Statement statement = con.createStatement();
-            ResultSet rs = statement.executeQuery("select * from car where id = '" + pq.getCarId() + "'");
+            ResultSet rs = statement.executeQuery("select * from car where brand= '" + pq.getBrand() + "' and model= '" + pq.getModel() +"'");
             rs.next();
+            pq.setCarId(rs.getInt("id"));
             pq.setCarPricePerHour(rs.getFloat("price"));
-
         } catch (Exception e) {
             e.printStackTrace();
-            mainView.error();
+            mainView.error("Database error!");
         }
         int time_dif = pq.getReturnTime() - pq.getPickTime();
         int day_dif = pq.getReturnDay() - pq.getPickDay();
@@ -357,10 +376,10 @@ public class MainController {
             String sql2 = String.format("update user set password='%s', email='%s', driver_license_id='%s', driver_license_country='%s', address='%s', city='%s', country='%s' where userid='%s'",client.getPassword(),client.getEmail(),client.getDriverLicenseId(),client.getDriverLicenseCountry(),client.getAddress(),client.getCity(),client.getCountry(),client.getUserId());
             int rs2 = stmt2.executeUpdate(sql2);
             if (rs2 > -1) {
-                mainView.dataModificiationFinal();
-                mainView.getEndOfRegOkButton().addActionListener(e -> showClientProfile(client));
+                mainView.endOperation("Modifiche apportate successo");
+                mainView.getOkButton().addActionListener(e -> showClientProfile(client));
             } else
-                mainView.error();
+                mainView.error("Database error!");
             con2.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -372,9 +391,9 @@ public class MainController {
         try {
             Connection con2 = getConnection();
             Statement stmt2 = con2.createStatement();
-            stmt2.executeUpdate("Delete from cliente where userid = '" + userid + "'");
-            mainView.eliminafine();
-            mainView.getEndOfRegOkButton().addActionListener(e -> showWelcome());
+            stmt2.executeUpdate("Delete from user where userid = '" + userid + "'");
+            mainView.endOperation("Profilo eliminato con successo");
+            mainView.getOkButton().addActionListener(e -> showMenu());
             con2.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -383,7 +402,7 @@ public class MainController {
     }
 
     private void logout() {
-        mainView.logout();
-        mainView.getEndOfRegOkButton().addActionListener(e -> showWelcome());
+        mainView.endOperation("Logout effettuato con successo");
+        mainView.getOkButton().addActionListener(e -> showMenu());
     }
 }

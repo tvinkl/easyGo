@@ -16,12 +16,13 @@ public class GarageView {
         frame.getContentPane().setLayout(new BorderLayout());
         frame.setVisible(true);
 
-        String[] col = {"Id", "Name", "Price", "Color", "Is available"};
+        String[] col = {"Id", "Brand", "Model", "Color", "Price", "Total num.", "Available num.","Rented num.", "Doors", "Power"};
 
         DefaultTableModel model = new DefaultTableModel(col, 0);
 
         for (Car car : cars) {
-            model.addRow(new Object[]{car.getId(), car.getName(), car.getPrice(), car.getColor(), car.getAvailable()});
+            model.addRow(new Object[]{car.getId(), car.getBrand(), car.getModel(), car.getColor(),
+                    car.getPrice(), car.getNumTotal(), car.getNumAvailable(), car.getNumRented(), car.getNumDoors(), car.getPower()});
         }
 
         JTable table = new JTable(model);

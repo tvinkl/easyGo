@@ -12,10 +12,30 @@ public class PaymentQuote {
     private int returnMonth;
     private int returnYear;
 
-    private int totalHours;
+    private String model;
+    private String brand;
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
 
     private int carId;
+    private float totalCost;
+
     private float carPricePerHour;
+    private int totalHours;
 
     public int getTotalHours() {
         return totalHours;
@@ -37,7 +57,6 @@ public class PaymentQuote {
         this.totalCost = totalCost;
     }
 
-    private float totalCost;
 
     public void setPickTime(Integer pickTime) {
         this.pickTime = pickTime;

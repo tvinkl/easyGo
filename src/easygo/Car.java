@@ -6,53 +6,88 @@ import java.sql.SQLException;
 public class Car {
 
     private Long id;
-    private String name;
-    private Double price;
-    private Boolean isAvailable;
+    private String brand;
+    private String model;
     private String color;
+    private Double price;
+    private int numTotal;
+
+    private int numAvailable;
+    private int numRented;
+    private int numDoors;
+    private int power;
+
 
     public Car(ResultSet rs) throws SQLException {
         this.id = rs.getLong("id");
-        this.name = rs.getString("name");
-        this.price = rs.getDouble("price");
+        this.brand = rs.getString("brand");
+        this.model = rs.getString("model");
         this.color = rs.getString("color");
-        this.isAvailable = rs.getBoolean("is_available");
+        this.price = rs.getDouble("price");
+        this.numAvailable = rs.getInt("num_available");
+        this.numTotal = rs.getInt("num_total");
+        this.numRented = rs.getInt("num_rented");
+        this.numDoors = rs.getInt("num_doors");
+        this.power = rs.getInt("power");
     }
 
-    public Car(String name, Double price, String color) {
-        this.name = name;
-        this.price = price;
+    public Car(String brand, String model, String color, Double price) {
+        this.brand = brand;
+        this.model = model;
         this.color = color;
-        this.isAvailable = true;
+        this.price = price;
     }
 
+    public int getNumTotal() {
+        return numTotal;
+    }
+
+    public int getNumRented() {
+        return numRented;
+    }
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getBrand() {
+        return brand;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public Boolean getAvailable() {
-        return isAvailable;
+    public String getModel() {
+        return model;
     }
 
     public String getColor() {
         return color;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
+    public int getNumAvailable() {
+        return numAvailable;
+    }
+
+    public int getNumDoors() {
+        return numDoors;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
     @Override
     public String toString() {
         return "Car{" +
-                "name='" + name + '\'' +
-                ", price=" + price +
-                ", isAvailable=" + isAvailable +
+                "id=" + id +
+                ", brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
                 ", color='" + color + '\'' +
+                ", price=" + price +
+                ", numAvailable=" + numAvailable +
+                ", numDoors=" + numDoors +
+                ", power=" + power +
                 '}';
     }
 }
