@@ -8,6 +8,7 @@ public class ServiceManagerProfileView {
     private JButton viewGarage;
     private JButton logout;
     private JButton registrationButton;
+    private JButton viewBookings;
 
     public ServiceManagerProfileView(JFrame frame) {
         frame.getContentPane().removeAll();
@@ -18,11 +19,13 @@ public class ServiceManagerProfileView {
 
         viewGarage = new JButton("View garage");
         registrationButton = new JButton("Register new user");
+        viewBookings = new JButton("View bookings");
         logout = new JButton("Logout");
-
 
         viewGarage.setBounds(200,150,200,150);
         frame.add(viewGarage);
+        viewBookings.setBounds(200,350,200,150);
+        frame.add(viewBookings);
         registrationButton.setBounds(700,150,200,150);
         frame.add(registrationButton);
         logout.setBounds(1100, 50, 130, 50);
@@ -40,5 +43,9 @@ public class ServiceManagerProfileView {
 
     public JButton getLogout() {
         return logout;
+    }
+
+    public JButton getViewBookings() {
+        return viewBookings;
     }
 }

@@ -58,13 +58,13 @@ public class RentalController {
     }
 
     private void showPaymentQuote(User user) {
-        try{
+        try {
             Connection con = getConnection();
             Statement stmt = con.createStatement();
             String sql = "select * from car where num_available > 0";
             ResultSet rs = stmt.executeQuery(sql);
             List<Car> cars = new ArrayList<>();
-            while(rs.next()){
+            while (rs.next()) {
                 cars.add(new Car(rs));
             }
             mainView.paymentQuote(cars);
@@ -74,7 +74,7 @@ public class RentalController {
             } else {
                 mainView.getPaymentQuoteView().getBackButton().addActionListener(e -> showMenu());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -113,16 +113,17 @@ public class RentalController {
         }
     }
 
-    public void showProfile(User user){
+    public void showProfile(User user) {
         if (user.getRole() == Roles.CLIENT) {
             showClientProfile(user);
-        }else if (user.getRole() == Roles.SERVICE_MANAGER) {
+        } else if (user.getRole() == Roles.SERVICE_MANAGER) {
             showServiceManagerProfile(user);
-        }else {
+        } else {
             showMenu();
             //mainView.error(String.format("Role %s is not supported", client.getRole()));
         }
     }
+
     private void showClientProfile(User user) {
         mainView.clientProfile();
         mainView.getClientProfileView().setNameLabel(user.getName());
@@ -138,6 +139,7 @@ public class RentalController {
     public void showServiceManagerProfile(User user) {
         mainView.serviceManagerProfile();
         mainView.getServiceManagerView().getViewGarage().addActionListener(e -> showGarageManager(user));
+        mainView.getServiceManagerView().getViewBookings().addActionListener(e -> showBooking(user));
         mainView.getServiceManagerView().getRegistrationButton().addActionListener(e -> showRegistration(user));
         mainView.getServiceManagerView().getLogout().addActionListener(e -> logout());
     }
@@ -176,6 +178,66 @@ public class RentalController {
         }
     }
 
+    public void showBooking(User user) {
+        try {
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("select b.id as id, CONCAT(u.name, ' ', u.lastname, ' (', u.userid, ')') as userName,\n" +
+                    "b.pick_time as pickTime, b.pick_day as pickDay, b.pick_month as pickMonth, b.pick_year as pickYear,\n" +
+                    "       b.return_time as returnTime, b.return_day as returnDay, b.return_month as returnMonth,\n" +
+                    "       b.return_year as returnYear, CONCAT(c.brand, ' ', c.model, ' (', c.color, ')') as carInfo,\n" +
+                    "       b.total_cost as totalCost, b.picked as isPicked, b.returned as isReturned\n" +
+                    "from\n" +
+                    "    booking b\n" +
+                    "    inner join car c on b.car_id = c.id\n" +
+                    "    inner join user u on b.userid = u.userid");
+            List<Booking> bookings = new ArrayList<>();
+            while (rs.next()) {
+                bookings.add(new Booking(rs));
+            }
+            mainView.viewBooking(bookings);
+            mainView.getBookingView().getPeekCar().addActionListener(e -> peekCar());
+            mainView.getBookingView().getReturnCar().addActionListener(e -> returnCar());
+            mainView.getBookingView().getBackButton().addActionListener(e -> showProfile(user));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void returnCar() {
+        try {
+            JTable table = mainView.getBookingView().getTable();
+            int selectedRow = table.getSelectedRow();
+            Integer bookingId = Integer.valueOf(table.getValueAt(selectedRow, 0).toString());
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("update booking set returned = 1 where id = " + bookingId);
+            JOptionPane.showMessageDialog(mainView.getMainFrame(),
+                    "Return car for booking " + bookingId + " was successfully.",
+                    "Info",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void peekCar() {
+        try {
+            JTable table = mainView.getBookingView().getTable();
+            int selectedRow = table.getSelectedRow();
+            Integer bookingId = Integer.valueOf(table.getValueAt(selectedRow, 0).toString());
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("update booking set picked = 1 where id = " + bookingId);
+            JOptionPane.showMessageDialog(mainView.getMainFrame(),
+                    "Peek car for booking " + bookingId + " was successfully.",
+                    "Info",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void deleteCar() {
         try {
             JTable table = mainView.getGarageView().getTable();
@@ -200,7 +262,7 @@ public class RentalController {
 
     private void addCar(CreateCarView carView) {
         try {
-            Car car = new Car(carView.getCarBrand(),carView.getCarModel(), carView.getCarColor(), carView.getCarPrice());
+            Car car = new Car(carView.getCarBrand(), carView.getCarModel(), carView.getCarColor(), carView.getCarPrice());
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
             statement.executeUpdate(String.format("insert into car(brand, model, color, price) values ('%s','%s', '%s', %s)",
@@ -214,9 +276,9 @@ public class RentalController {
 
     private void registration(User currentUser) {
         User user;
-        if(currentUser.getRole() == null){
+        if (currentUser.getRole() == null) {
             user = createClient(Roles.CLIENT);
-        }else{
+        } else {
             user = createClient(Roles.valueOf(mainView.getRegistrationView().getRole()));
         }
 
@@ -282,9 +344,9 @@ public class RentalController {
             Connection connection = getConnection();
             Statement statement = connection.createStatement();
             int result = statement.executeUpdate("delete from booking where id = " + contractNumber + " and userid=" + user.getUserId());
-            if(result == 0){
+            if (result == 0) {
                 mainView.error("The system cannot find a booking for that user");
-            }else{
+            } else {
                 mainView.endOperation("Contract with number " + contractNumber + " was deleted.");
                 mainView.getOkButton().addActionListener(e -> showClientProfile(user));
             }
@@ -301,12 +363,12 @@ public class RentalController {
             Statement statement = connection.createStatement();
 
             String sql = String.format("Insert into booking (userid,pick_time, pick_day, pick_month, pick_year, return_time, return_day, return_month, return_year,car_id,total_cost) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                    user.getUserId(),pq.getPickTime(), pq.getPickDay(), pq.getPickMonth(), pq.getPickYear(), pq.getReturnTime(),pq.getReturnDay(),pq.getReturnMonth(),pq.getReturnYear(),pq.getCarId(),pq.getTotalCost());
+                    user.getUserId(), pq.getPickTime(), pq.getPickDay(), pq.getPickMonth(), pq.getPickYear(), pq.getReturnTime(), pq.getReturnDay(), pq.getReturnMonth(), pq.getReturnYear(), pq.getCarId(), pq.getTotalCost());
             statement.executeUpdate(sql);
             ResultSet rs = statement.executeQuery("select max(id) as id from booking");
             rs.next();
             int booking_id = rs.getInt("id");
-            statement.executeUpdate("update car set num_available = (SELECT c.num_available - 1 from car c where c.id = " +pq.getCarId()+"), num_rented = (SELECT c.num_rented + 1 from car c where c.id = " +pq.getCarId()+") where id = " + pq.getCarId());
+            statement.executeUpdate("update car set num_available = (SELECT c.num_available - 1 from car c where c.id = " + pq.getCarId() + "), num_rented = (SELECT c.num_rented + 1 from car c where c.id = " + pq.getCarId() + ") where id = " + pq.getCarId());
             mainView.endOperation("Car was booked successfully. Contract number is " + booking_id);
             mainView.getOkButton().addActionListener(e -> showClientProfile(user));
         } catch (Exception e) {
@@ -333,7 +395,7 @@ public class RentalController {
         try {
             Connection con = getConnection();
             Statement statement = con.createStatement();
-            ResultSet rs = statement.executeQuery("select * from car where brand= '" + pq.getBrand() + "' and model= '" + pq.getModel() +"'");
+            ResultSet rs = statement.executeQuery("select * from car where brand= '" + pq.getBrand() + "' and model= '" + pq.getModel() + "'");
             rs.next();
             pq.setCarId(rs.getInt("id"));
             pq.setCarPricePerHour(rs.getFloat("price"));

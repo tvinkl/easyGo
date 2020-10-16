@@ -37,6 +37,7 @@ public class RentalView {
     private CalculationView calculationView;
     private ServiceManagerProfileView serviceManagerView;
     private GarageView garageView;
+    private BookingView bookingView;
     private PaymentQuoteView paymentQuoteView;
     private ClientProfileView clientProfileView;
 
@@ -67,14 +68,17 @@ public class RentalView {
         clearView();
         welcomeView = new MenuView(mainFrame);
     }
+
     public void login() {
         clearView();
         loginView = new LoginView(mainFrame);
     }
+
     public void registration(User user) {
         clearView();
         registrationView = new RegistrationView(user, mainFrame);
     }
+
     public void paymentQuote(List<Car> cars) {
         clearView();
         paymentQuoteView = new PaymentQuoteView(cars, mainFrame);
@@ -95,6 +99,11 @@ public class RentalView {
         garageView = new GarageView(mainFrame, cars, user);
     }
 
+    public void viewBooking(List<Booking> bookings) {
+        clearView();
+        bookingView = new BookingView(mainFrame, bookings);
+    }
+
     public void clientProfile() {
         clearView();
         clientProfileView = new ClientProfileView(mainFrame);
@@ -105,7 +114,7 @@ public class RentalView {
         modificationView = new ModificationView(mainFrame);
     }
 
-    public void endOperation(String resultMessage){
+    public void endOperation(String resultMessage) {
         clearView();
         resultLabel = new JLabel(resultMessage);
         mainFrame.setLayout(null);
@@ -212,6 +221,7 @@ public class RentalView {
     public ClientProfileView getClientProfileView() {
         return clientProfileView;
     }
+
     public StartView getHelloView() {
         return startView;
     }
@@ -230,6 +240,14 @@ public class RentalView {
 
     public GarageView getGarageView() {
         return garageView;
+    }
+
+    public BookingView getBookingView() {
+        return bookingView;
+    }
+
+    public JFrame getMainFrame() {
+        return mainFrame;
     }
 
     public PaymentQuoteView getPaymentQuoteView() {
