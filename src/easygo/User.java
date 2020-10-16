@@ -3,7 +3,7 @@ package easygo;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Client {
+public class User {
 
     private int userId;
     private String name;
@@ -24,11 +24,12 @@ public class Client {
     //ogni cliente deve avere et� >= 18 anni
     //controllo semplificato verifica solo anno poich� non � stata creata una variabile anni
     //@ requires 2020 - Dnanno >= 18
-    public Client(){
 
+
+    public User() {
     }
 
-    public Client(ResultSet rs) {
+    public User(ResultSet rs) {
         try{
             this.userId = rs.getInt("userid");
             this.name = rs.getString("name");
@@ -74,9 +75,7 @@ public class Client {
         this.lastname = lastname;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
 
     public void setPassword(String password) {
         this.password = password;
@@ -118,6 +117,7 @@ public class Client {
         return yearOfBirth;
     }
 
+    //@ requires 2020 - yearOfBirth >= 18
     public void setYearOfBirth(int yearOfBirth) {
         this.yearOfBirth = yearOfBirth;
     }

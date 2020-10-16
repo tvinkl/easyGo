@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class MainView {
+public class RentalView {
 
     private JFrame mainFrame;
 
@@ -50,7 +50,7 @@ public class MainView {
 
     }
 
-    public MainView(String title) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+    public RentalView(String title) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         mainFrame = new JFrame(title);
         mainFrame.getContentPane().setLayout(new BorderLayout());
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,18 +71,18 @@ public class MainView {
         clearView();
         loginView = new LoginView(mainFrame);
     }
-    public void registration(Client client) {
+    public void registration(User user) {
         clearView();
-        registrationView = new RegistrationView(client, mainFrame);
+        registrationView = new RegistrationView(user, mainFrame);
     }
     public void paymentQuote(List<Car> cars) {
         clearView();
         paymentQuoteView = new PaymentQuoteView(cars, mainFrame);
     }
 
-    public void calculateView(Client client) {
+    public void calculateView(User user) {
         clearView();
-        calculationView = new CalculationView(mainFrame, client);
+        calculationView = new CalculationView(mainFrame, user);
     }
 
     public void serviceManagerProfile() {
@@ -90,9 +90,9 @@ public class MainView {
         serviceManagerView = new ServiceManagerProfileView(mainFrame);
     }
 
-    public void viewGarage(List<Car> cars, Client client) {
+    public void viewGarage(List<Car> cars, User user) {
         clearView();
-        garageView = new GarageView(mainFrame, cars, client);
+        garageView = new GarageView(mainFrame, cars, user);
     }
 
     public void clientProfile() {

@@ -26,7 +26,7 @@ public class LoginView {
         frame.add(userIdTextField);
         passwordTextField.setBounds(300, 325, 200, 20);
         frame.add(passwordTextField);
-        loginButton = new JButton("Login");
+        loginButton = new JButton("Enter");
         backButton = new JButton("Back");
         loginButton.setBounds(250, 500, 100, 60);
         frame.add(loginButton);

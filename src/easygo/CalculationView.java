@@ -23,7 +23,7 @@ public class CalculationView {
     private JButton backButton;
     private JButton createContractButton;
 
-    public CalculationView(JFrame frame, Client client) {
+    public CalculationView(JFrame frame, User user) {
         // Create UI elements
 
         toMenuButton = new JButton();
@@ -37,15 +37,15 @@ public class CalculationView {
         totalCostLabel = new JLabel("Costo totale : ");
         totalCostLabelInput = new JLabel();
 
-        createContractButton = new JButton("Create contract");
+        createContractButton = new JButton("Create booking");
         createContractButton.setBounds(825, 500, 150, 70);
 
-        if (Objects.isNull(client.getRole())) {
+        if (Objects.isNull(user.getRole())) {
             JOptionPane.showMessageDialog(frame,
                     "You will not be able to complete your booking. Please register your profile.",
                     "Warning",
                     JOptionPane.WARNING_MESSAGE);
-        } else if (client.getRole() == Roles.CLIENT) {
+        } else if (user.getRole() == Roles.CLIENT) {
             frame.add(createContractButton);
         }
 

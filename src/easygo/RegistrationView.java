@@ -66,7 +66,7 @@ public class RegistrationView {
         this.creditCardTextField = creditCardTextField;
     }
 
-    public RegistrationView(Client client, JFrame frame) {
+    public RegistrationView(User user, JFrame frame) {
 
         personalInfoLabel = new JLabel("Personal info");
         nameLabel = new JLabel("Nome :");
@@ -120,12 +120,12 @@ public class RegistrationView {
         zipCodeLabel = new JLabel("Codice Postale :");
         zipCodeTextField = new JTextField();
         rolesLabel = new JLabel("Role: ");
-        registrationButton = new JButton("Registration");
+        registrationButton = new JButton("Confirm Registration");
         backButton = new JButton("Back");
         // Add UI element to frame
         frame.setLayout(null);
 
-        registrationButton.setBounds(900, 575, 100, 50);
+        registrationButton.setBounds(800, 575, 200, 50);
         frame.add(registrationButton);
         backButton.setBounds(1050, 575, 100, 50);
         frame.add(backButton);
@@ -246,7 +246,7 @@ public class RegistrationView {
         zipCodeTextField.setBounds(400, 600, 200, 20);
         frame.add(zipCodeTextField);
 
-        if (client.getRole() == Roles.SERVICE_MANAGER) {
+        if (user.getRole() == Roles.SERVICE_MANAGER) {
             rolesLabel.setBounds(800, 100, 100, 20);
             frame.add(rolesLabel);
             rolesComboBox.setBounds(900, 100, 100, 20);

@@ -12,7 +12,7 @@ public class GarageView {
     private JButton deleteCarButton;
     private JTable table;
 
-    public GarageView(JFrame frame, List<Car> cars, Client client) {
+    public GarageView(JFrame frame, List<Car> cars, User user) {
         frame.getContentPane().removeAll();
         frame.getContentPane().setLayout(new BorderLayout());
         frame.setVisible(true);
@@ -33,7 +33,7 @@ public class GarageView {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
 
-        if(client.getRole() == Roles.SERVICE_MANAGER){
+        if(user.getRole() == Roles.SERVICE_MANAGER){
             addCarButton = new JButton("Add car");
             deleteCarButton = new JButton("Delete car");
             buttonPanel.add(addCarButton);
