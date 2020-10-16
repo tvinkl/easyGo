@@ -1,5 +1,6 @@
 package easygo;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -177,6 +178,16 @@ public class MainController {
     }
 
     private void deleteCar() {
+        try {
+            JTable table = mainView.getGarageView().getTable();
+            int selectedRow = table.getSelectedRow();
+            Integer carId = Integer.valueOf(table.getValueAt(selectedRow, 0).toString());
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("delete from car where id = " + carId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void addCar() {

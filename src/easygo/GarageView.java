@@ -10,6 +10,7 @@ public class GarageView {
     private JButton backButton;
     private JButton addCarButton;
     private JButton deleteCarButton;
+    private JTable table;
 
     public GarageView(JFrame frame, List<Car> cars, Client client) {
         frame.getContentPane().removeAll();
@@ -25,7 +26,7 @@ public class GarageView {
                     car.getPrice(), car.getNumTotal(), car.getNumAvailable(), car.getNumRented(), car.getNumDoors(), car.getPower()});
         }
 
-        JTable table = new JTable(model);
+        table = new JTable(model);
         table.setPreferredScrollableViewportSize(new Dimension(1300, 700));
         JScrollPane scroll = new JScrollPane(table);
         frame.add(scroll, BorderLayout.CENTER);
@@ -55,5 +56,9 @@ public class GarageView {
 
     public JButton getDeleteCarButton() {
         return deleteCarButton;
+    }
+
+    public JTable getTable() {
+        return table;
     }
 }
